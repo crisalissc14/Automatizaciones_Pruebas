@@ -96,6 +96,11 @@ $script:ExpectedPublishers = @{
   "Wireshark"                                   = @("Wireshark Foundation", "Wireshark")
   "PuTTY (64-bit)"                              = @("Simon Tatham")
   "Nmap"                                        = @("Insecure.Com LLC", "Nmap Project", "Nmap.Org")
+  "OpenJDK (Eclipse Temurin, LTS más reciente, Windows x64 MSI)" = @("Eclipse Foundation, Inc.", "Eclipse Adoptium")
+  "Power Automate for Desktop"                  = @("Microsoft Corporation")
+  ".NET SDK (LTS más reciente, win-x64)"        = @("Microsoft Corporation")
+  "Visual Studio Professional 2026 (bootstrapper)" = @("Microsoft Corporation")
+  "Visual Studio Enterprise 2026 (bootstrapper)"   = @("Microsoft Corporation")
 }
 
 # Hashes SHA256 "oficiales" publicados directamente por el fabricante (cuando
@@ -400,6 +405,79 @@ function Get-LatestPowerBIDesktop {
   New-VersionResult -Name "Microsoft Power BI Desktop (latest from change log)" -LatestVersion $ver -Source $url
 }
 
+function Get-LatestOpenJDK {
+  # Eclipse Temurin (proyecto Adoptium): distribución de referencia de OpenJDK,
+  # con API pública estable que incluye checksum SHA256 oficial del instalador.
+  $availUrl = "https://api.adoptium.net/v3/info/available_releases"
+  $avail = Get-JsonFromUrl -Url $availUrl
+  $lts = $avail.most_recent_lts
+  $assetsUrl = "https://api.adoptium.net/v3/assets/latest/$lts/hotspot?image_type=jdk&os=windows&architecture=x64"
+  $assets = Get-JsonFromUrl -Url $assetsUrl
+  $msiAsset = $assets | Where-Object { $_.binary.installer.name -match '\.msi$' } | Select-Object -First 1
+  if (-not $msiAsset) { throw "No se encontró paquete MSI de Temurin JDK $lts para Windows x64." }
+  $ver = $msiAsset.version.semver
+  if ($msiAsset.binary.installer.checksum) {
+    $script:OfficialHashes["OpenJDK (Eclipse Temurin, LTS más reciente, Windows x64 MSI)"] = $msiAsset.binary.installer.checksum.ToLower()
+  }
+  New-VersionResult -Name "OpenJDK (Eclipse Temurin, LTS más reciente, Windows x64 MSI)" -LatestVersion $ver -Source $assetsUrl -Notes "LTS actual: $lts. sha256 oficial (Adoptium): $($msiAsset.binary.installer.checksum)"
+}
+
+function Get-LatestPowerAutomateDesktop {
+  # Microsoft no publica una URL de descarga directa estable para Power Automate
+  # for Desktop: se distribuye vía winget (Microsoft Store package). Se resuelve
+  # la versión con el propio winget como fuente de verdad.
+  if (-not (Test-WingetAvailable)) { throw "winget no está disponible para resolver la versión de Power Automate for Desktop." }
+  $out = (& winget show --id Microsoft.PowerAutomateDesktop --source winget 2>&1 | Out-String)
+  $ver = Extract-RegexFirstGroup -Text $out -Pattern "Version:\s*([0-9]+(?:\.[0-9]+)*)"
+  New-VersionResult -Name "Power Automate for Desktop" -LatestVersion $ver -Source "winget show Microsoft.PowerAutomateDesktop" -Notes "Se instala/descarga vía winget; Microsoft no publica una URL de descarga directa pública."
+}
+
+function Get-LatestNotepadPlusPlus {
+  $r = Get-LatestGitHubReleaseAsset -Owner "notepad-plus-plus" -Repo "notepad-plus-plus" -AssetPattern '^npp\.[\d.]+\.Installer\.x64\.exe$'
+  New-VersionResult -Name "Notepad++ (x64)" -LatestVersion $r.Version -Source "https://api.github.com/repos/notepad-plus-plus/notepad-plus-plus/releases/latest"
+}
+
+function Get-LatestDotNetSdk {
+  # Índice oficial de releases de .NET (dotnet/core en GitHub). .NET no publica
+  # un .msi independiente para el SDK: usa un bootstrapper .exe oficial que
+  # contiene los MSI de los componentes por dentro.
+  $indexUrl = "https://raw.githubusercontent.com/dotnet/core/main/release-notes/releases-index.json"
+  $index = Get-JsonFromUrl -Url $indexUrl
+  $ltsChannel = $index.'releases-index' |
+    Where-Object { $_.'release-type' -eq 'lts' -and $_.'support-phase' -eq 'active' } |
+    Sort-Object { [version]$_.'channel-version' } -Descending | Select-Object -First 1
+  if (-not $ltsChannel) { throw "No se encontró un canal LTS activo en releases-index.json." }
+  $releases = Get-JsonFromUrl -Url $ltsChannel.'releases.json'
+  $latestRelease = $releases.releases | Sort-Object { [datetime]$_.'release-date' } -Descending | Select-Object -First 1
+  $sdkFile = $latestRelease.sdk.files | Where-Object { $_.rid -eq 'win-x64' -and $_.name -match '\.exe$' } | Select-Object -First 1
+  if (-not $sdkFile) { throw "No se encontró instalador win-x64 .exe del SDK de .NET en el canal $($ltsChannel.'channel-version')." }
+  New-VersionResult -Name ".NET SDK (LTS más reciente, win-x64)" -LatestVersion $latestRelease.sdk.version -Source $ltsChannel.'releases.json' -Notes "Canal LTS: $($ltsChannel.'channel-version'). .NET no publica .msi independiente para el SDK (bootstrapper .exe oficial)."
+}
+
+function Get-LatestVSProfessional2026 {
+  # Visual Studio usa un bootstrapper pequeño (pocos MB) que durante la
+  # instalación real descarga los workloads seleccionados (GBs) desde
+  # internet. Este script valida el bootstrapper, no el payload completo.
+  New-VersionResult -Name "Visual Studio Professional 2026 (bootstrapper)" -LatestVersion "18.x (canal release)" -Source "https://aka.ms/vs/18/release/vs_professional.exe" -Notes "El bootstrapper descarga los workloads seleccionados durante la instalación; VT/Defender solo validan el bootstrapper, no el payload completo descargado después."
+}
+
+function Get-LatestVSEnterprise2026 {
+  New-VersionResult -Name "Visual Studio Enterprise 2026 (bootstrapper)" -LatestVersion "18.x (canal release)" -Source "https://aka.ms/vs/18/release/vs_enterprise.exe" -Notes "El bootstrapper descarga los workloads seleccionados durante la instalación; VT/Defender solo validan el bootstrapper, no el payload completo descargado después."
+}
+
+function Get-SentinelOneNote {
+  # SentinelOne NO publica un instalador público: se descarga desde la consola
+  # de administración del tenant (login + Site Token específico por sitio).
+  New-VersionResult -Name "SentinelOne (agente)" -LatestVersion "N/A" -Source "https://<tu-tenant>.sentinelone.net" -Notes "Requiere iniciar sesión en la consola de administración de SentinelOne del tenant y descargar el instalador MSI firmado con el Site Token del sitio correspondiente. No existe URL de descarga pública."
+}
+
+function Get-TRSuiteNote {
+  # TRSuite (trsuite.ch) es software de reportería fiscal FATCA/CRS de pago;
+  # la descarga (incluida la prueba de 10 días) se obtiene vía el portal del
+  # fabricante, no mediante una URL pública estable.
+  New-VersionResult -Name "TRSuite (FATCA/CRS)" -LatestVersion "N/A" -Source "https://www.trsuite.ch/downloads.html" -Notes "Software licenciado; la descarga se obtiene desde el portal del fabricante (trsuite.ch), sin URL pública estable ni API de versión."
+}
+
 # ============================================================
 # NUEVO: Visual Studio Code y LucenTime Timeline
 # ============================================================
@@ -561,6 +639,33 @@ $script:DownloadResolvers = @{
   "Nmap" = { param($v)
     "https://nmap.org/dist/nmap-$v-setup.exe" }
 
+  "OpenJDK (Eclipse Temurin, LTS más reciente, Windows x64 MSI)" = { param($v)
+    $avail = Get-JsonFromUrl -Url "https://api.adoptium.net/v3/info/available_releases"
+    $lts = $avail.most_recent_lts
+    $assets = Get-JsonFromUrl -Url "https://api.adoptium.net/v3/assets/latest/$lts/hotspot?image_type=jdk&os=windows&architecture=x64"
+    ($assets | Where-Object { $_.binary.installer.name -match '\.msi$' } | Select-Object -First 1).binary.installer.link }
+
+  "Notepad++ (x64)" = { param($v)
+    (Get-LatestGitHubReleaseAsset -Owner "notepad-plus-plus" -Repo "notepad-plus-plus" -AssetPattern '^npp\.[\d.]+\.Installer\.x64\.exe$').DownloadUrl }
+
+  ".NET SDK (LTS más reciente, win-x64)" = { param($v)
+    $index = Get-JsonFromUrl -Url "https://raw.githubusercontent.com/dotnet/core/main/release-notes/releases-index.json"
+    $ltsChannel = $index.'releases-index' |
+      Where-Object { $_.'release-type' -eq 'lts' -and $_.'support-phase' -eq 'active' } |
+      Sort-Object { [version]$_.'channel-version' } -Descending | Select-Object -First 1
+    $releases = Get-JsonFromUrl -Url $ltsChannel.'releases.json'
+    $latestRelease = $releases.releases | Sort-Object { [datetime]$_.'release-date' } -Descending | Select-Object -First 1
+    ($latestRelease.sdk.files | Where-Object { $_.rid -eq 'win-x64' -and $_.name -match '\.exe$' } | Select-Object -First 1).url }
+
+  "Visual Studio Professional 2026 (bootstrapper)" = { param($v)
+    "https://aka.ms/vs/18/release/vs_professional.exe" }
+
+  "Visual Studio Enterprise 2026 (bootstrapper)" = { param($v)
+    "https://aka.ms/vs/18/release/vs_enterprise.exe" }
+
+  "SentinelOne (agente)" = { param($v) $null }   # sin URL pública: requiere consola del tenant + Site Token
+  "TRSuite (FATCA/CRS)" = { param($v) $null }    # software licenciado, descarga vía portal del fabricante
+
   "think-cell" = { param($v) $null }   # requiere licencia comercial, no publica instalador de descarga pública sin cuenta
 }
 
@@ -581,6 +686,7 @@ function Test-WingetAvailable {
 $script:WingetIds = @{
   "Android Studio (latest shown on official site)"       = "Google.AndroidStudio"
   "Microsoft Power BI Desktop (latest from change log)"  = "Microsoft.PowerBI"
+  "Power Automate for Desktop"                            = "Microsoft.PowerAutomateDesktop"
 }
 
 function Download-InstallerViaWinget {
@@ -950,7 +1056,9 @@ function Process-Application {
     "CyberArk EPM - Latest Agent Version (from rollout status)",
     "Bizagi Modeler (Latest from Bizagi Release Notes)",
     "DCNet Document Control Backoffice",
-    "think-cell"
+    "think-cell",
+    "SentinelOne (agente)",
+    "TRSuite (FATCA/CRS)"
   )
 
   $name = $VersionResult.Name
@@ -1184,6 +1292,14 @@ $results += Safe-Run -Name "Wireshark"                                    -Sourc
 $results += Safe-Run -Name "ILSpy"                                        -Source "https://api.github.com/repos/icsharpcode/ILSpy/releases/latest" -Block { Get-LatestILSpy }
 $results += Safe-Run -Name "PuTTY (64-bit)"                               -Source "https://the.earth.li/~sgtatham/putty/latest/w64/" -Block { Get-LatestPuTTY }
 $results += Safe-Run -Name "Nmap"                                         -Source "https://nmap.org/download.html" -Block { Get-LatestNmap }
+$results += Safe-Run -Name "OpenJDK (Eclipse Temurin)"                    -Source "https://api.adoptium.net/v3/info/available_releases" -Block { Get-LatestOpenJDK }
+$results += Safe-Run -Name "Power Automate for Desktop"                   -Source "winget show Microsoft.PowerAutomateDesktop" -Block { Get-LatestPowerAutomateDesktop }
+$results += Safe-Run -Name "Notepad++ (x64)"                              -Source "https://api.github.com/repos/notepad-plus-plus/notepad-plus-plus/releases/latest" -Block { Get-LatestNotepadPlusPlus }
+$results += Safe-Run -Name ".NET SDK"                                     -Source "https://raw.githubusercontent.com/dotnet/core/main/release-notes/releases-index.json" -Block { Get-LatestDotNetSdk }
+$results += Safe-Run -Name "Visual Studio Professional 2026"              -Source "https://aka.ms/vs/18/release/vs_professional.exe" -Block { Get-LatestVSProfessional2026 }
+$results += Safe-Run -Name "Visual Studio Enterprise 2026"                -Source "https://aka.ms/vs/18/release/vs_enterprise.exe" -Block { Get-LatestVSEnterprise2026 }
+$results += Get-SentinelOneNote
+$results += Get-TRSuiteNote
 $results += Get-ThinkCellNote
 
 $results | Sort-Object Name | Format-Table -AutoSize
