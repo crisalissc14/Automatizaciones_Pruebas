@@ -94,6 +94,8 @@ $script:ExpectedPublishers = @{
   "Adobe Acrobat Reader (Continuous track - latest)" = @("Adobe")
   "7-Zip"                                       = @("Igor Pavlov")
   "Wireshark"                                   = @("Wireshark Foundation", "Wireshark")
+  "PuTTY (64-bit)"                              = @("Simon Tatham")
+  "Nmap"                                        = @("Insecure.Com LLC", "Nmap Project", "Nmap.Org")
 }
 
 # Hashes SHA256 "oficiales" publicados directamente por el fabricante (cuando
@@ -363,7 +365,10 @@ function Get-DCNetDocumentControlBackoffice {
 function Get-LatestAdobeAcrobatReaderContinuous {
   $url = "https://helpx.adobe.com/acrobat/release-note/release-notes-acrobat-reader.html"
   $html = Get-TextFromUrl -Url $url
-  $versions = [regex]::Matches($html, "\b([0-9]{2}\.[0-9]{3}\.[0-9]{5})\b") |
+  # Adobe cambió su esquema de versión a uno basado en año (ej. 2026.001.21662)
+  # en vez del viejo formato de 2 dígitos (ej. 24.003.20269); se acepta 2 a 4
+  # dígitos en el primer grupo para cubrir ambos esquemas.
+  $versions = [regex]::Matches($html, "\b([0-9]{2,4}\.[0-9]{3}\.[0-9]{5})\b") |
     ForEach-Object { $_.Groups[1].Value } | Select-Object -Unique
   if (-not $versions -or $versions.Count -eq 0) { throw "No se encontraron versiones en release notes oficiales." }
   $latest = ($versions | Sort-Object { [version]$_ } -Descending | Select-Object -First 1)
@@ -450,6 +455,23 @@ function Get-LatestILSpy {
   New-VersionResult -Name "ILSpy" -LatestVersion $r.Version -Source "https://api.github.com/repos/icsharpcode/ILSpy/releases/latest"
 }
 
+function Get-LatestPuTTY {
+  # Página oficial de PuTTY: listado del directorio "latest" para Windows 64-bit,
+  # que expone el nombre del instalador MSI con la versión en el nombre.
+  $url = "https://the.earth.li/~sgtatham/putty/latest/w64/"
+  $html = Get-TextFromUrl -Url $url
+  $ver = Extract-RegexFirstGroup -Text $html -Pattern "putty-64bit-([0-9]+\.[0-9]+)-installer\.msi"
+  New-VersionResult -Name "PuTTY (64-bit)" -LatestVersion $ver -Source $url
+}
+
+function Get-LatestNmap {
+  # Nmap NO publica instalador .msi para Windows, solo .exe (NSIS) firmado por el proyecto.
+  $url = "https://nmap.org/download.html"
+  $html = Get-TextFromUrl -Url $url
+  $ver = Extract-RegexFirstGroup -Text $html -Pattern "nmap-([0-9]+\.[0-9]+)-setup\.exe"
+  New-VersionResult -Name "Nmap" -LatestVersion $ver -Source $url -Notes "Nmap solo distribuye .exe para Windows (no hay .msi oficial)."
+}
+
 function Get-ThinkCellNote {
   # think-cell requiere licencia comercial (solo trial gratuito con límite de tiempo) y no publica
   # un instalador de descarga pública sin cuenta/licencia asociada. No se automatiza por diseño.
@@ -532,6 +554,12 @@ $script:DownloadResolvers = @{
 
   "ILSpy" = { param($v)
     (Get-LatestGitHubReleaseAsset -Owner "icsharpcode" -Repo "ILSpy" -AssetPattern '^ILSpy_Installer_(?!.*arm64).*\.msi$').DownloadUrl }
+
+  "PuTTY (64-bit)" = { param($v)
+    "https://the.earth.li/~sgtatham/putty/latest/w64/putty-64bit-$v-installer.msi" }
+
+  "Nmap" = { param($v)
+    "https://nmap.org/dist/nmap-$v-setup.exe" }
 
   "think-cell" = { param($v) $null }   # requiere licencia comercial, no publica instalador de descarga pública sin cuenta
 }
@@ -1154,6 +1182,8 @@ $results += Safe-Run -Name "draw.io Desktop"                              -Sourc
 $results += Safe-Run -Name "Zulu JDK 21 (Windows x64 MSI)"                 -Source "https://api.azul.com/metadata/v1/zulu/packages/" -Block { Get-LatestZuluJDK }
 $results += Safe-Run -Name "Wireshark"                                    -Source "https://www.wireshark.org/download.html" -Block { Get-LatestWireshark }
 $results += Safe-Run -Name "ILSpy"                                        -Source "https://api.github.com/repos/icsharpcode/ILSpy/releases/latest" -Block { Get-LatestILSpy }
+$results += Safe-Run -Name "PuTTY (64-bit)"                               -Source "https://the.earth.li/~sgtatham/putty/latest/w64/" -Block { Get-LatestPuTTY }
+$results += Safe-Run -Name "Nmap"                                         -Source "https://nmap.org/download.html" -Block { Get-LatestNmap }
 $results += Get-ThinkCellNote
 
 $results | Sort-Object Name | Format-Table -AutoSize
