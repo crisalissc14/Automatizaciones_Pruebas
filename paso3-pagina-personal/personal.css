@@ -1,0 +1,92 @@
+/* Fondo de la pagina usando color HSL (mi color favorito: turquesa) */
+body {
+  background-color: hsl(175, 55%, 28%);
+  margin: 0;
+  padding: 0 20px 60px;
+  font-family: Verdana, Geneva, sans-serif;
+}
+
+/* ---------- Encabezado con mi nombre ---------- */
+.mi-nombre {
+  color: gold;                 /* color con nombre */
+  font-family: "Georgia", serif;
+  letter-spacing: 3px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  text-transform: uppercase;
+  margin-top: 70px;            /* separado del borde superior */
+  margin-bottom: 40px;
+  font-size: 42px;
+}
+
+/* ---------- Contenedor de los bloques de contenido ---------- */
+.contenido {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+}
+
+/* Modelo de caja (box model) de cada bloque:
+   border  = borde visible alrededor del bloque
+   margin  = espacio afuera del bloque (lo separa de los otros bloques)
+   padding = espacio adentro del bloque (separa el borde del texto) */
+.bloque {
+  width: 300px;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 3px solid whitesmoke;
+  margin: 10px;
+  padding: 18px 20px;
+}
+
+.bloque h2 {
+  font-size: 16px;
+  color: whitesmoke;
+  margin-top: 0;
+}
+
+/* Bloque 1: color de texto en HSL, fuente serif, interlineado amplio */
+.bloque-hsl p {
+  color: hsl(45, 90%, 75%);
+  font-family: "Georgia", "Times New Roman", serif;
+  line-height: 1.8;
+  letter-spacing: 0.5px;
+  text-align: justify;
+}
+
+/* Bloque 2: color de texto en RGB, fuente monoespaciada, mayusculas */
+.bloque-rgb p {
+  color: rgb(255, 200, 150);
+  font-family: "Courier New", Courier, monospace;
+  line-height: 1.4;
+  font-size: 13px;
+  text-transform: uppercase;
+  text-align: left;
+}
+
+/* Bloque 3: color de texto en HEX, fuente sans-serif, cursiva y centrada */
+.bloque-hex p {
+  color: #b8f2e6;
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+  font-style: italic;
+  line-height: 1.6;
+  text-align: center;
+  word-spacing: 2px;
+}
+
+.enlace-meme {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.enlace-meme a {
+  color: whitesmoke;
+  font-weight: bold;
+  text-decoration: none;
+  border-bottom: 2px solid gold;
+  padding-bottom: 2px;
+}
+
+.enlace-meme a:hover {
+  color: gold;
+}

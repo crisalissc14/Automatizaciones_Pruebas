@@ -1,0 +1,88 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f2f2f2;
+  display: flex;
+  justify-content: center;
+  padding: 30px 0;
+}
+
+/* border = borde de la tarjeta del formulario
+   padding = espacio interno entre el borde y los campos (modelo de caja) */
+.payment-form {
+  background-color: #ffffff;
+  border: 1px solid #999;
+  border-radius: 4px;
+  width: 360px;
+  padding: 20px 24px 28px;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.payment-form h1 {
+  font-size: 22px;
+  margin: 0 0 6px;
+}
+
+.required-note {
+  color: #c0392b;
+  font-weight: bold;
+  font-size: 13px;
+  margin: 0 0 16px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.form-row label {
+  font-weight: bold;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.form-row input[type="text"],
+.form-row select,
+.form-row textarea {
+  border: 1px solid #050011;
+  border-radius: 3px;
+  padding: 6px 8px;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.form-row select {
+  width: 48%;
+  display: inline-block;
+  margin-right: 4%;
+}
+
+.card-type {
+  border: none;
+  padding: 0;
+  margin: 4px 0 14px;
+}
+
+.card-type legend {
+  font-weight: bold;
+  font-size: 13px;
+  padding: 0;
+}
+
+.card-type label {
+  margin: 0 14px 0 4px;
+  font-size: 13px;
+}
+
+button[type="submit"] {
+  background-color: #e0e0e0;
+  border: 1px solid #777;
+  border-radius: 3px;
+  padding: 8px 18px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: #cfcfcf;
+}

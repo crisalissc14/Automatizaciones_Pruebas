@@ -1,0 +1,86 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 30px;
+  color: #222;
+}
+
+h1 {
+  margin-bottom: 10px;
+}
+
+h2 {
+  margin-top: 40px;
+}
+
+/* ---------- Tabla 1: Cartelera de peliculas ---------- */
+
+.tabla-peliculas {
+  border-collapse: collapse;
+  width: 320px;
+}
+
+/* border = el borde de cada celda; padding = el espacio interno entre el
+   borde y el texto (parte del modelo de caja / box model) */
+.tabla-peliculas th,
+.tabla-peliculas td {
+  border: 1px solid #333;
+  padding: 10px 14px;
+}
+
+.tabla-peliculas .fila-encabezado {
+  background-color: #b3b3b3;
+}
+
+.tabla-peliculas th {
+  text-align: center;
+  color: #1a3350;
+}
+
+.tabla-peliculas td:first-child {
+  text-align: left;
+}
+
+.tabla-peliculas td:last-child {
+  text-align: center;
+}
+
+/* ---------- Tabla 2: Videojuegos favoritos ---------- */
+
+.tabla-videojuegos {
+  border-collapse: collapse;
+  width: 640px;
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+  border: 2px solid #2f3e46;
+}
+
+.tabla-videojuegos th,
+.tabla-videojuegos td {
+  border: 1px solid #52796f;
+  padding: 10px 16px;
+  text-align: center;
+}
+
+.tabla-videojuegos thead {
+  background-color: #2f3e46;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.tabla-videojuegos tbody tr:nth-child(odd) {
+  background-color: #cad2c5;
+}
+
+.tabla-videojuegos tbody tr:nth-child(even) {
+  background-color: #e9edf0;
+}
+
+.tabla-videojuegos tbody td:nth-child(2) {
+  text-align: left;
+}
+
+.tabla-videojuegos tfoot {
+  background-color: #84a98c;
+  font-weight: bold;
+  color: #1b2a20;
+}

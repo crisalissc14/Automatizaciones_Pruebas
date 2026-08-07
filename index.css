@@ -1,0 +1,206 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  background-color: #141414;
+  color: #f5f5f5;
+}
+
+/* ---------- Barra superior estilo UIDE ---------- */
+.portada-topbar {
+  background-color: #8c1146;
+  padding: 16px 40px;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  border-bottom: 4px solid #f0b429;
+}
+
+.portada-marca {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #ffffff;
+}
+
+.portada-marca-sub {
+  font-size: 13px;
+  color: #f6d9ba;
+  letter-spacing: 0.5px;
+}
+
+/* ---------- Seccion principal (hero) ---------- */
+.portada-hero {
+  background-color: #141414;
+  padding: 60px 40px 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.portada-datos {
+  max-width: 640px;
+}
+
+.portada-etiqueta {
+  color: #f0b429;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: bold;
+  font-size: 13px;
+  margin: 0 0 10px;
+}
+
+.portada-hero h1 {
+  font-size: 38px;
+  margin: 0 0 24px;
+  line-height: 1.25;
+  color: #ffffff;
+}
+
+.portada-ficha {
+  display: flex;
+  gap: 36px;
+  margin: 0 0 22px;
+  flex-wrap: wrap;
+}
+
+.portada-ficha-item dt {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #b0b0b0;
+  margin-bottom: 4px;
+}
+
+.portada-ficha-item dd {
+  margin: 0;
+  font-size: 17px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.portada-objetivo {
+  color: #d8d8d8;
+  line-height: 1.7;
+  font-size: 15px;
+  border-left: 3px solid #f0b429;
+  padding-left: 16px;
+}
+
+.portada-objetivo strong {
+  color: #f0b429;
+}
+
+/* ---------- Insignia dorada (inspirada en el "#1" de la referencia) ---------- */
+/*.portada-insignia {
+  background-color: #1f1f1f;
+  border: 2px solid #f0b429;
+  border-radius: 10px;
+  padding: 24px 28px;
+  text-align: center;
+  min-width: 150px;
+}
+
+.portada-insignia-numero {
+  display: block;
+  font-size: 56px;
+  font-weight: 900;
+  color: #f0b429;
+  line-height: 1;
+}
+
+.portada-insignia-texto {
+  display: block;
+  margin-top: 10px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #f5f5f5;
+}
+*/
+/* ---------- Indice de contenido ---------- */
+.portada-indice {
+  background-color: #f5f5f5;
+  color: #1a1a1a;
+  padding: 50px 40px 60px;
+}
+
+.portada-indice h2 {
+  color: #8c1146;
+  margin-top: 0;
+  margin-bottom: 26px;
+}
+
+.portada-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  max-width: 1000px;
+}
+
+/*.portada-lista a {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-left: 5px solid #8c1146;
+  border-radius: 6px;
+  padding: 16px 18px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-left-color 0.15s, box-shadow 0.15s;
+}*/
+.portada-lista a {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-left: 5px solid #8c1146;
+  border-radius: 6px;
+  padding: 16px 18px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.portada-lista a:hover {
+  background-color: #f6f0e6;
+}
+/*
+.portada-lista a:hover {
+  border-left-color: #f0b429;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.12);
+}*/
+
+.portada-lista .numero {
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #8c1146;
+}
+
+.portada-lista .titulo {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* ---------- Pie de pagina ---------- */
+.portada-footer {
+  background-color: #8c1146;
+  color: #f6d9ba;
+  text-align: center;
+  padding: 16px;
+  font-size: 13px;
+}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paso 5 - Mi receta favorita: Bolon de verde</title>
+  <link rel="stylesheet" href="receta.css">
+</head>
+<body>
+
+  <header class="receta-header">
+    <h1>Bolon de Verde</h1>
+    <p class="subtitulo">Mi receta ecuatoriana favorita, paso a paso</p>
+  </header>
+
+  <main class="receta-contenido">
+
+    <section class="galeria">
+      <h2>Fotos de la receta</h2>
+      <div class="galeria-imagenes">
+        <figure>
+          <img src="img/ingredientes.png" alt="Ingredientes del bolon de verde: platano verde, queso, chicharron y mantequilla" width="320" height="220">
+          <figcaption>1. Ingredientes</figcaption>
+        </figure>
+        <figure>
+          <img src="img/preparacion.png" alt="Platano verde cocido siendo aplastado y mezclado con queso y chicharron" width="320" height="220">
+          <figcaption>2. Preparacion</figcaption>
+        </figure>
+        <figure>
+          <img src="img/boloneslistos.png" alt="Bolones de verde dorados y listos para servir" width="320" height="220">
+          <figcaption>3. Bolones listos</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="video-receta">
+      <h2>Video de la receta</h2>
+      <!-- Coloca aqui tu video descargado con el nombre "bolon-de-verde.mp4"
+           dentro de la carpeta paso5-receta/video/ y se reproducira automaticamente. -->
+      <video controls width="200" poster="img/boloneslistos.svg">
+        <source src="video/bolon-de-verde.mp4" type="video/mp4">
+        Tu navegador no soporta la reproduccion de video.
+      </video>
+    </section>
+
+    <section class="ingredientes">
+      <h2>Ingredientes</h2>
+      <table class="tabla-ingredientes" id="tabla-ingredientes">
+        <thead>
+          <tr>
+            <th>Ingrediente</th>
+            <th>Cantidad</th>
+            <th>Unidad</th>
+          </tr>
+        </thead>
+        <tbody id="cuerpo-ingredientes">
+          <!-- Las filas se generan dinamicamente con JavaScript -->
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3" id="pie-ingredientes">Cargando total de ingredientes...</td>
+          </tr>
+        </tfoot>
+      </table>
+    </section>
+
+    <section class="instrucciones">
+      <h2>Instrucciones de preparacion</h2>
+      <ol class="lista-pasos">
+        <li>Pela los platanos verdes y cortalos en trozos medianos.</li>
+        <li>Cocina los trozos en agua con un poco de sal hasta que esten suaves, unos 20 minutos.</li>
+        <li>Escurre el platano y aplastalo en caliente hasta formar una masa uniforme.</li>
+        <li>Mezcla la masa con el queso fresco desmenuzado y el chicharron o tocino picado.</li>
+        <li>Con las manos ligeramente engrasadas, forma bolas medianas con la mezcla.</li>
+        <li>Derrite la mantequilla en un sarten a fuego medio y dora las bolas por todos los lados.</li>
+        <li>Sirve caliente, solo o acompañado de cafe o chocolate caliente.</li>
+      </ol>
+    </section>
+
+  </main>
+
+  <footer class="receta-footer">
+    <p>Receta compartida con cariño para el Paso 5 de la practica.</p>
+  </footer>
+
+  <script src="receta.js"></script>
+</body>
+</html>

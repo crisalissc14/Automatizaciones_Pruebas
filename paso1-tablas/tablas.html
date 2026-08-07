@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paso 1 - Tablas</title>
+  <link rel="stylesheet" href="tablas.css">
+</head>
+<body>
+
+  <h1>Paso 1: Tablas</h1>
+
+  <h2>Tabla 1: Cartelera de peliculas</h2>
+  <!-- Los textos de esta tabla (encabezados y titulos de peliculas) se dejan en ingles
+       a proposito, porque la consigna del ejercicio los pide de forma literal. -->
+  <table class="tabla-peliculas">
+    <tr class="fila-encabezado">
+      <th>Movie Title</th>
+      <th>Price</th>
+    </tr>
+    <tr>
+      <td>The Jungle Book</td>
+      <td>$22.96</td>
+    </tr>
+    <tr>
+      <td>Marvel's Captain America: Civil War</td>
+      <td>$22.99</td>
+    </tr>
+    <tr>
+      <td>Star Wars: The Force Awakens</td>
+      <td>$29.96</td>
+    </tr>
+  </table>
+
+  <h2>Tabla 2: Mis videojuegos favoritos por genero</h2>
+  <table class="tabla-videojuegos">
+    <thead>
+      <tr>
+        <th>Genero</th>
+        <th>Titulo</th>
+        <th>Ano de lanzamiento</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td rowspan="3">Aventura</td>
+        <td>Minecraft Edition</td>
+        <td>2011</td>
+      </tr>
+      <tr>
+        <td>Dinsey's Tarzan</td>
+        <td>1999</td>
+      </tr>
+      <tr>
+        <td>Resident Evil 7</td>
+        <td>2017</td>
+      </tr>
+      <tr>
+        <td rowspan="2">Acertijos y Misterios</td>
+        <td>Clue: Murder at Boddy Mansion</td>
+        <td>1998</td>
+      </tr>
+      <tr>
+        <td>RUN (FRIV)</td>
+        <td>2008</td>
+      </tr>
+      <tr>
+        <td>Conducción</td>
+        <td>The Need for Speed</td>
+        <td>1994</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3">Total: 6 juegos favoritos</td>
+      </tr>
+    </tfoot>
+  </table>
+
+</body>
+</html>

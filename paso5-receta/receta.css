@@ -1,0 +1,148 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Verdana, sans-serif;
+  background-color: #fff8f0;
+  color: #3e2723;
+}
+
+.receta-header {
+  background-color: #bf360c;
+  color: #fff8f0;
+  text-align: center;
+  padding: 36px 20px 28px;
+}
+
+.receta-header h1 {
+  margin: 0 0 8px;
+  font-size: 38px;
+  letter-spacing: 1px;
+}
+
+.receta-header .subtitulo {
+  margin: 0;
+  font-style: italic;
+  font-size: 16px;
+  color: #ffe0b2;
+}
+
+.receta-contenido {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px 20px 10px;
+}
+
+.receta-contenido h2 {
+  color: #bf360c;
+  border-bottom: 3px solid #ffb74d;
+  padding-bottom: 6px;
+  margin-top: 40px;
+}
+
+/* ---------- Galeria de imagenes ---------- */
+.galeria-imagenes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.galeria-imagenes figure {
+  margin: 0;
+  background-color: #ffffff;
+  border: 2px solid #ffb74d;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 3px 3px 0 rgba(191, 54, 12, 0.15);
+}
+
+.galeria-imagenes img {
+  border-radius: 6px;
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.galeria-imagenes figcaption {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #6d4c41;
+}
+
+/* ---------- Tabla de ingredientes ---------- */
+.tabla-ingredientes {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  font-size: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.tabla-ingredientes th,
+.tabla-ingredientes td {
+  border: 1px solid #ffb74d;
+  padding: 10px 14px;
+  text-align: left;
+}
+
+.tabla-ingredientes thead {
+  background-color: #bf360c;
+  color: #fff8f0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 13px;
+}
+
+.tabla-ingredientes tbody tr:nth-child(odd) {
+  background-color: #fff3e0;
+}
+
+.tabla-ingredientes tbody tr:nth-child(even) {
+  background-color: #ffe0b2;
+}
+
+.tabla-ingredientes tbody tr:hover {
+  background-color: #ffcc80;
+}
+
+.tabla-ingredientes tfoot {
+  background-color: #6d4c41;
+  color: #fff8f0;
+  font-weight: bold;
+}
+
+.tabla-ingredientes tfoot td {
+  text-align: center;
+}
+
+/* ---------- Lista de instrucciones ---------- */
+.lista-pasos {
+  margin-top: 16px;
+  padding-left: 24px;
+  line-height: 1.8;
+}
+
+.lista-pasos li {
+  margin-bottom: 10px;
+  padding-left: 6px;
+}
+
+.lista-pasos li::marker {
+  color: #bf360c;
+  font-weight: bold;
+}
+
+.receta-footer {
+  text-align: center;
+  background-color: #3e2723;
+  color: #ffe0b2;
+  padding: 18px;
+  margin-top: 40px;
+  font-size: 14px;
+}
