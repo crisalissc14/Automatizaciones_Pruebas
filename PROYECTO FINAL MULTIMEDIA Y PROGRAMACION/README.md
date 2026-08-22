@@ -7,7 +7,7 @@ Sitio informativo/interactivo dirigido a partners baristas de una cafetería fic
 
 ## Cómo usarlo
 
-1. Descomprime la carpeta `PF_ColimbaRamosCristina`.
+1. Descomprime la carpeta `PROYECTO FINAL MULTIMEDIA Y PROGRAMACION`.
 2. Abre `index.html` directamente en el navegador (doble clic). No requiere servidor ni instalación.
 3. Necesitas conexión a internet únicamente para cargar las tipografías desde Google Fonts (Newsreader, Archivo, Space Mono), definidas en `css/style.css`. Si no hay internet, el sitio sigue funcionando con las fuentes de reemplazo del sistema.
 4. Navega entre las 8 páginas desde el menú superior (o el botón de hamburguesa en móvil).
@@ -15,7 +15,7 @@ Sitio informativo/interactivo dirigido a partners baristas de una cafetería fic
 ## Estructura
 
 ```
-PF_ColimbaRamosCristina/
+PROYECTO FINAL MULTIMEDIA Y PROGRAMACION/
 ├── index.html, historia.html, noticias.html, cursos.html,
 │   latte-art.html, recetario.html, comunidad.html, trivia.html
 ├── css/style.css
