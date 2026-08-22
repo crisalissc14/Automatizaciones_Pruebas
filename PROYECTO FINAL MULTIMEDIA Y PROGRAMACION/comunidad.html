@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comunidad de Partners — GROUNDS</title>
+<meta name="description" content="Tablero de tips entre baristas y preguntas frecuentes de la comunidad de partners GROUNDS.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Saltar al contenido principal</a>
+
+<header class="site-header">
+  <div class="container nav-bar">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">GC</span>
+      <span class="brand-name">GROUNDS</span>
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menú de navegación">
+      <span></span><span></span><span></span>
+    </button>
+    <nav aria-label="Navegación principal">
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="historia.html">Historia</a></li>
+        <li><a href="noticias.html">Noticias</a></li>
+        <li><a href="cursos.html">Cursos</a></li>
+        <li><a href="latte-art.html">Arte Latte</a></li>
+        <li><a href="recetario.html">Recetario</a></li>
+        <li><a href="comunidad.html" aria-current="page">Comunidad</a></li>
+        <li><a href="trivia.html">Trivia</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="section container">
+    <p class="eyebrow">Comunidad de partners</p>
+    <h1>Tips entre baristas</h1>
+    <p class="lede">Comparte lo que has aprendido en la barra. Cualquier tip queda guardado en este equipo, no solo en tu memoria.</p>
+    <img src="assets/img/comunidad-tablero.svg" alt="Ilustración de un tablero de corcho con notas y tickets colgados" width="900" height="260">
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+
+      <form id="tip-form" class="tip-form grid grid-2">
+        <div class="form-field">
+          <label for="tip-name">Tu nombre</label>
+          <input type="text" id="tip-name" autocomplete="name">
+          <span class="form-error" id="error-tip-name"></span>
+        </div>
+        <div class="form-field form-span-2">
+          <label for="tip-text">Tu tip</label>
+          <textarea id="tip-text" placeholder="Ej. Si la leche de avena se corta, prueba con agua más fría..."></textarea>
+          <span class="form-error" id="error-tip-text"></span>
+        </div>
+        <div class="form-span-2">
+          <button type="submit" class="btn btn-caramel">Publicar tip</button>
+        </div>
+      </form>
+
+      <h2>Tips del equipo</h2>
+      <div class="grid grid-3" id="tip-list">
+        <!-- Tarjetas generadas dinámicamente por comunidad.js -->
+      </div>
+      <p class="empty-state" id="tip-empty" hidden>Todavía no hay tips publicados. ¡Sé el primero!</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Preguntas frecuentes</h2>
+
+      <div class="accordion" id="faq-accordion">
+        <div class="accordion-item">
+          <button class="accordion-trigger" aria-expanded="false" aria-controls="faq-1">
+            <span>¿Cómo reporto un problema con la máquina de espresso?</span>
+            <span class="accordion-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="accordion-panel" id="faq-1">
+            <p>Avisa de inmediato a tu líder de turno y registra el incidente en la bitácora de mantenimiento de la tienda.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger" aria-expanded="false" aria-controls="faq-2">
+            <span>¿Dónde encuentro el manual de fundamentos de barista?</span>
+            <span class="accordion-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="accordion-panel" id="faq-2">
+            <p>En la sección <a href="cursos.html">Cursos</a>, dentro del grupo "Fundamentos".</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger" aria-expanded="false" aria-controls="faq-3">
+            <span>¿Con qué frecuencia se actualiza la trivia semanal?</span>
+            <span class="accordion-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="accordion-panel" id="faq-3">
+            <p>El leaderboard se reinicia cada semana. Puedes revisar el detalle en la sección <a href="trivia.html">Trivia</a>.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger" aria-expanded="false" aria-controls="faq-4">
+            <span>¿Puedo sugerir un tip que ya existe pero mejorado?</span>
+            <span class="accordion-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="accordion-panel" id="faq-4">
+            <p>Claro, publícalo igual: mientras más versiones y contexto tengamos, mejor aprende todo el equipo.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger" aria-expanded="false" aria-controls="faq-5">
+            <span>¿Cómo elimino un tip que publiqué por error?</span>
+            <span class="accordion-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="accordion-panel" id="faq-5">
+            <p>Cada tarjeta de tip tiene un botón "Eliminar" que lo quita de la lista y de tu navegador de inmediato.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger" aria-expanded="false" aria-controls="faq-6">
+            <span>¿A quién contacto si tengo una duda que no está aquí?</span>
+            <span class="accordion-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="accordion-panel" id="faq-6">
+            <p>Escríbenos usando el correo de contacto en el pie de página, o pregúntale a tu líder de turno.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <h3>Sobre GROUNDS</h3>
+      <p><span class="brand-mark">GC</span> El hub del partner: un solo lugar para aprender, compartir y crecer como equipo.</p>
+    </div>
+    <div>
+      <h3>Navegación rápida</h3>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="historia.html">Historia</a></li>
+        <li><a href="noticias.html">Noticias</a></li>
+        <li><a href="cursos.html">Cursos</a></li>
+        <li><a href="latte-art.html">Arte Latte</a></li>
+        <li><a href="recetario.html">Recetario</a></li>
+        <li><a href="comunidad.html">Comunidad</a></li>
+        <li><a href="trivia.html">Trivia</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Contacto</h3>
+      <ul>
+        <li><a href="mailto:partners@grounds-hub.example.com?subject=Consulta%20desde%20el%20sitio">Escríbenos</a></li>
+        <li><a href="mailto:capacitacion@grounds-hub.example.com?subject=Duda%20sobre%20un%20curso">Dudas de capacitación</a></li>
+        <li><a href="tel:+15555550142">Línea de partners: +1 555 555 0142</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>© <span data-year></span> GROUNDS — El Hub del Partner</span>
+    <span>Proyecto académico — Programación Web y Multimedia</span>
+    <a href="historia.html#creditos">Créditos multimedia</a>
+  </div>
+</footer>
+
+<script src="js/nav.js"></script>
+<script src="js/comunidad.js"></script>
+</body>
+</html>

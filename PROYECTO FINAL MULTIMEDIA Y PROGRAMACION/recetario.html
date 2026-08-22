@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recetario &amp; Catas — GROUNDS</title>
+<meta name="description" content="Calculadora de bebidas y hoja de cata interactiva (cupping) para partners GROUNDS.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Saltar al contenido principal</a>
+
+<header class="site-header">
+  <div class="container nav-bar">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">GC</span>
+      <span class="brand-name">GROUNDS</span>
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menú de navegación">
+      <span></span><span></span><span></span>
+    </button>
+    <nav aria-label="Navegación principal">
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="historia.html">Historia</a></li>
+        <li><a href="noticias.html">Noticias</a></li>
+        <li><a href="cursos.html">Cursos</a></li>
+        <li><a href="latte-art.html">Arte Latte</a></li>
+        <li><a href="recetario.html" aria-current="page">Recetario</a></li>
+        <li><a href="comunidad.html">Comunidad</a></li>
+        <li><a href="trivia.html">Trivia</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="section container">
+    <p class="eyebrow">Recetario &amp; Catas</p>
+    <h1>Calculadora de bebidas y hoja de cata</h1>
+    <p class="lede">Dos herramientas en una: arma cualquier bebida base en segundos y practica tu paladar con una hoja de cata digital.</p>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <h2>Parte 1 — Calculadora de bebidas</h2>
+
+      <form id="drink-form" class="grid grid-3">
+        <div class="form-field">
+          <label for="drink-size">Tamaño</label>
+          <select id="drink-size">
+            <option value="alto">Alto (12 oz)</option>
+            <option value="grande" selected>Grande (16 oz)</option>
+            <option value="venti">Venti (20 oz)</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="drink-milk">Tipo de leche</label>
+          <select id="drink-milk">
+            <option value="entera">Entera</option>
+            <option value="descremada">Descremada</option>
+            <option value="avena">Avena</option>
+            <option value="almendra">Almendra</option>
+            <option value="deslactosada">Deslactosada</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="drink-shots">Shots de espresso</label>
+          <select id="drink-shots">
+            <option value="1">1 shot</option>
+            <option value="2" selected>2 shots</option>
+            <option value="3">3 shots</option>
+            <option value="4">4 shots</option>
+          </select>
+        </div>
+      </form>
+
+      <div class="recipe-result" id="drink-result" aria-live="polite">
+        <!-- Resultado calculado dinámicamente por recetario.js -->
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Parte 2 — Cómo hacer una cata (cupping)</h2>
+      <img src="assets/img/recetario-cata.svg" alt="Ilustración de tazas de cata en fila con cucharas sobre una mesa de madera" width="900" height="260">
+
+      <ol>
+        <li>Muele el café más grueso de lo habitual y déjalo reposar 4 minutos con agua caliente, sin remover.</li>
+        <li>Rompe la costra empujando suavemente los granos hacia el fondo mientras acercas la nariz a la taza.</li>
+        <li>Aspira el aroma profundamente antes de que se disipe: es la primera impresión del café.</li>
+        <li>Sorbe con fuerza para atomizar el café en toda la boca y evalúa acidez, cuerpo y dulzor.</li>
+        <li>Anota tus impresiones en la hoja de cata mientras el café se enfría y cambia de carácter.</li>
+      </ol>
+
+      <h3>Hoja de cata interactiva</h3>
+      <p class="lede">Mueve cada control para puntuar de 1 a 10. El puntaje total se actualiza al instante.</p>
+
+      <form id="cupping-form">
+        <div class="slider-row">
+          <label for="score-aroma">Aroma</label>
+          <input type="range" id="score-aroma" min="1" max="10" value="5">
+          <output id="out-aroma">5</output>
+        </div>
+        <div class="slider-row">
+          <label for="score-acidez">Acidez</label>
+          <input type="range" id="score-acidez" min="1" max="10" value="5">
+          <output id="out-acidez">5</output>
+        </div>
+        <div class="slider-row">
+          <label for="score-cuerpo">Cuerpo</label>
+          <input type="range" id="score-cuerpo" min="1" max="10" value="5">
+          <output id="out-cuerpo">5</output>
+        </div>
+        <div class="slider-row">
+          <label for="score-dulzor">Dulzor</label>
+          <input type="range" id="score-dulzor" min="1" max="10" value="5">
+          <output id="out-dulzor">5</output>
+        </div>
+        <div class="slider-row">
+          <label for="score-retrogusto">Retrogusto</label>
+          <input type="range" id="score-retrogusto" min="1" max="10" value="5">
+          <output id="out-retrogusto">5</output>
+        </div>
+      </form>
+
+      <p class="text-center mono mb-0">Puntaje total</p>
+      <p class="cupping-score" id="cupping-total" aria-live="polite">25 / 50</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <h3>Sobre GROUNDS</h3>
+      <p><span class="brand-mark">GC</span> El hub del partner: un solo lugar para aprender, compartir y crecer como equipo.</p>
+    </div>
+    <div>
+      <h3>Navegación rápida</h3>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="historia.html">Historia</a></li>
+        <li><a href="noticias.html">Noticias</a></li>
+        <li><a href="cursos.html">Cursos</a></li>
+        <li><a href="latte-art.html">Arte Latte</a></li>
+        <li><a href="recetario.html">Recetario</a></li>
+        <li><a href="comunidad.html">Comunidad</a></li>
+        <li><a href="trivia.html">Trivia</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Contacto</h3>
+      <ul>
+        <li><a href="mailto:partners@grounds-hub.example.com?subject=Consulta%20desde%20el%20sitio">Escríbenos</a></li>
+        <li><a href="mailto:capacitacion@grounds-hub.example.com?subject=Duda%20sobre%20un%20curso">Dudas de capacitación</a></li>
+        <li><a href="tel:+15555550142">Línea de partners: +1 555 555 0142</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>© <span data-year></span> GROUNDS — El Hub del Partner</span>
+    <span>Proyecto académico — Programación Web y Multimedia</span>
+    <a href="historia.html#creditos">Créditos multimedia</a>
+  </div>
+</footer>
+
+<script src="js/nav.js"></script>
+<script src="js/recetario.js"></script>
+</body>
+</html>

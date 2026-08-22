@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 260" role="img" aria-labelledby="t3">
+<title id="t3">Ilustración de una pila de cuadernos y un diploma, representando el repositorio de cursos GROUNDS</title>
+<rect width="900" height="260" fill="#F7EFE3"/>
+<rect x="120" y="150" width="260" height="24" rx="6" fill="#1F4D3A"/>
+<rect x="140" y="120" width="260" height="24" rx="6" fill="#C9974B"/>
+<rect x="100" y="90" width="260" height="24" rx="6" fill="#2B1B14"/>
+<g stroke="#4A3327" stroke-width="4" fill="none">
+<circle cx="640" cy="120" r="70"/>
+</g>
+<path d="M600 120 l25 25 l45 -50" stroke="#1F4D3A" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="600" y="190" width="80" height="14" fill="#A8792F" transform="skewX(-15)"/>
+<g fill="#C9974B">
+<circle cx="760" cy="70" r="10"/>
+<circle cx="790" cy="100" r="8"/>
+</g>
+</svg>

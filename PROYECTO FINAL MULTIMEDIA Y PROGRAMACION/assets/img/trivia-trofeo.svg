@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" role="img" aria-labelledby="t9">
+<title id="t9">Ilustración de un trofeo de trivia GROUNDS con un grano de café en la copa</title>
+<rect x="110" y="230" width="80" height="20" rx="4" fill="#2B1B14"/>
+<rect x="130" y="200" width="40" height="35" fill="#4A3327"/>
+<path d="M90 90 h120 v50 a60 55 0 0 1 -120 0 z" fill="#C9974B" stroke="#2B1B14" stroke-width="6"/>
+<path d="M90 100 q-40 0 -40 40 q0 45 55 45" fill="none" stroke="#2B1B14" stroke-width="8"/>
+<path d="M210 100 q40 0 40 40 q0 45 -55 45" fill="none" stroke="#2B1B14" stroke-width="8"/>
+<ellipse cx="150" cy="115" rx="18" ry="24" fill="#2B1B14"/>
+<path d="M150 95 v40" stroke="#C9974B" stroke-width="4"/>
+</svg>
