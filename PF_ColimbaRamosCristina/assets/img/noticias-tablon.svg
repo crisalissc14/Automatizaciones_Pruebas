@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 220" role="img" aria-labelledby="t10">
+<title id="t10">Ilustración de tickets de noticias apilados con un megáfono, representando el tablón de comunicados</title>
+<rect width="900" height="220" fill="#F7EFE3"/>
+<rect x="90" y="60" width="320" height="100" rx="12" fill="#FFFDF9" stroke="#2B1B14" stroke-width="5"/>
+<rect x="120" y="50" width="320" height="100" rx="12" fill="#EFE3D0" stroke="#2B1B14" stroke-width="5"/>
+<rect x="150" y="40" width="320" height="100" rx="12" fill="#FFFDF9" stroke="#2B1B14" stroke-width="5"/>
+<line x1="170" y1="70" x2="420" y2="70" stroke="#4A3327" stroke-width="6"/>
+<line x1="170" y1="95" x2="420" y2="95" stroke="#C9974B" stroke-width="6"/>
+<line x1="170" y1="120" x2="360" y2="120" stroke="#4A3327" stroke-width="6"/>
+<path d="M600 90 l90 -35 v130 l-90 -35 z" fill="#1F4D3A"/>
+<rect x="560" y="80" width="45" height="50" rx="6" fill="#1F4D3A"/>
+<path d="M700 70 q30 20 0 50" stroke="#A3312A" stroke-width="6" fill="none"/>
+<path d="M715 55 q45 30 0 90" stroke="#A3312A" stroke-width="6" fill="none"/>
+</svg>

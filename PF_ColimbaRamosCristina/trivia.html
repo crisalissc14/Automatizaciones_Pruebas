@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trivia del Café — GROUNDS</title>
+<meta name="description" content="Trivia interactiva de café con leaderboard semanal para partners GROUNDS.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Saltar al contenido principal</a>
+
+<header class="site-header">
+  <div class="container nav-bar">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">GC</span>
+      <span class="brand-name">GROUNDS</span>
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menú de navegación">
+      <span></span><span></span><span></span>
+    </button>
+    <nav aria-label="Navegación principal">
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="historia.html">Historia</a></li>
+        <li><a href="noticias.html">Noticias</a></li>
+        <li><a href="cursos.html">Cursos</a></li>
+        <li><a href="latte-art.html">Arte Latte</a></li>
+        <li><a href="recetario.html">Recetario</a></li>
+        <li><a href="comunidad.html">Comunidad</a></li>
+        <li><a href="trivia.html" aria-current="page">Trivia</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="section container">
+    <p class="eyebrow"><span class="badge-live">Reto semanal</span></p>
+    <h1>Trivia del Café</h1>
+    <p class="lede">10 preguntas sobre café. El ganador de esta semana se anuncia cada lunes en la reunión de apertura de tienda — no necesitas backend para competir, solo tu conocimiento.</p>
+    <img src="assets/img/trivia-trofeo.svg" alt="Ilustración de un trofeo con un grano de café tostado en la copa" width="240" height="240" class="img-sm">
+  </section>
+
+  <section class="section section-alt">
+    <div class="container quiz-card">
+
+      <div id="quiz-active">
+        <p class="quiz-progress" id="quiz-progress">Pregunta 1 de 10</p>
+        <div class="ticket">
+          <span class="ticket-code" id="quiz-code">#TRIVIA-01</span>
+          <h2 id="quiz-question">Pregunta</h2>
+          <hr class="ticket-divider">
+          <ul class="quiz-options" id="quiz-options"></ul>
+        </div>
+      </div>
+
+      <div id="quiz-result" hidden>
+        <div class="ticket text-center">
+          <span class="ticket-code">#TRIVIA-RESULT</span>
+          <h2>¡Trivia completada!</h2>
+          <hr class="ticket-divider">
+          <p class="cupping-score" id="quiz-final-score">0 / 10</p>
+          <p class="lede">Ingresa tu nombre para sumar este puntaje al reto semanal.</p>
+
+          <form id="score-form" class="grid grid-2">
+            <div class="form-field form-span-2">
+              <label for="score-name">Tu nombre</label>
+              <input type="text" id="score-name" autocomplete="name">
+              <span class="form-error" id="error-score-name"></span>
+            </div>
+            <div class="form-span-2">
+              <button type="submit" class="btn btn-caramel">Enviar puntaje al reto semanal</button>
+              <button type="button" class="btn btn-outline" id="quiz-restart">Jugar de nuevo</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Leaderboard — Top 5 de la semana</h2>
+      <div class="table-wrap">
+        <table id="leaderboard-table">
+          <caption>Mejores puntajes registrados en este navegador</caption>
+          <thead>
+            <tr>
+              <th scope="col">Puesto</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Puntaje</th>
+              <th scope="col">Fecha</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboard-body">
+            <!-- Generado dinámicamente por trivia.js -->
+          </tbody>
+        </table>
+      </div>
+      <p class="empty-state" id="leaderboard-empty" hidden>Todavía no hay puntajes registrados esta semana.</p>
+      <button class="btn btn-outline btn-sm mt-4" id="reset-leaderboard">Reiniciar reto</button>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <h3>Sobre GROUNDS</h3>
+      <p><span class="brand-mark">GC</span> El hub del partner: un solo lugar para aprender, compartir y crecer como equipo.</p>
+    </div>
+    <div>
+      <h3>Navegación rápida</h3>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="historia.html">Historia</a></li>
+        <li><a href="noticias.html">Noticias</a></li>
+        <li><a href="cursos.html">Cursos</a></li>
+        <li><a href="latte-art.html">Arte Latte</a></li>
+        <li><a href="recetario.html">Recetario</a></li>
+        <li><a href="comunidad.html">Comunidad</a></li>
+        <li><a href="trivia.html">Trivia</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Contacto</h3>
+      <ul>
+        <li><a href="mailto:partners@grounds-hub.example.com?subject=Consulta%20desde%20el%20sitio">Escríbenos</a></li>
+        <li><a href="mailto:capacitacion@grounds-hub.example.com?subject=Duda%20sobre%20un%20curso">Dudas de capacitación</a></li>
+        <li><a href="tel:+15555550142">Línea de partners: +1 555 555 0142</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>© <span data-year></span> GROUNDS — El Hub del Partner</span>
+    <span>Proyecto académico — Programación Web y Multimedia</span>
+    <a href="historia.html#creditos">Créditos multimedia</a>
+  </div>
+</footer>
+
+<script src="js/nav.js"></script>
+<script src="js/trivia.js"></script>
+</body>
+</html>

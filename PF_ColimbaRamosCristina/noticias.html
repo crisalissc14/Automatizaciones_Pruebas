@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noticias — GROUNDS</title>
+<meta name="description" content="Comunicados internos, eventos, productos y reconocimientos del equipo GROUNDS, filtrables por categoría.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Saltar al contenido principal</a>
+
+<header class="site-header">
+  <div class="container nav-bar">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">GC</span>
+      <span class="brand-name">GROUNDS</span>
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menú de navegación">
+      <span></span><span></span><span></span>
+    </button>
+    <nav aria-label="Navegación principal">
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="historia.html">Historia</a></li>
+        <li><a href="noticias.html" aria-current="page">Noticias</a></li>
+        <li><a href="cursos.html">Cursos</a></li>
+        <li><a href="latte-art.html">Arte Latte</a></li>
+        <li><a href="recetario.html">Recetario</a></li>
+        <li><a href="comunidad.html">Comunidad</a></li>
+        <li><a href="trivia.html">Trivia</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="section container">
+    <p class="eyebrow">Comunicados internos</p>
+    <h1>Noticias del equipo</h1>
+    <p class="lede">Todo lo que pasa en GROUNDS: eventos, productos nuevos y reconocimientos a partners, en un solo tablón.</p>
+    <img src="assets/img/noticias-tablon.svg" alt="Ilustración de tickets de noticias apilados junto a un megáfono, representando el tablón de comunicados" width="900" height="220">
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+
+      <div class="form-field field-narrow">
+        <label for="news-search">Buscar por título</label>
+        <input type="search" id="news-search" placeholder="Ej. Coffee Master, tueste, Ana...">
+      </div>
+
+      <div class="filter-bar" role="group" aria-label="Filtrar noticias por categoría">
+        <button class="filter-btn" data-category="todas" aria-pressed="true">Todas</button>
+        <button class="filter-btn" data-category="eventos" aria-pressed="false">Eventos</button>
+        <button class="filter-btn" data-category="productos" aria-pressed="false">Productos</button>
+        <button class="filter-btn" data-category="reconocimientos" aria-pressed="false">Reconocimientos</button>
+      </div>
+
+      <p class="results-count" id="news-count"></p>
+
+      <div class="grid grid-2" id="news-list">
+
+        <article class="ticket news-article" data-category="eventos" data-title="noche de catas abierta al público">
+          <span class="ticket-code">#NEWS-014</span>
+          <div class="news-meta">
+            <span class="news-date">14 ago 2026</span>
+            <span class="news-category-label">Eventos</span>
+          </div>
+          <h3>Noche de catas abierta al público</h3>
+          <hr class="ticket-divider">
+          <p>Este viernes abrimos la barra para una cata guiada con clientes frecuentes. Se necesitan dos partners voluntarios en el turno de la tarde.</p>
+        </article>
+
+        <article class="ticket news-article" data-category="productos" data-title="nuevo tueste de temporada: finca la loma">
+          <span class="ticket-code">#NEWS-013</span>
+          <div class="news-meta">
+            <span class="news-date">10 ago 2026</span>
+            <span class="news-category-label">Productos</span>
+          </div>
+          <h3>Nuevo tueste de temporada: Finca La Loma</h3>
+          <hr class="ticket-divider">
+          <p>Llega un tueste medio con notas a caramelo y cítricos. Ya está disponible la ficha técnica en Cursos → Café y Origen.</p>
+        </article>
+
+        <article class="ticket news-article" data-category="reconocimientos" data-title="partner del mes: javier rueda">
+          <span class="ticket-code">#NEWS-012</span>
+          <div class="news-meta">
+            <span class="news-date">05 ago 2026</span>
+            <span class="news-category-label">Reconocimientos</span>
+          </div>
+          <h3>Partner del mes: Javier Rueda</h3>
+          <hr class="ticket-divider">
+          <p>Por su iniciativa entrenando a los nuevos ingresos en arte latte. ¡Felicidades, Javier!</p>
+        </article>
+
+        <article class="ticket news-article" data-category="eventos" data-title="capacitación coffee master, segunda cohorte">
+          <span class="ticket-code">#NEWS-011</span>
+          <div class="news-meta">
+            <span class="news-date">28 jul 2026</span>
+            <span class="news-category-label">Eventos</span>
+          </div>
+          <h3>Capacitación Coffee Master, segunda cohorte</h3>
+          <hr class="ticket-divider">
+          <p>Abren cupos para el programa avanzado de catas. Inscripciones en Cursos, con tu líder de tienda.</p>
+        </article>
+
+        <article class="ticket news-article" data-category="productos" data-title="nueva leche de avena en el menú">
+          <span class="ticket-code">#NEWS-010</span>
+          <div class="news-meta">
+            <span class="news-date">20 jul 2026</span>
+            <span class="news-category-label">Productos</span>
+          </div>
+          <h3>Nueva leche de avena en el menú</h3>
+          <hr class="ticket-divider">
+          <p>A partir de esta semana, la leche de avena es una opción estándar en todas las tiendas. Revisa la calculadora de bebidas en Recetario.</p>
+        </article>
+
+        <article class="ticket news-article" data-category="reconocimientos" data-title="cinco años de servicio: equipo tienda centro">
+          <span class="ticket-code">#NEWS-009</span>
+          <div class="news-meta">
+            <span class="news-date">12 jul 2026</span>
+            <span class="news-category-label">Reconocimientos</span>
+          </div>
+          <h3>Cinco años de servicio: equipo Tienda Centro</h3>
+          <hr class="ticket-divider">
+          <p>Todo el equipo de la tienda Centro cumplió cinco años trabajando junto. Un brindis (con café, claro) para ellos.</p>
+        </article>
+
+      </div>
+
+      <p class="empty-state" id="news-empty" hidden>No encontramos noticias que coincidan con tu búsqueda.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <h3>Sobre GROUNDS</h3>
+      <p><span class="brand-mark">GC</span> El hub del partner: un solo lugar para aprender, compartir y crecer como equipo.</p>
+    </div>
+    <div>
+      <h3>Navegación rápida</h3>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="historia.html">Historia</a></li>
+        <li><a href="noticias.html">Noticias</a></li>
+        <li><a href="cursos.html">Cursos</a></li>
+        <li><a href="latte-art.html">Arte Latte</a></li>
+        <li><a href="recetario.html">Recetario</a></li>
+        <li><a href="comunidad.html">Comunidad</a></li>
+        <li><a href="trivia.html">Trivia</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Contacto</h3>
+      <ul>
+        <li><a href="mailto:partners@grounds-hub.example.com?subject=Consulta%20desde%20el%20sitio">Escríbenos</a></li>
+        <li><a href="mailto:capacitacion@grounds-hub.example.com?subject=Duda%20sobre%20un%20curso">Dudas de capacitación</a></li>
+        <li><a href="tel:+15555550142">Línea de partners: +1 555 555 0142</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>© <span data-year></span> GROUNDS — El Hub del Partner</span>
+    <span>Proyecto académico — Programación Web y Multimedia</span>
+    <a href="historia.html#creditos">Créditos multimedia</a>
+  </div>
+</footer>
+
+<script src="js/nav.js"></script>
+<script src="js/noticias.js"></script>
+</body>
+</html>

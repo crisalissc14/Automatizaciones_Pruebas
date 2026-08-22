@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cursos — GROUNDS</title>
+<meta name="description" content="Repositorio centralizado de cursos GROUNDS: fundamentos, café y origen, liderazgo y Coffee Master, con buscador en vivo.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Saltar al contenido principal</a>
+
+<header class="site-header">
+  <div class="container nav-bar">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">GC</span>
+      <span class="brand-name">GROUNDS</span>
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menú de navegación">
+      <span></span><span></span><span></span>
+    </button>
+    <nav aria-label="Navegación principal">
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="historia.html">Historia</a></li>
+        <li><a href="noticias.html">Noticias</a></li>
+        <li><a href="cursos.html" aria-current="page">Cursos</a></li>
+        <li><a href="latte-art.html">Arte Latte</a></li>
+        <li><a href="recetario.html">Recetario</a></li>
+        <li><a href="comunidad.html">Comunidad</a></li>
+        <li><a href="trivia.html">Trivia</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="section container">
+    <p class="eyebrow">Capacitación centralizada</p>
+    <h1>Cursos</h1>
+    <p class="lede">Se acabaron los PDFs perdidos en cinco chats distintos. Aquí está todo el material de capacitación de GROUNDS, buscable y organizado por categoría.</p>
+    <img src="assets/img/cursos-banner.svg" alt="Ilustración de una pila de cuadernos de estudio y un diploma con una marca de verificación" width="900" height="260">
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+
+      <div class="course-toolbar">
+        <div class="form-field toolbar-search-field">
+          <label for="course-search">Buscar curso por nombre o categoría</label>
+          <input type="search" id="course-search" placeholder="Ej. Coffee Master, liderazgo, tueste...">
+        </div>
+        <span class="results-count" id="course-count"></span>
+      </div>
+
+      <h2>Tabla de cursos</h2>
+      <div class="table-wrap">
+        <table id="course-table">
+          <caption>Listado completo de cursos disponibles para partners</caption>
+          <thead>
+            <tr>
+              <th scope="col">Nombre</th>
+              <th scope="col">Categoría</th>
+              <th scope="col">Duración</th>
+              <th scope="col">Nivel</th>
+              <th scope="col">Acceso</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="course-row" data-name="fundamentos de barista i" data-category="fundamentos">
+              <td>Fundamentos de Barista I</td><td>Fundamentos</td><td>2 h</td><td>Básico</td>
+              <td><a href="#curso-fundamentos-1">Ver detalle</a></td>
+            </tr>
+            <tr class="course-row" data-name="higiene y seguridad en barra" data-category="fundamentos">
+              <td>Higiene y seguridad en barra</td><td>Fundamentos</td><td>1 h</td><td>Básico</td>
+              <td><a href="#curso-fundamentos-2">Ver detalle</a></td>
+            </tr>
+            <tr class="course-row" data-name="atención al cliente grounds" data-category="fundamentos">
+              <td>Atención al cliente GROUNDS</td><td>Fundamentos</td><td>1.5 h</td><td>Básico</td>
+              <td><a href="#curso-fundamentos-3">Ver detalle</a></td>
+            </tr>
+            <tr class="course-row" data-name="orígenes del café: de la semilla a la taza" data-category="café y origen">
+              <td>Orígenes del café: de la semilla a la taza</td><td>Café y Origen</td><td>3 h</td><td>Intermedio</td>
+              <td><a href="#curso-origen-1">Ver detalle</a></td>
+            </tr>
+            <tr class="course-row" data-name="perfiles de tueste" data-category="café y origen">
+              <td>Perfiles de tueste</td><td>Café y Origen</td><td>2 h</td><td>Intermedio</td>
+              <td><a href="#curso-origen-2">Ver detalle</a></td>
+            </tr>
+            <tr class="course-row" data-name="métodos de extracción alternativos" data-category="café y origen">
+              <td>Métodos de extracción alternativos</td><td>Café y Origen</td><td>2.5 h</td><td>Intermedio</td>
+              <td><a href="#curso-origen-3">Ver detalle</a></td>
+            </tr>
+            <tr class="course-row" data-name="liderazgo de turno" data-category="liderazgo">
+              <td>Liderazgo de turno</td><td>Liderazgo</td><td>4 h</td><td>Avanzado</td>
+              <td><a href="#curso-liderazgo-1">Ver detalle</a></td>
+            </tr>
+            <tr class="course-row" data-name="manejo de conflictos en equipo" data-category="liderazgo">
+              <td>Manejo de conflictos en equipo</td><td>Liderazgo</td><td>2 h</td><td>Avanzado</td>
+              <td><a href="#curso-liderazgo-2">Ver detalle</a></td>
+            </tr>
+            <tr class="course-row" data-name="formación de nuevos partners" data-category="liderazgo">
+              <td>Formación de nuevos partners</td><td>Liderazgo</td><td>3 h</td><td>Avanzado</td>
+              <td><a href="#curso-liderazgo-3">Ver detalle</a></td>
+            </tr>
+            <tr class="course-row" data-name="certificación coffee master" data-category="coffee master">
+              <td>Certificación Coffee Master</td><td>Coffee Master</td><td>6 h</td><td>Avanzado</td>
+              <td><a href="#curso-master-1">Ver detalle</a></td>
+            </tr>
+            <tr class="course-row" data-name="cata avanzada y calibración de paladar" data-category="coffee master">
+              <td>Cata avanzada y calibración de paladar</td><td>Coffee Master</td><td>3 h</td><td>Avanzado</td>
+              <td><a href="#curso-master-2">Ver detalle</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="course-group-title">Fundamentos</h2>
+      <div class="grid grid-3 course-card-group">
+        <a class="ticket course-card" href="#curso-fundamentos-1" data-name="fundamentos de barista i" data-category="fundamentos">
+          <span class="ticket-code">#COURSE-001</span>
+          <h3>Fundamentos de Barista I</h3>
+          <hr class="ticket-divider">
+          <p>2 h · Básico — La base de espresso, vapor y montado de leche.</p>
+        </a>
+        <a class="ticket course-card" href="#curso-fundamentos-2" data-name="higiene y seguridad en barra" data-category="fundamentos">
+          <span class="ticket-code">#COURSE-002</span>
+          <h3>Higiene y seguridad en barra</h3>
+          <hr class="ticket-divider">
+          <p>1 h · Básico — Manejo de alimentos y protocolos de limpieza.</p>
+        </a>
+        <a class="ticket course-card" href="#curso-fundamentos-3" data-name="atención al cliente grounds" data-category="fundamentos">
+          <span class="ticket-code">#COURSE-003</span>
+          <h3>Atención al cliente GROUNDS</h3>
+          <hr class="ticket-divider">
+          <p>1.5 h · Básico — Cómo dar una bienvenida real, no un guion.</p>
+        </a>
+      </div>
+
+      <h2 class="course-group-title">Café y Origen</h2>
+      <div class="grid grid-3 course-card-group">
+        <a class="ticket course-card" href="#curso-origen-1" data-name="orígenes del café: de la semilla a la taza" data-category="café y origen">
+          <span class="ticket-code">#COURSE-004</span>
+          <h3>Orígenes del café: de la semilla a la taza</h3>
+          <hr class="ticket-divider">
+          <p>3 h · Intermedio — Recorrido por el proceso agrícola y de exportación.</p>
+        </a>
+        <a class="ticket course-card" href="#curso-origen-2" data-name="perfiles de tueste" data-category="café y origen">
+          <span class="ticket-code">#COURSE-005</span>
+          <h3>Perfiles de tueste</h3>
+          <hr class="ticket-divider">
+          <p>2 h · Intermedio — Cómo el tueste cambia el sabor final en taza.</p>
+        </a>
+        <a class="ticket course-card" href="#curso-origen-3" data-name="métodos de extracción alternativos" data-category="café y origen">
+          <span class="ticket-code">#COURSE-006</span>
+          <h3>Métodos de extracción alternativos</h3>
+          <hr class="ticket-divider">
+          <p>2.5 h · Intermedio — Prensa francesa, V60 y cold brew.</p>
+        </a>
+      </div>
+
+      <h2 class="course-group-title">Liderazgo</h2>
+      <div class="grid grid-3 course-card-group">
+        <a class="ticket course-card" href="#curso-liderazgo-1" data-name="liderazgo de turno" data-category="liderazgo">
+          <span class="ticket-code">#COURSE-007</span>
+          <h3>Liderazgo de turno</h3>
+          <hr class="ticket-divider">
+          <p>4 h · Avanzado — Organización de barra en horas pico.</p>
+        </a>
+        <a class="ticket course-card" href="#curso-liderazgo-2" data-name="manejo de conflictos en equipo" data-category="liderazgo">
+          <span class="ticket-code">#COURSE-008</span>
+          <h3>Manejo de conflictos en equipo</h3>
+          <hr class="ticket-divider">
+          <p>2 h · Avanzado — Herramientas de comunicación para líderes de turno.</p>
+        </a>
+        <a class="ticket course-card" href="#curso-liderazgo-3" data-name="formación de nuevos partners" data-category="liderazgo">
+          <span class="ticket-code">#COURSE-009</span>
+          <h3>Formación de nuevos partners</h3>
+          <hr class="ticket-divider">
+          <p>3 h · Avanzado — Cómo diseñar un buen plan de inducción.</p>
+        </a>
+      </div>
+
+      <h2 class="course-group-title">Coffee Master</h2>
+      <div class="grid grid-3 course-card-group">
+        <a class="ticket course-card" href="#curso-master-1" data-name="certificación coffee master" data-category="coffee master">
+          <span class="ticket-code">#COURSE-010</span>
+          <h3>Certificación Coffee Master</h3>
+          <hr class="ticket-divider">
+          <p>6 h · Avanzado — El programa completo de especialización en café.</p>
+        </a>
+        <a class="ticket course-card" href="#curso-master-2" data-name="cata avanzada y calibración de paladar" data-category="coffee master">
+          <span class="ticket-code">#COURSE-011</span>
+          <h3>Cata avanzada y calibración de paladar</h3>
+          <hr class="ticket-divider">
+          <p>3 h · Avanzado — Práctica intensiva de cupping con el equipo.</p>
+        </a>
+      </div>
+
+      <p class="empty-state" id="course-empty" hidden>No encontramos cursos que coincidan con tu búsqueda.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Detalle de cursos</h2>
+      <div class="grid grid-2">
+        <article class="card" id="curso-fundamentos-1">
+          <h3>Fundamentos de Barista I</h3>
+          <p>Aprende a calibrar el molino, preparar un espresso balanceado y montar leche para bebidas base. Incluye evaluación práctica al final.</p>
+        </article>
+        <article class="card" id="curso-fundamentos-2">
+          <h3>Higiene y seguridad en barra</h3>
+          <p>Protocolos de manejo de alimentos, limpieza de máquina y prevención de accidentes en horas pico.</p>
+        </article>
+        <article class="card" id="curso-fundamentos-3">
+          <h3>Atención al cliente GROUNDS</h3>
+          <p>Cómo personalizar el trato sin perder tiempo de servicio, y qué hacer ante quejas frecuentes.</p>
+        </article>
+        <article class="card" id="curso-origen-1">
+          <h3>Orígenes del café: de la semilla a la taza</h3>
+          <p>Desde la siembra hasta la exportación: entender el origen ayuda a explicarle mejor el menú al cliente.</p>
+        </article>
+        <article class="card" id="curso-origen-2">
+          <h3>Perfiles de tueste</h3>
+          <p>Diferencias entre tueste claro, medio y oscuro, y cómo influyen en acidez, cuerpo y dulzor.</p>
+        </article>
+        <article class="card" id="curso-origen-3">
+          <h3>Métodos de extracción alternativos</h3>
+          <p>Prensa francesa, V60, Chemex y cold brew: cuándo recomendar cada uno.</p>
+        </article>
+        <article class="card" id="curso-liderazgo-1">
+          <h3>Liderazgo de turno</h3>
+          <p>Distribución de estaciones, lectura de flujo de clientes y toma de decisiones rápidas en hora pico.</p>
+        </article>
+        <article class="card" id="curso-liderazgo-2">
+          <h3>Manejo de conflictos en equipo</h3>
+          <p>Técnicas de comunicación no violenta aplicadas a situaciones reales de barra.</p>
+        </article>
+        <article class="card" id="curso-liderazgo-3">
+          <h3>Formación de nuevos partners</h3>
+          <p>Cómo estructurar las primeras dos semanas de un partner nuevo para que aprenda rápido y con confianza.</p>
+        </article>
+        <article class="card" id="curso-master-1">
+          <h3>Certificación Coffee Master</h3>
+          <p>El programa insignia de GROUNDS: origen, tueste, extracción y cata, evaluado por un partner senior.</p>
+        </article>
+        <article class="card" id="curso-master-2">
+          <h3>Cata avanzada y calibración de paladar</h3>
+          <p>Sesiones semanales de cupping en grupo para calibrar el paladar de todo el equipo por igual.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <h3>Sobre GROUNDS</h3>
+      <p><span class="brand-mark">GC</span> El hub del partner: un solo lugar para aprender, compartir y crecer como equipo.</p>
+    </div>
+    <div>
+      <h3>Navegación rápida</h3>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="historia.html">Historia</a></li>
+        <li><a href="noticias.html">Noticias</a></li>
+        <li><a href="cursos.html">Cursos</a></li>
+        <li><a href="latte-art.html">Arte Latte</a></li>
+        <li><a href="recetario.html">Recetario</a></li>
+        <li><a href="comunidad.html">Comunidad</a></li>
+        <li><a href="trivia.html">Trivia</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Contacto</h3>
+      <ul>
+        <li><a href="mailto:partners@grounds-hub.example.com?subject=Consulta%20desde%20el%20sitio">Escríbenos</a></li>
+        <li><a href="mailto:capacitacion@grounds-hub.example.com?subject=Duda%20sobre%20un%20curso">Dudas de capacitación</a></li>
+        <li><a href="tel:+15555550142">Línea de partners: +1 555 555 0142</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>© <span data-year></span> GROUNDS — El Hub del Partner</span>
+    <span>Proyecto académico — Programación Web y Multimedia</span>
+    <a href="historia.html#creditos">Créditos multimedia</a>
+  </div>
+</footer>
+
+<script src="js/nav.js"></script>
+<script src="js/cursos.js"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arte Latte — GROUNDS</title>
+<meta name="description" content="Tutorial interactivo de arte latte: corazón, rosetta y tulipán, paso a paso, con secuencia de vertido tipo flipbook.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Saltar al contenido principal</a>
+
+<header class="site-header">
+  <div class="container nav-bar">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">GC</span>
+      <span class="brand-name">GROUNDS</span>
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menú de navegación">
+      <span></span><span></span><span></span>
+    </button>
+    <nav aria-label="Navegación principal">
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="historia.html">Historia</a></li>
+        <li><a href="noticias.html">Noticias</a></li>
+        <li><a href="cursos.html">Cursos</a></li>
+        <li><a href="latte-art.html" aria-current="page">Arte Latte</a></li>
+        <li><a href="recetario.html">Recetario</a></li>
+        <li><a href="comunidad.html">Comunidad</a></li>
+        <li><a href="trivia.html">Trivia</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="section container">
+    <p class="eyebrow">Tutorial interactivo</p>
+    <h1>Arte Latte</h1>
+    <p class="lede">Tres figuras clásicas, explicadas paso a paso. Elige una figura, avanza con los botones y practica en tu próximo turno.</p>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+
+      <div class="tabs" role="tablist" aria-label="Figuras de arte latte" id="figure-tabs">
+        <button class="tab-btn" role="tab" id="tab-corazon" aria-selected="true" data-figure="corazon">Corazón</button>
+        <button class="tab-btn" role="tab" id="tab-rosetta" aria-selected="false" data-figure="rosetta">Rosetta</button>
+        <button class="tab-btn" role="tab" id="tab-tulipan" aria-selected="false" data-figure="tulipan">Tulipán</button>
+      </div>
+
+      <div class="grid grid-2" role="tabpanel" aria-labelledby="tab-corazon" id="figure-panel">
+        <div>
+          <img id="figure-image" src="assets/img/latte-corazon.svg" alt="Diagrama de arte latte en forma de corazón visto desde arriba" width="300" height="260">
+        </div>
+        <div>
+          <h2 id="figure-title">Corazón</h2>
+          <ol id="figure-steps">
+            <!-- Rellenado dinámicamente por latte-art.js -->
+          </ol>
+          <div class="progress-bar"><div class="progress-bar-fill" id="figure-progress"></div></div>
+          <div class="step-controls">
+            <button class="btn btn-outline btn-sm" id="step-prev">Anterior</button>
+            <span class="step-counter" id="step-counter">Paso 1 de 5</span>
+            <button class="btn btn-caramel btn-sm" id="step-next">Siguiente</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Secuencia de vertido</h2>
+      <p class="lede">No contamos con video propio libre de derechos para esta versión del sitio, así que la técnica se muestra como una secuencia de imágenes ("flipbook") controlada por JavaScript — la alternativa que sugiere la guía del curso cuando no hay video disponible.</p>
+
+      <div class="flipbook">
+        <img id="flip-frame" src="assets/img/pour-frame-1.svg" alt="Paso 1: taza vacía lista para el vertido, solo espresso en el fondo" width="300" height="260">
+        <div class="step-controls">
+          <button class="btn btn-outline btn-sm" id="flip-prev">Anterior</button>
+          <button class="btn btn-caramel btn-sm" id="flip-play">Reproducir secuencia</button>
+          <button class="btn btn-outline btn-sm" id="flip-next">Siguiente</button>
+        </div>
+        <span class="step-counter" id="flip-counter">Fotograma 1 de 5</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <h3>Sobre GROUNDS</h3>
+      <p><span class="brand-mark">GC</span> El hub del partner: un solo lugar para aprender, compartir y crecer como equipo.</p>
+    </div>
+    <div>
+      <h3>Navegación rápida</h3>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="historia.html">Historia</a></li>
+        <li><a href="noticias.html">Noticias</a></li>
+        <li><a href="cursos.html">Cursos</a></li>
+        <li><a href="latte-art.html">Arte Latte</a></li>
+        <li><a href="recetario.html">Recetario</a></li>
+        <li><a href="comunidad.html">Comunidad</a></li>
+        <li><a href="trivia.html">Trivia</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Contacto</h3>
+      <ul>
+        <li><a href="mailto:partners@grounds-hub.example.com?subject=Consulta%20desde%20el%20sitio">Escríbenos</a></li>
+        <li><a href="mailto:capacitacion@grounds-hub.example.com?subject=Duda%20sobre%20un%20curso">Dudas de capacitación</a></li>
+        <li><a href="tel:+15555550142">Línea de partners: +1 555 555 0142</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>© <span data-year></span> GROUNDS — El Hub del Partner</span>
+    <span>Proyecto académico — Programación Web y Multimedia</span>
+    <a href="historia.html#creditos">Créditos multimedia</a>
+  </div>
+</footer>
+
+<script src="js/nav.js"></script>
+<script src="js/latte-art.js"></script>
+</body>
+</html>
