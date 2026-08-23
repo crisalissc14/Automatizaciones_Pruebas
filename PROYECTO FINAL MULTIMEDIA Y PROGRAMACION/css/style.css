@@ -120,6 +120,7 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
 .text-center { text-align: center; }
 .mb-0 { margin-bottom: 0; }
 .mt-4 { margin-top: 1rem; }
+.mt-8 { margin-top: 2rem; }
 .img-sm { max-width: 220px; }
 .eyebrow {
   display: inline-block;
@@ -142,8 +143,8 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.4rem;
-  border-radius: var(--radius-sm);
+  padding: 0.8rem 1.6rem;
+  border-radius: 999px;
   border: 2px solid var(--ink);
   background: var(--ink);
   color: var(--paper-white);
@@ -167,11 +168,9 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
   background: transparent;
   color: var(--ink);
 }
-.section-dark .btn-outline,
-.hero-full .btn-outline { color: var(--paper); border-color: var(--paper); }
+.section-dark .btn-outline { color: var(--paper); border-color: var(--paper); }
 .btn-outline:hover { background: var(--ink); color: var(--paper-white); }
-.section-dark .btn-outline:hover,
-.hero-full .btn-outline:hover { background: var(--paper); color: var(--ink); }
+.section-dark .btn-outline:hover { background: var(--paper); color: var(--ink); }
 
 .btn-sm { padding: 0.45rem 0.9rem; font-size: 0.85rem; }
 
@@ -199,10 +198,14 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
 }
 .brand-mark {
   font-family: var(--font-mono);
-  background: var(--ink);
-  color: var(--paper);
-  padding: 0.3rem 0.5rem;
-  border-radius: var(--radius-sm);
+  background: var(--pine);
+  color: var(--paper-white);
+  width: 2.1rem;
+  height: 2.1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
   font-weight: 700;
   letter-spacing: 0.03em;
   transition: transform var(--transition), background var(--transition), color var(--transition);
@@ -254,8 +257,10 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
   padding: 0.4rem 0.05rem;
   color: var(--ink);
   text-decoration: none;
-  font-weight: 600;
-  font-size: 0.95rem;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   transition: color var(--transition);
 }
 .nav-menu a::after {
@@ -275,38 +280,7 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
 .nav-menu a[aria-current="page"]::after { transform: scaleX(1); }
 .nav-menu a[aria-current="page"] { color: var(--gold-text); }
 
-/* ---------- Nav "overlay": header transparente flotando sobre un hero
-   oscuro, que se vuelve sólido apenas se hace scroll (solo index.html) ---------- */
-.site-header--overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  background: transparent;
-  border-bottom-color: transparent;
-}
-.site-header--overlay .brand,
-.site-header--overlay .nav-menu a { color: var(--paper-white); }
-.site-header--overlay .brand-mark { background: rgba(255, 255, 255, 0.16); color: var(--paper-white); }
-.site-header--overlay .nav-toggle:hover { background: rgba(255, 255, 255, 0.16); }
-.site-header--overlay .nav-toggle span { background: var(--paper-white); }
-.site-header--overlay.is-scrolled {
-  background: var(--paper);
-  border-bottom-color: var(--ink);
-  box-shadow: var(--shadow-sm);
-}
-.site-header--overlay.is-scrolled .brand,
-.site-header--overlay.is-scrolled .nav-menu a { color: var(--ink); }
-.site-header--overlay.is-scrolled .nav-menu a[aria-current="page"] { color: var(--gold-text); }
-.site-header--overlay.is-scrolled .brand-mark { background: var(--ink); color: var(--paper); }
-.site-header--overlay.is-scrolled .nav-toggle:hover { background: var(--paper-dim); }
-.site-header--overlay.is-scrolled .nav-toggle span { background: var(--ink); }
-/* el header pasa a fixed (fuera del flujo): el hero-full ya trae suficiente
-   padding superior para no quedar tapado por la barra flotante */
-
 @media (max-width: 780px) {
-  .site-header--overlay .nav-menu { background: var(--ink); border-bottom-color: rgba(255,255,255,0.2); }
-  .site-header--overlay .nav-menu a { border-bottom-color: rgba(255,255,255,0.12); }
-  .site-header--overlay.is-scrolled .nav-menu { background: var(--paper); border-bottom-color: var(--ink); }
-  .site-header--overlay.is-scrolled .nav-menu a { color: var(--ink); border-bottom-color: var(--paper-dim); }
   .nav-toggle { display: flex; }
   .nav-menu {
     position: absolute;
@@ -342,28 +316,85 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
 .hero-art { justify-self: center; }
 .hero-art img { width: 100%; max-width: 380px; }
 
-/* ---------- Hero editorial full-bleed (estilo "newsroom") ---------- */
+/* ---------- Hero claro con panel (estilo landing de producto) ---------- */
 .hero-full {
-  position: relative;
-  overflow: hidden;
-  background:
-    radial-gradient(ellipse 120% 90% at 85% 0%, var(--pine-light) 0%, transparent 55%),
-    linear-gradient(160deg, var(--pine) 0%, var(--ink) 78%);
-  color: var(--paper-white);
-  padding: 4.5rem 0 5rem;
+  background: var(--paper-dim);
+  padding: 3rem 0 3.5rem;
 }
-.hero-full .eyebrow { color: var(--gold); }
+.hero-full .eyebrow { color: var(--pine); }
 .hero-full h1 {
-  color: var(--paper-white);
-  font-size: clamp(2.6rem, 6vw + 1rem, 4.6rem);
+  font-size: clamp(2.4rem, 5vw + 1rem, 3.8rem);
   max-width: 16ch;
 }
-.hero-full .lede { color: rgba(245, 243, 234, 0.82); max-width: 48ch; font-size: 1.15rem; }
+.hero-full .lede { max-width: 46ch; }
 .hero-full .hero-art { justify-self: end; }
-.hero-full .hero-art img { max-width: 320px; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.35)); }
+.hero-full .hero-art img { max-width: 340px; filter: drop-shadow(0 18px 30px rgba(30, 57, 50, 0.18)); }
 @media (max-width: 780px) {
   .hero-full .hero-art { justify-self: center; margin-top: 2rem; }
 }
+
+/* ---------- Product card (ícono/medallón asomando arriba) ---------- */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+@media (max-width: 780px) { .product-grid { grid-template-columns: 1fr; } }
+@media (min-width: 481px) and (max-width: 780px) { .product-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.product-card {
+  position: relative;
+  display: block;
+  background: var(--pine);
+  color: var(--paper-white);
+  border-radius: var(--radius-md);
+  padding: 3.75rem 1.5rem 1.75rem;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); color: var(--paper-white); }
+.product-card-medallion {
+  position: absolute;
+  top: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--paper-white);
+  border: 3px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.9rem;
+  box-shadow: var(--shadow-sm);
+}
+.product-card-code {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  color: var(--gold);
+  margin-bottom: 0.4rem;
+}
+.product-card h3 { color: var(--paper-white); font-size: 1.2rem; margin-bottom: 0.5rem; }
+.product-card p { color: rgba(255, 255, 255, 0.85); font-size: 0.92rem; margin-bottom: 1.5rem; }
+.product-card-cta {
+  display: inline-block;
+  padding: 0.55rem 1.4rem;
+  border-radius: 999px;
+  border: 2px solid var(--paper-white);
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: background var(--transition), color var(--transition);
+}
+.product-card:hover .product-card-cta { background: var(--paper-white); color: var(--pine); }
+
+/* ---------- Encabezado de sección centrado (estilo "SHOP NOW / SHOP COFFEE") ---------- */
+.section-header--center { text-align: center; max-width: 640px; margin: 0 auto 2.5rem; }
+.section-header--center .lede { margin-inline: auto; }
 
 /* ---------- Feature grid (destacado grande + grid, estilo editorial) ---------- */
 .feature-grid {
