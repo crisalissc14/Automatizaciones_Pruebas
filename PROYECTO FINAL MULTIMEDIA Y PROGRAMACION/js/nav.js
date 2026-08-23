@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Si el navegador no soporta IntersectionObserver, todo queda visible
   // igual (no depende de JS para poder leerse). ----------
   const revealTargets = document.querySelectorAll(
-    '.ticket, .product-card, .card, .accordion-item'
+    '.ticket, .product-card, .card, .accordion-item, .tier-card, .stat-item'
   );
 
   if (revealTargets.length && 'IntersectionObserver' in window) {
