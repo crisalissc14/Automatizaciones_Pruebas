@@ -63,4 +63,6 @@ El bloque de créditos también está visible en el sitio, al final de `historia
 
 ## Notas de marca
 
-GROUNDS es una marca ficticia creada para este proyecto académico. No usa el logo, la marca registrada ni ningún asset visual de Starbucks; cualquier mención a "la experiencia de un partner barista" es puramente narrativa.
+GROUNDS es una marca ficticia creada para este proyecto académico. No usa el logo, el nombre ni ningún asset visual de Starbucks; cualquier mención a "la experiencia de un partner barista" es puramente narrativa.
+
+**Paleta de color:** por decisión explícita de la autora, los valores hexadecimales de la paleta (`css/style.css`, sección `:root`) se tomaron directamente de los tokens de diseño públicos de starbucks.com/rewards (por ejemplo `colorStarbucksGreen300: #006242`, `colorCoffeeLeaf600: #2c3d28`, `colorGold300: #cba258`), en vez de una paleta 100% original. Cada variable CSS documenta de qué token oficial proviene.

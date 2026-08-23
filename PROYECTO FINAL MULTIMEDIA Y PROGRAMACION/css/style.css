@@ -7,23 +7,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400..700;1,400..700&family=Archivo:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
 
 /* ---------- Variables de marca ----------
-   Paleta verde inspirada en la identidad de Starbucks Rewards (cafetería
-   premium, verde como color dominante) pero con valores hex propios y
-   distintos a los oficiales — GROUNDS sigue siendo una marca ficticia. */
+   Paleta tomada directamente de los tokens de diseño de starbucks.com/rewards
+   (colorHouseGreen, colorCoffeeLeaf600, colorStarbucksGreen300, colorGold300,
+   colorWarmNeutral*, etc. — a pedido explícito, en vez de una paleta propia
+   "inspirada"). GROUNDS sigue siendo una marca ficticia: no se usa su logo
+   ni ningún otro asset de Starbucks, solo estos valores de color. */
 :root {
-  --ink: #16211B;
-  --ink-soft: #33443B;
-  --paper: #F5F3EA;
-  --paper-dim: #EAE6D6;
-  --gold: #C7A24E;
-  --gold-dark: #A17F35;
-  --pine: #0E5C40;
-  --pine-light: #17795A;
-  --alert: #A3312A;
-  --paper-white: #FFFDF7;
+  --ink: #1E3932;        /* colorHouseGreen */
+  --ink-soft: #2C3D28;   /* colorCoffeeLeaf600 */
+  --paper: #F7F0E4;      /* colorWarmNeutral25 */
+  --paper-dim: #F3E9D9;  /* colorWarmNeutral50 */
+  --gold: #CBA258;       /* colorGold300 */
+  --gold-dark: #8F6E32;  /* colorGold600 */
+  --pine: #006242;       /* colorStarbucksGreen300 */
+  --pine-light: #00754A; /* colorGreenAccent */
+  --alert: #C82014;      /* colorRed */
+  --paper-white: #FFFCF7; /* colorWarmNeutral5 */
   /* Variante de --gold-dark ajustada para texto pequeño sobre fondos claros
      (cumple contraste AA; --gold-dark se conserva para hovers y acentos grandes). */
-  --gold-text: #7A5419;
+  --gold-text: #735725;  /* colorGold700 */
 
   --font-display: "Newsreader", "Georgia", serif;
   --font-body: "Archivo", "Segoe UI", sans-serif;
@@ -32,9 +34,9 @@
   --radius-sm: 6px;
   --radius-md: 14px;
 
-  --shadow-sm: 0 2px 6px rgba(22, 33, 27, 0.12);
-  --shadow-md: 0 6px 18px rgba(22, 33, 27, 0.16);
-  --shadow-lg: 0 12px 30px rgba(22, 33, 27, 0.22);
+  --shadow-sm: 0 2px 6px rgba(30, 57, 50, 0.12);
+  --shadow-md: 0 6px 18px rgba(30, 57, 50, 0.16);
+  --shadow-lg: 0 12px 30px rgba(30, 57, 50, 0.22);
 
   --nav-height: 72px;
   --transition: 0.25s ease;
