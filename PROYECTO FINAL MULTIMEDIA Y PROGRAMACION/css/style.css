@@ -180,6 +180,7 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
   z-index: 100;
   background: var(--paper);
   border-bottom: 2px solid var(--ink);
+  transition: background var(--transition), border-color var(--transition), box-shadow var(--transition), color var(--transition);
 }
 .nav-bar {
   display: flex;
@@ -202,7 +203,9 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
   border-radius: var(--radius-sm);
   font-weight: 700;
   letter-spacing: 0.03em;
+  transition: transform var(--transition), background var(--transition), color var(--transition);
 }
+.brand:hover .brand-mark { transform: scale(1.08) rotate(-3deg); }
 .brand-name {
   font-family: var(--font-display);
   font-weight: 700;
@@ -213,21 +216,24 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
   display: none;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   gap: 5px;
   width: 44px;
   height: 44px;
-  border-radius: var(--radius-sm);
-  border: 2px solid var(--ink);
-  background: var(--paper-white);
+  border-radius: 50%;
+  border: none;
+  background: transparent;
   cursor: pointer;
+  transition: background var(--transition);
 }
+.nav-toggle:hover { background: var(--paper-dim); }
 .nav-toggle span {
   display: block;
   width: 20px;
   height: 2px;
+  border-radius: 2px;
   background: var(--ink);
-  margin-inline: auto;
-  transition: transform var(--transition), opacity var(--transition);
+  transition: transform var(--transition), opacity var(--transition), background var(--transition);
 }
 .nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
@@ -235,28 +241,70 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
 
 .nav-menu {
   display: flex;
-  gap: 1.5rem;
+  gap: 1.75rem;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 .nav-menu a {
+  position: relative;
   display: inline-block;
-  padding: 0.4rem 0.1rem;
+  padding: 0.4rem 0.05rem;
   color: var(--ink);
   text-decoration: none;
   font-weight: 600;
   font-size: 0.95rem;
-  border-bottom: 2px solid transparent;
-  transition: border-color var(--transition), color var(--transition);
+  transition: color var(--transition);
 }
-.nav-menu a:hover { border-color: var(--gold); }
-.nav-menu a[aria-current="page"] {
-  color: var(--gold-text);
-  border-color: var(--gold-dark);
+.nav-menu a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  background: var(--gold-dark);
+  border-radius: 2px;
+  transform: scaleX(0);
+  transition: transform var(--transition);
 }
+.nav-menu a:hover::after,
+.nav-menu a:focus-visible::after,
+.nav-menu a[aria-current="page"]::after { transform: scaleX(1); }
+.nav-menu a[aria-current="page"] { color: var(--gold-text); }
+
+/* ---------- Nav "overlay": header transparente flotando sobre un hero
+   oscuro, que se vuelve sólido apenas se hace scroll (solo index.html) ---------- */
+.site-header--overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background: transparent;
+  border-bottom-color: transparent;
+}
+.site-header--overlay .brand,
+.site-header--overlay .nav-menu a { color: var(--paper-white); }
+.site-header--overlay .brand-mark { background: rgba(255, 255, 255, 0.16); color: var(--paper-white); }
+.site-header--overlay .nav-toggle:hover { background: rgba(255, 255, 255, 0.16); }
+.site-header--overlay .nav-toggle span { background: var(--paper-white); }
+.site-header--overlay.is-scrolled {
+  background: var(--paper);
+  border-bottom-color: var(--ink);
+  box-shadow: var(--shadow-sm);
+}
+.site-header--overlay.is-scrolled .brand,
+.site-header--overlay.is-scrolled .nav-menu a { color: var(--ink); }
+.site-header--overlay.is-scrolled .nav-menu a[aria-current="page"] { color: var(--gold-text); }
+.site-header--overlay.is-scrolled .brand-mark { background: var(--ink); color: var(--paper); }
+.site-header--overlay.is-scrolled .nav-toggle:hover { background: var(--paper-dim); }
+.site-header--overlay.is-scrolled .nav-toggle span { background: var(--ink); }
+/* el header pasa a fixed (fuera del flujo): el hero-full ya trae suficiente
+   padding superior para no quedar tapado por la barra flotante */
 
 @media (max-width: 780px) {
+  .site-header--overlay .nav-menu { background: var(--ink); border-bottom-color: rgba(255,255,255,0.2); }
+  .site-header--overlay .nav-menu a { border-bottom-color: rgba(255,255,255,0.12); }
+  .site-header--overlay.is-scrolled .nav-menu { background: var(--paper); border-bottom-color: var(--ink); }
+  .site-header--overlay.is-scrolled .nav-menu a { color: var(--ink); border-bottom-color: var(--paper-dim); }
   .nav-toggle { display: flex; }
   .nav-menu {
     position: absolute;
@@ -272,6 +320,7 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
     transition: max-height var(--transition);
   }
   .nav-menu.is-open { max-height: 480px; }
+  .nav-menu a::after { display: none; }
   .nav-menu a {
     display: block;
     padding: 0.9rem 1.25rem;
