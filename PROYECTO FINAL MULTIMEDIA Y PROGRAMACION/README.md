@@ -9,7 +9,7 @@ Sitio informativo/interactivo dirigido a partners baristas de una cafetería fic
 
 1. Descomprime la carpeta `PROYECTO FINAL MULTIMEDIA Y PROGRAMACION`.
 2. Abre `index.html` directamente en el navegador (doble clic). No requiere servidor ni instalación.
-3. Necesitas conexión a internet únicamente para cargar las tipografías desde Google Fonts (Newsreader, Archivo, Space Mono), definidas en `css/style.css`. Si no hay internet, el sitio sigue funcionando con las fuentes de reemplazo del sistema.
+3. Necesitas conexión a internet únicamente para cargar las tipografías desde Google Fonts (Poppins, Inter, Space Mono), definidas en `css/style.css`. Si no hay internet, el sitio sigue funcionando con las fuentes de reemplazo del sistema.
 4. Navega entre las 8 páginas desde el menú superior (o el botón de hamburguesa en móvil).
 
 ## Estructura
@@ -53,8 +53,8 @@ Por una restricción de red del entorno de desarrollo usado para este proyecto, 
 
 | Fuente | Uso | Licencia |
 |---|---|---|
-| Newsreader | Títulos (display) | SIL Open Font License |
-| Archivo | Cuerpo de texto | SIL Open Font License |
+| Poppins | Títulos (display) — sans-serif redondeada, cercana en espíritu a SoDoSans (la tipografía propietaria de Starbucks) | SIL Open Font License |
+| Inter | Cuerpo de texto | SIL Open Font License |
 | Space Mono | Datos, códigos, timestamps | SIL Open Font License |
 
 El bloque de créditos también está visible en el sitio, al final de `historia.html` (sección `#creditos`), enlazado desde el pie de página de las 8 páginas.
