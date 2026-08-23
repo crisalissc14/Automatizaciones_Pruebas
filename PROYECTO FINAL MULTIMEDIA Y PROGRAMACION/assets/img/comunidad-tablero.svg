@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 260" role="img" aria-labelledby="t8">
 <title id="t8">Ilustración de un tablero de corcho con notas y tickets colgados, representando la comunidad de partners</title>
-<rect width="900" height="260" fill="#EFE3D0"/>
-<rect x="60" y="30" width="780" height="200" rx="14" fill="#A8792F"/>
+<rect width="900" height="260" fill="#EAE6D6"/>
+<rect x="60" y="30" width="780" height="200" rx="14" fill="#A17F35"/>
 <g>
-<rect x="110" y="70" width="150" height="110" rx="8" fill="#FFFDF9" stroke="#2B1B14" stroke-width="4" transform="rotate(-4 185 125)"/>
-<rect x="310" y="60" width="150" height="110" rx="8" fill="#F7EFE3" stroke="#2B1B14" stroke-width="4" transform="rotate(3 385 115)"/>
-<rect x="520" y="75" width="150" height="110" rx="8" fill="#FFFDF9" stroke="#2B1B14" stroke-width="4" transform="rotate(-2 595 130)"/>
+<rect x="110" y="70" width="150" height="110" rx="8" fill="#FFFDF7" stroke="#16211B" stroke-width="4" transform="rotate(-4 185 125)"/>
+<rect x="310" y="60" width="150" height="110" rx="8" fill="#F5F3EA" stroke="#16211B" stroke-width="4" transform="rotate(3 385 115)"/>
+<rect x="520" y="75" width="150" height="110" rx="8" fill="#FFFDF7" stroke="#16211B" stroke-width="4" transform="rotate(-2 595 130)"/>
 </g>
 <g fill="#A3312A">
 <circle cx="185" cy="70" r="7"/>

@@ -36,18 +36,20 @@
 
 <main id="main">
 
-  <section class="section hero container">
-    <div class="hero-copy">
-      <p class="eyebrow">Bienvenido, partner</p>
-      <h1>El café que compartimos empieza con la gente que lo sirve.</h1>
-      <p class="lede">GROUNDS es el hub donde encuentras todo lo que antes andaba disperso en PDFs y grupos de chat: cursos, historia de la comunidad, recetario, catas, tips entre partners y la trivia semanal del equipo.</p>
-      <div class="hero-actions">
-        <a class="btn btn-caramel" href="cursos.html">Explorar cursos</a>
-        <a class="btn btn-outline" href="historia.html">Ver historia</a>
+  <section class="hero-full">
+    <div class="hero container">
+      <div class="hero-copy">
+        <p class="eyebrow">Bienvenido, partner</p>
+        <h1>El café que compartimos empieza con la gente que lo sirve.</h1>
+        <p class="lede">GROUNDS es el hub donde encuentras todo lo que antes andaba disperso en PDFs y grupos de chat: cursos, historia de la comunidad, recetario, catas, tips entre partners y la trivia semanal del equipo.</p>
+        <div class="hero-actions">
+          <a class="btn btn-gold" href="cursos.html">Explorar cursos</a>
+          <a class="btn btn-outline" href="historia.html">Ver historia</a>
+        </div>
       </div>
-    </div>
-    <div class="hero-art">
-      <img src="assets/img/hero-taza.svg" alt="Taza de café GROUNDS humeante sobre un plato, rodeada de granos de café tostado" width="420" height="380">
+      <div class="hero-art">
+        <img src="assets/img/hero-taza.svg" alt="Taza de café GROUNDS humeante sobre un plato, rodeada de granos de café tostado" width="420" height="380">
+      </div>
     </div>
   </section>
 
@@ -55,7 +57,19 @@
     <div class="container">
       <p class="eyebrow">Todo en un solo lugar</p>
       <h2>Accesos rápidos</h2>
-      <div class="grid grid-3">
+      <div class="feature-grid">
+        <a class="ticket is-feature" href="cursos.html">
+          <div>
+            <span class="ticket-code">#HUB-03</span>
+            <span class="ticket-icon" aria-hidden="true">🎓</span>
+            <h3>Cursos</h3>
+            <hr class="ticket-divider">
+            <p>Todo tu material de capacitación centralizado en un solo lugar: fundamentos, café y origen, liderazgo y Coffee Master. Se acabó buscar en cinco chats distintos.</p>
+          </div>
+          <div>
+            <img src="assets/img/cursos-banner.svg" alt="Ilustración de una pila de cuadernos de estudio y un diploma con una marca de verificación" width="900" height="260">
+          </div>
+        </a>
         <a class="ticket" href="historia.html">
           <span class="ticket-code">#HUB-01</span>
           <span class="ticket-icon" aria-hidden="true">📜</span>
@@ -69,13 +83,6 @@
           <h3>Noticias</h3>
           <hr class="ticket-divider">
           <p>Comunicados, reconocimientos y novedades de la tienda, siempre al día.</p>
-        </a>
-        <a class="ticket" href="cursos.html">
-          <span class="ticket-code">#HUB-03</span>
-          <span class="ticket-icon" aria-hidden="true">🎓</span>
-          <h3>Cursos</h3>
-          <hr class="ticket-divider">
-          <p>Todo tu material de capacitación centralizado, sin buscar en cinco chats.</p>
         </a>
         <a class="ticket" href="latte-art.html">
           <span class="ticket-code">#HUB-04</span>
@@ -114,7 +121,7 @@
       <p class="eyebrow"><span class="badge-live">En vivo</span></p>
       <h2>Reto semanal de trivia</h2>
       <p class="lede" id="trivia-status">Todavía nadie ha registrado puntaje esta semana. Sé el primer partner en jugar la trivia y aparecer aquí.</p>
-      <a class="btn btn-caramel" href="trivia.html">Jugar la trivia</a>
+      <a class="btn btn-gold" href="trivia.html">Jugar la trivia</a>
     </div>
   </section>
 
@@ -141,7 +148,7 @@
           <span class="form-error" id="error-message"></span>
         </div>
         <div class="form-span-2">
-          <button type="submit" class="btn btn-caramel">Enviar mensaje</button>
+          <button type="submit" class="btn btn-gold">Enviar mensaje</button>
         </div>
       </form>
       <p class="form-success" id="contact-success" hidden>¡Gracias! Tu mensaje quedó registrado. Un partner del equipo te responderá pronto.</p>

@@ -1,18 +1,31 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 380" role="img" aria-labelledby="t1">
 <title id="t1">Taza de café GROUNDS humeante sobre un plato, con granos de café alrededor</title>
+<style>
+  .steam { transform-origin: center bottom; animation: steam-drift 3.2s ease-in-out infinite; }
+  .steam-2 { animation-delay: 0.4s; }
+  .steam-3 { animation-delay: 0.8s; }
+  @keyframes steam-drift {
+    0%   { transform: translateY(0) scaleY(1);   opacity: 0.85; }
+    50%  { transform: translateY(-6px) scaleY(1.06); opacity: 0.55; }
+    100% { transform: translateY(0) scaleY(1);   opacity: 0.85; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .steam { animation: none; }
+  }
+</style>
 <rect width="420" height="380" fill="none"/>
-<circle cx="210" cy="210" r="170" fill="#EFE3D0"/>
-<path d="M140 250 q70 40 140 0 l-8 30 q-62 34 -124 0 z" fill="#2B1B14"/>
-<ellipse cx="210" cy="250" rx="90" ry="16" fill="#2B1B14"/>
-<path d="M120 190 h180 v50 a90 60 0 0 1 -180 0 z" fill="#F7EFE3" stroke="#2B1B14" stroke-width="6"/>
-<path d="M130 200 h160 v40 a80 50 0 0 1 -160 0 z" fill="#4A3327"/>
-<path d="M300 200 q35 0 35 30 q0 30 -35 30" fill="none" stroke="#2B1B14" stroke-width="6"/>
-<g stroke="#A8792F" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.8">
-<path d="M170 170 q-10 -25 0 -45 q10 -20 0 -40"/>
-<path d="M210 170 q10 -25 0 -45 q-10 -20 0 -40"/>
-<path d="M250 170 q-10 -25 0 -45 q10 -20 0 -40"/>
+<circle cx="210" cy="210" r="170" fill="#F5F3EA" fill-opacity="0.1"/>
+<path d="M140 250 q70 40 140 0 l-8 30 q-62 34 -124 0 z" fill="#16211B"/>
+<ellipse cx="210" cy="250" rx="90" ry="16" fill="#16211B"/>
+<path d="M120 190 h180 v50 a90 60 0 0 1 -180 0 z" fill="#F5F3EA" stroke="#16211B" stroke-width="6"/>
+<path d="M130 200 h160 v40 a80 50 0 0 1 -160 0 z" fill="#33443B"/>
+<path d="M300 200 q35 0 35 30 q0 30 -35 30" fill="none" stroke="#16211B" stroke-width="6"/>
+<g stroke="#C7A24E" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.8">
+<path class="steam steam-1" d="M170 170 q-10 -25 0 -45 q10 -20 0 -40"/>
+<path class="steam steam-2" d="M210 170 q10 -25 0 -45 q-10 -20 0 -40"/>
+<path class="steam steam-3" d="M250 170 q-10 -25 0 -45 q10 -20 0 -40"/>
 </g>
-<g fill="#2B1B14">
+<g fill="#16211B">
 <ellipse cx="70" cy="300" rx="16" ry="11" transform="rotate(-20 70 300)"/>
 <ellipse cx="95" cy="320" rx="16" ry="11" transform="rotate(10 95 320)"/>
 <ellipse cx="340" cy="300" rx="16" ry="11" transform="rotate(15 340 300)"/>

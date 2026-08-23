@@ -1,25 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 260" role="img" aria-labelledby="t7">
 <title id="t7">Ilustración de tazas de cata (cupping) en fila con cucharas, sobre una mesa de madera</title>
-<rect width="900" height="260" fill="#F7EFE3"/>
-<rect x="0" y="190" width="900" height="70" fill="#4A3327"/>
+<rect width="900" height="260" fill="#F5F3EA"/>
+<rect x="0" y="190" width="900" height="70" fill="#33443B"/>
 <g>
-<ellipse cx="200" cy="180" rx="60" ry="20" fill="#FFFDF9" stroke="#2B1B14" stroke-width="5"/>
-<ellipse cx="200" cy="176" rx="46" ry="14" fill="#2B1B14"/>
-<rect x="150" y="140" width="6" height="45" fill="#A8792F" transform="rotate(20 150 140)"/>
+<ellipse cx="200" cy="180" rx="60" ry="20" fill="#FFFDF7" stroke="#16211B" stroke-width="5"/>
+<ellipse cx="200" cy="176" rx="46" ry="14" fill="#16211B"/>
+<rect x="150" y="140" width="6" height="45" fill="#A17F35" transform="rotate(20 150 140)"/>
 </g>
 <g>
-<ellipse cx="380" cy="180" rx="60" ry="20" fill="#FFFDF9" stroke="#2B1B14" stroke-width="5"/>
-<ellipse cx="380" cy="176" rx="46" ry="14" fill="#4A3327"/>
-<rect x="330" y="140" width="6" height="45" fill="#A8792F" transform="rotate(20 330 140)"/>
+<ellipse cx="380" cy="180" rx="60" ry="20" fill="#FFFDF7" stroke="#16211B" stroke-width="5"/>
+<ellipse cx="380" cy="176" rx="46" ry="14" fill="#33443B"/>
+<rect x="330" y="140" width="6" height="45" fill="#A17F35" transform="rotate(20 330 140)"/>
 </g>
 <g>
-<ellipse cx="560" cy="180" rx="60" ry="20" fill="#FFFDF9" stroke="#2B1B14" stroke-width="5"/>
-<ellipse cx="560" cy="176" rx="46" ry="14" fill="#2B1B14"/>
-<rect x="510" y="140" width="6" height="45" fill="#A8792F" transform="rotate(20 510 140)"/>
+<ellipse cx="560" cy="180" rx="60" ry="20" fill="#FFFDF7" stroke="#16211B" stroke-width="5"/>
+<ellipse cx="560" cy="176" rx="46" ry="14" fill="#16211B"/>
+<rect x="510" y="140" width="6" height="45" fill="#A17F35" transform="rotate(20 510 140)"/>
 </g>
 <g>
-<ellipse cx="740" cy="180" rx="60" ry="20" fill="#FFFDF9" stroke="#2B1B14" stroke-width="5"/>
-<ellipse cx="740" cy="176" rx="46" ry="14" fill="#4A3327"/>
-<rect x="690" y="140" width="6" height="45" fill="#A8792F" transform="rotate(20 690 140)"/>
+<ellipse cx="740" cy="180" rx="60" ry="20" fill="#FFFDF7" stroke="#16211B" stroke-width="5"/>
+<ellipse cx="740" cy="176" rx="46" ry="14" fill="#33443B"/>
+<rect x="690" y="140" width="6" height="45" fill="#A17F35" transform="rotate(20 690 140)"/>
 </g>
 </svg>

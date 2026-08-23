@@ -1,36 +1,36 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" role="img" aria-labelledby="t2">
 <title id="t2">Ilustración de una cafetería comunitaria GROUNDS con mesas, partners y una barra de café al fondo</title>
-<rect width="900" height="420" fill="#EFE3D0"/>
-<rect x="0" y="300" width="900" height="120" fill="#C9974B" opacity="0.35"/>
-<rect x="40" y="60" width="820" height="160" rx="14" fill="#2B1B14"/>
-<rect x="60" y="80" width="780" height="120" rx="10" fill="#4A3327"/>
-<g fill="#F7EFE3">
+<rect width="900" height="420" fill="#EAE6D6"/>
+<rect x="0" y="300" width="900" height="120" fill="#C7A24E" opacity="0.35"/>
+<rect x="40" y="60" width="820" height="160" rx="14" fill="#16211B"/>
+<rect x="60" y="80" width="780" height="120" rx="10" fill="#33443B"/>
+<g fill="#F5F3EA">
 <rect x="90" y="110" width="60" height="70" rx="8"/>
 <rect x="170" y="100" width="40" height="80" rx="8"/>
 <rect x="230" y="115" width="70" height="65" rx="8"/>
 </g>
-<g fill="#C9974B">
+<g fill="#C7A24E">
 <circle cx="600" cy="140" r="30"/>
 <circle cx="660" cy="150" r="22"/>
 <circle cx="710" cy="135" r="26"/>
 </g>
 <g>
-<rect x="120" y="260" width="120" height="80" rx="10" fill="#FFFDF9" stroke="#2B1B14" stroke-width="5"/>
-<circle cx="150" cy="245" r="18" fill="#4A3327"/>
-<rect x="145" y="255" width="10" height="30" fill="#4A3327"/>
-<circle cx="210" cy="245" r="18" fill="#1F4D3A"/>
-<rect x="205" y="255" width="10" height="30" fill="#1F4D3A"/>
+<rect x="120" y="260" width="120" height="80" rx="10" fill="#FFFDF7" stroke="#16211B" stroke-width="5"/>
+<circle cx="150" cy="245" r="18" fill="#33443B"/>
+<rect x="145" y="255" width="10" height="30" fill="#33443B"/>
+<circle cx="210" cy="245" r="18" fill="#0E5C40"/>
+<rect x="205" y="255" width="10" height="30" fill="#0E5C40"/>
 </g>
 <g>
-<rect x="420" y="260" width="120" height="80" rx="10" fill="#FFFDF9" stroke="#2B1B14" stroke-width="5"/>
+<rect x="420" y="260" width="120" height="80" rx="10" fill="#FFFDF7" stroke="#16211B" stroke-width="5"/>
 <circle cx="450" cy="245" r="18" fill="#A3312A"/>
 <rect x="445" y="255" width="10" height="30" fill="#A3312A"/>
 </g>
 <g>
-<rect x="700" y="260" width="120" height="80" rx="10" fill="#FFFDF9" stroke="#2B1B14" stroke-width="5"/>
-<circle cx="730" cy="245" r="18" fill="#C9974B"/>
-<rect x="725" y="255" width="10" height="30" fill="#C9974B"/>
-<circle cx="790" cy="245" r="18" fill="#4A3327"/>
-<rect x="785" y="255" width="10" height="30" fill="#4A3327"/>
+<rect x="700" y="260" width="120" height="80" rx="10" fill="#FFFDF7" stroke="#16211B" stroke-width="5"/>
+<circle cx="730" cy="245" r="18" fill="#C7A24E"/>
+<rect x="725" y="255" width="10" height="30" fill="#C7A24E"/>
+<circle cx="790" cy="245" r="18" fill="#33443B"/>
+<rect x="785" y="255" width="10" height="30" fill="#33443B"/>
 </g>
 </svg>
