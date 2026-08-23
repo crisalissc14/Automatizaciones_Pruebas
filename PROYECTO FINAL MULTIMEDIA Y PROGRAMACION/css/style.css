@@ -3,8 +3,12 @@
    Hoja de estilos base compartida por las 8 páginas.
    ========================================================= */
 
-/* ---------- Fuentes ---------- */
-@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400..700;1,400..700&family=Archivo:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+/* ---------- Fuentes ----------
+   Sans-serif redondeada tipo SoDoSans (la fuente de marca de Starbucks,
+   propietaria y no disponible en Google Fonts): Poppins para títulos,
+   Inter para cuerpo de texto — en vez de la serif editorial que traía
+   la primera versión del sitio. */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
 
 /* ---------- Variables de marca ----------
    Paleta tomada directamente de los tokens de diseño de starbucks.com/rewards
@@ -27,8 +31,8 @@
      (cumple contraste AA; --gold-dark se conserva para hovers y acentos grandes). */
   --gold-text: #735725;  /* colorGold700 */
 
-  --font-display: "Newsreader", "Georgia", serif;
-  --font-body: "Archivo", "Segoe UI", sans-serif;
+  --font-display: "Poppins", "Segoe UI", sans-serif;
+  --font-body: "Inter", "Segoe UI", sans-serif;
   --font-mono: "Space Mono", "Courier New", monospace;
 
   --radius-sm: 6px;
@@ -61,13 +65,15 @@ button { font-family: inherit; }
 
 h1, h2, h3, h4 {
   font-family: var(--font-display);
+  font-weight: 700;
   line-height: 1.15;
+  letter-spacing: -0.01em;
   margin: 0 0 0.6em;
   color: var(--ink);
 }
-h1 { font-size: clamp(2.1rem, 5vw + 1rem, 3.6rem); }
+h1 { font-size: clamp(2.1rem, 5vw + 1rem, 3.6rem); font-weight: 800; }
 h2 { font-size: clamp(1.6rem, 3vw + 1rem, 2.4rem); }
-h3 { font-size: clamp(1.2rem, 1.4vw + 1rem, 1.5rem); }
+h3 { font-size: clamp(1.2rem, 1.4vw + 1rem, 1.5rem); font-weight: 600; }
 p { margin: 0 0 1em; }
 
 code, .mono { font-family: var(--font-mono); }
@@ -88,6 +94,17 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
     scroll-behavior: auto !important;
   }
 }
+
+/* ---------- Scroll-reveal (agregado por nav.js vía IntersectionObserver) ----------
+   Colocado antes que cualquier estilo de componente para que el hover de
+   .ticket/.card/.product-card siempre gane el empate de cascada sobre
+   .reveal.is-visible (misma especificidad, pero estas reglas van primero). */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.is-visible { opacity: 1; transform: none; }
 
 /* ---------- Utilidades de layout ---------- */
 .container {
@@ -396,6 +413,58 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
 .section-header--center { text-align: center; max-width: 640px; margin: 0 auto 2.5rem; }
 .section-header--center .lede { margin-inline: auto; }
 
+/* ---------- Franja de estadísticas (estilo "In numbers" de Nestlé) ---------- */
+.stats-band {
+  background: var(--pine);
+  color: var(--paper-white);
+  padding: 2.75rem 0;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  text-align: center;
+}
+@media (max-width: 780px) { .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem 1rem; } }
+.stat-item .stat-icon { display: block; font-size: 1.8rem; margin-bottom: 0.5rem; }
+.stat-item .stat-number {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.8rem, 1.2rem + 2vw, 2.6rem);
+  line-height: 1;
+  margin-bottom: 0.35rem;
+}
+.stat-item .stat-label { font-size: 0.85rem; color: rgba(255, 255, 255, 0.85); }
+
+/* ---------- Tarjetas de nivel (estilo Green/Gold/Reserve status de Starbucks Rewards) ---------- */
+.tier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+@media (max-width: 780px) { .tier-grid { grid-template-columns: 1fr; } }
+.tier-card {
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+  color: var(--paper-white);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.tier-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.tier-card h3 { color: var(--paper-white); margin-bottom: 0.3rem; }
+.tier-card .tier-stat { display: block; font-size: 0.85rem; color: var(--paper-white); margin-bottom: 1.1rem; }
+.tier-card ul { list-style: none; padding: 0; margin: 0; }
+.tier-card li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.4rem 0;
+  font-size: 0.9rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+.tier-card li:first-child { border-top: none; }
+.tier-card li::before { content: "✓"; font-weight: 700; flex-shrink: 0; }
+.tier-green { background: var(--pine); }
+.tier-gold { background: var(--gold-dark); }
+.tier-dark { background: var(--ink); }
+
 /* ---------- Feature grid (destacado grande + grid, estilo editorial) ---------- */
 .feature-grid {
   display: grid;
@@ -682,12 +751,13 @@ legend { font-family: var(--font-mono); padding: 0 0.5rem; }
 .quote-source { margin-top: 0.75rem; font-style: normal; font-size: 0.9rem; }
 
 blockquote {
+  position: relative;
   border-left: 4px solid var(--gold);
   margin: 1.5rem 0;
   padding: 0.5rem 0 0.5rem 1.25rem;
   font-family: var(--font-display);
+  font-weight: 600;
   font-size: 1.25rem;
-  font-style: italic;
   color: var(--ink-soft);
 }
 
