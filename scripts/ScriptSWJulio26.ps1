@@ -348,7 +348,7 @@ function Get-LatestPythonWindows {
   $mgr = Extract-RegexFirstGroup -Text $html -Pattern "Latest\s+Python\s+install\s+manager\s*-\s*Python\s+install\s+manager\s*([0-9]+\.[0-9]+)"
   @(
     New-VersionResult -Name "Python (Latest 3.x for Windows)" -LatestVersion $py -Source $url
-    New-VersionResult -Name "Python install manager (Windows)" -LatestVersion $mgr -Source $url -Notes "Launcher viene con instaladores."
+    New-VersionResult -Name "Python install manager (Windows)" -LatestVersion $mgr -Source $url -Notes "Formato .msix (no .msi): se instala con Add-AppxPackage o doble clic, no con msiexec. Fuente del paquete: github.com/python/pymanager."
   )
 }
 
@@ -368,7 +368,9 @@ function Get-DCNetDocumentControlBackoffice {
 }
 
 function Get-LatestAdobeAcrobatReaderContinuous {
-  $url = "https://helpx.adobe.com/acrobat/release-note/release-notes-acrobat-reader.html"
+  # Fuente oficial del Acrobat Enterprise Toolkit (más confiable para IT que la
+  # página de release notes de consumo), confirmada por el fabricante.
+  $url = "https://www.adobe.com/devnet-docs/acrobatetk/tools/ReleaseNotesDC/index.html"
   $html = Get-TextFromUrl -Url $url
   # Adobe cambió su esquema de versión a uno basado en año (ej. 2026.001.21662)
   # en vez del viejo formato de 2 dígitos (ej. 24.003.20269); se acepta 2 a 4
@@ -458,11 +460,11 @@ function Get-LatestVSProfessional2026 {
   # Visual Studio usa un bootstrapper pequeño (pocos MB) que durante la
   # instalación real descarga los workloads seleccionados (GBs) desde
   # internet. Este script valida el bootstrapper, no el payload completo.
-  New-VersionResult -Name "Visual Studio Professional 2026 (bootstrapper)" -LatestVersion "18.x (canal release)" -Source "https://aka.ms/vs/18/release/vs_professional.exe" -Notes "El bootstrapper descarga los workloads seleccionados durante la instalación; VT/Defender solo validan el bootstrapper, no el payload completo descargado después."
+  New-VersionResult -Name "Visual Studio Professional 2026 (bootstrapper)" -LatestVersion "18.x (canal Stable)" -Source "https://aka.ms/vs/18/Stable/vs_professional.exe" -Notes "El bootstrapper descarga los workloads seleccionados durante la instalación; VT/Defender solo validan el bootstrapper, no el payload completo descargado después."
 }
 
 function Get-LatestVSEnterprise2026 {
-  New-VersionResult -Name "Visual Studio Enterprise 2026 (bootstrapper)" -LatestVersion "18.x (canal release)" -Source "https://aka.ms/vs/18/release/vs_enterprise.exe" -Notes "El bootstrapper descarga los workloads seleccionados durante la instalación; VT/Defender solo validan el bootstrapper, no el payload completo descargado después."
+  New-VersionResult -Name "Visual Studio Enterprise 2026 (bootstrapper)" -LatestVersion "18.x (canal Stable)" -Source "https://aka.ms/vs/18/Stable/vs_enterprise.exe" -Notes "El bootstrapper descarga los workloads seleccionados durante la instalación; VT/Defender solo validan el bootstrapper, no el payload completo descargado después."
 }
 
 function Get-SentinelOneNote {
@@ -568,7 +570,7 @@ $script:DownloadResolvers = @{
     "https://dl.google.com/edgedl/chrome/install/GoogleChromeStandaloneEnterprise64.msi" }
 
   "Mozilla Firefox (Standalone) - Latest" = { param($v)
-    "https://download.mozilla.org/?product=firefox-msi-latest-ssl&os=win64&lang=en-US" }  # MSI oficial (antes era el .exe)
+    "https://download.mozilla.org/?product=firefox-msi-latest-ssl&os=win64&lang=es-MX" }  # MSI oficial en español latam (confirmado por firefox.com/es-ES/download/all/desktop-release/win64-msi/es-MX/)
 
   "KeePass" = { param($v)
     "https://sourceforge.net/projects/keepass/files/KeePass%202.x/$v/KeePass-$v-Setup.exe/download" }
@@ -608,7 +610,7 @@ $script:DownloadResolvers = @{
   # porque el fabricante no publica un patrón de URL directa predecible.
   "Adobe Acrobat Reader (Continuous track - latest)" = { param($v)
     $vNoDot = $v -replace "\.", ""
-    "https://ardownload2.adobe.com/pub/adobe/acrobat/win/AcrobatDC/$vNoDot/AcroRdrDCx64${vNoDot}_en_US.exe" }  # patrón oficial confirmado
+    "https://ardownload2.adobe.com/pub/adobe/acrobat/win/AcrobatDC/$vNoDot/AcroRdrDCx64${vNoDot}_es_MX.exe" }  # es_MX (español latam); si Adobe cambió el sufijo de idioma tras el rebranding 2026, verificar
   "K-Lite Codec Pack" = { param($v)
     $vNoDot = $v -replace "\.", ""
     "https://files2.codecguide.com/K-Lite_Codec_Pack_${vNoDot}_Standard.exe" }  # patrón oficial confirmado (variante Standard)
@@ -658,10 +660,13 @@ $script:DownloadResolvers = @{
     ($latestRelease.sdk.files | Where-Object { $_.rid -eq 'win-x64' -and $_.name -match '\.exe$' } | Select-Object -First 1).url }
 
   "Visual Studio Professional 2026 (bootstrapper)" = { param($v)
-    "https://aka.ms/vs/18/release/vs_professional.exe" }
+    "https://aka.ms/vs/18/Stable/vs_professional.exe" }
 
   "Visual Studio Enterprise 2026 (bootstrapper)" = { param($v)
-    "https://aka.ms/vs/18/release/vs_enterprise.exe" }
+    "https://aka.ms/vs/18/Stable/vs_enterprise.exe" }
+
+  "Python install manager (Windows)" = { param($v)
+    (Get-LatestGitHubReleaseAsset -Owner "python" -Repo "pymanager" -AssetPattern '(?i)\.msix$').DownloadUrl }
 
   "SentinelOne (agente)" = { param($v) $null }   # sin URL pública: requiere consola del tenant + Site Token
   "TRSuite (FATCA/CRS)" = { param($v) $null }    # software licenciado, descarga vía portal del fabricante
@@ -689,11 +694,20 @@ $script:WingetIds = @{
   "Power Automate for Desktop"                            = "Microsoft.PowerAutomateDesktop"
 }
 
+# Idioma preferido (código winget/BCP-47) para apps sin MSI/URL directa que se
+# resuelven vía winget. Si el manifest del paquete no publica ese idioma,
+# Download-InstallerViaWinget reintenta automáticamente sin --locale.
+$script:WingetLocale = @{
+  "Microsoft Power BI Desktop (latest from change log)" = "es-MX"
+  "Power Automate for Desktop"                            = "es-MX"
+}
+
 function Download-InstallerViaWinget {
   param(
     [Parameter(Mandatory)][string]$WingetId,
     [Parameter(Mandatory)][string]$DestDir,
-    [string]$Version   # opcional: para reintentar una versión específica (penúltima segura)
+    [string]$Version,   # opcional: para reintentar una versión específica (penúltima segura)
+    [string]$Locale     # opcional: idioma preferido (ej. "es-MX"); se relaja si el paquete no lo publica
   )
   Ensure-Directory -Path $DestDir
   $subDir = Join-Path $DestDir ($WingetId -replace "[^a-zA-Z0-9\.\-]", "_")
@@ -708,18 +722,19 @@ function Download-InstallerViaWinget {
   $baseArgs = @("download", "--id", $WingetId, "--source", "winget", "-d", $subDir,
                 "--accept-package-agreements", "--accept-source-agreements", "--disable-interactivity")
 
+  # Se intenta primero con la combinación más específica (versión + idioma) y
+  # se va relajando ante fallos: el manifest de winget del paquete puede no
+  # publicar esa versión exacta, o no publicar ese idioma en particular.
+  $attempts = @()
+  if ($Version -and $Locale) { $attempts += , ($baseArgs + @("--version", $Version, "--locale", $Locale)) }
+  if ($Locale)                { $attempts += , ($baseArgs + @("--locale", $Locale)) }
+  if ($Version)                { $attempts += , ($baseArgs + @("--version", $Version)) }
+  $attempts += , $baseArgs
+
   $result = $null
-  if ($Version) {
-    $result = Invoke-WingetDownload -ArgsList ($baseArgs + @("--version", $Version))
-    if ($result.ExitCode -ne 0) {
-      # La versión exacta detectada en el sitio del fabricante puede no estar
-      # todavía publicada en el repositorio de winget (o tener otro esquema
-      # de versión). Reintentamos sin fijar versión para traer la más
-      # reciente que winget sí tenga disponible.
-      $result = Invoke-WingetDownload -ArgsList $baseArgs
-    }
-  } else {
-    $result = Invoke-WingetDownload -ArgsList $baseArgs
+  foreach ($argSet in $attempts) {
+    $result = Invoke-WingetDownload -ArgsList $argSet
+    if ($result.ExitCode -eq 0) { break }
   }
 
   if ($result.ExitCode -ne 0) {
@@ -742,7 +757,8 @@ function Get-InstallerFile {
   )
   if ($script:WingetIds.ContainsKey($Name)) {
     if (-not (Test-WingetAvailable)) { throw "winget no está disponible en este equipo (instala 'App Installer' desde Microsoft Store)." }
-    return Download-InstallerViaWinget -WingetId $script:WingetIds[$Name] -DestDir $TempDir -Version $Version
+    $locale = if ($script:WingetLocale.ContainsKey($Name)) { $script:WingetLocale[$Name] } else { $null }
+    return Download-InstallerViaWinget -WingetId $script:WingetIds[$Name] -DestDir $TempDir -Version $Version -Locale $locale
   }
   $url = Get-InstallerDownloadUrl -Name $Name -Version $Version
   if (-not $url) { return $null }
@@ -1296,8 +1312,8 @@ $results += Safe-Run -Name "OpenJDK (Eclipse Temurin)"                    -Sourc
 $results += Safe-Run -Name "Power Automate for Desktop"                   -Source "winget show Microsoft.PowerAutomateDesktop" -Block { Get-LatestPowerAutomateDesktop }
 $results += Safe-Run -Name "Notepad++ (x64)"                              -Source "https://api.github.com/repos/notepad-plus-plus/notepad-plus-plus/releases/latest" -Block { Get-LatestNotepadPlusPlus }
 $results += Safe-Run -Name ".NET SDK"                                     -Source "https://raw.githubusercontent.com/dotnet/core/main/release-notes/releases-index.json" -Block { Get-LatestDotNetSdk }
-$results += Safe-Run -Name "Visual Studio Professional 2026"              -Source "https://aka.ms/vs/18/release/vs_professional.exe" -Block { Get-LatestVSProfessional2026 }
-$results += Safe-Run -Name "Visual Studio Enterprise 2026"                -Source "https://aka.ms/vs/18/release/vs_enterprise.exe" -Block { Get-LatestVSEnterprise2026 }
+$results += Safe-Run -Name "Visual Studio Professional 2026"              -Source "https://aka.ms/vs/18/Stable/vs_professional.exe" -Block { Get-LatestVSProfessional2026 }
+$results += Safe-Run -Name "Visual Studio Enterprise 2026"                -Source "https://aka.ms/vs/18/Stable/vs_enterprise.exe" -Block { Get-LatestVSEnterprise2026 }
 $results += Get-SentinelOneNote
 $results += Get-TRSuiteNote
 $results += Get-ThinkCellNote
