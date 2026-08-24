@@ -40,7 +40,30 @@
     <p class="eyebrow">Nuestra historia</p>
     <h1>Una comunidad que se construyó taza por taza.</h1>
     <p class="lede">GROUNDS nació de una idea sencilla: los partners que mejor conocen el oficio son los que deberían enseñarlo. Esta es la línea de tiempo de cómo pasamos de notas sueltas a un verdadero hub de conocimiento.</p>
-    <img src="assets/img/historia-ambiente.svg" alt="Ilustración de una cafetería comunitaria GROUNDS con partners atendiendo la barra y mesas con clientes" width="900" height="420">
+
+    <div class="carousel" data-carousel aria-label="Galería de GROUNDS">
+      <div class="carousel-track">
+        <div class="carousel-slide">
+          <video poster="assets/img/exterior-cafeteria-poster.jpg" muted loop playsinline preload="metadata">
+            <source src="assets/video/exterior-cafeteria.mp4" type="video/mp4">
+          </video>
+          <p class="carousel-caption">La terraza de la primera tienda GROUNDS</p>
+        </div>
+        <div class="carousel-slide">
+          <video poster="assets/img/clientes-cafeteria-poster.jpg" muted loop playsinline preload="metadata">
+            <source src="assets/video/clientes-cafeteria.mp4" type="video/mp4">
+          </video>
+          <p class="carousel-caption">Un partner conversando con un cliente frecuente</p>
+        </div>
+        <div class="carousel-slide">
+          <img src="assets/img/historia-ambiente.svg" alt="Ilustración de una cafetería comunitaria GROUNDS con partners atendiendo la barra y mesas con clientes">
+          <p class="carousel-caption">Así imaginamos la barra de GROUNDS</p>
+        </div>
+      </div>
+      <button class="carousel-btn carousel-prev" type="button" aria-label="Diapositiva anterior">‹</button>
+      <button class="carousel-btn carousel-next" type="button" aria-label="Siguiente diapositiva">›</button>
+      <div class="carousel-dots"></div>
+    </div>
   </section>
 
   <section class="section section-alt">
@@ -159,5 +182,6 @@
 </footer>
 
 <script src="js/nav.js"></script>
+<script src="js/carousel.js"></script>
 </body>
 </html>

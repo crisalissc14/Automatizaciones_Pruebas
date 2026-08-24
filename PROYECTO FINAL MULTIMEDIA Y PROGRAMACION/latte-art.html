@@ -40,6 +40,7 @@
     <p class="eyebrow">Tutorial interactivo</p>
     <h1>Arte Latte</h1>
     <p class="lede">Tres figuras clásicas, explicadas paso a paso. Elige una figura, avanza con los botones y practica en tu próximo turno.</p>
+    <img src="assets/img/baristahaciendoartelatte.png" alt="Partner sirviendo un latte con arte latte recién hecho" width="900" height="500">
   </section>
 
   <section class="section section-alt">
@@ -74,17 +75,25 @@
 
   <section class="section">
     <div class="container">
-      <h2>Secuencia de vertido</h2>
-      <p class="lede">No contamos con video propio libre de derechos para esta versión del sitio, así que la técnica se muestra como una secuencia de imágenes ("flipbook") controlada por JavaScript — la alternativa que sugiere la guía del curso cuando no hay video disponible.</p>
+      <div class="grid grid-2">
+        <div>
+          <h2>Secuencia de vertido</h2>
+          <p class="lede">No contamos con video propio libre de derechos para esta versión del sitio, así que la técnica se muestra como una secuencia de imágenes ("flipbook") controlada por JavaScript — la alternativa que sugiere la guía del curso cuando no hay video disponible.</p>
 
-      <div class="flipbook">
-        <img id="flip-frame" src="assets/img/pour-frame-1.svg" alt="Paso 1: taza vacía lista para el vertido, solo espresso en el fondo" width="300" height="260">
-        <div class="step-controls">
-          <button class="btn btn-outline btn-sm" id="flip-prev">Anterior</button>
-          <button class="btn btn-gold btn-sm" id="flip-play">Reproducir secuencia</button>
-          <button class="btn btn-outline btn-sm" id="flip-next">Siguiente</button>
+          <div class="flipbook">
+            <img id="flip-frame" src="assets/img/pour-frame-1.svg" alt="Paso 1: taza vacía lista para el vertido, solo espresso en el fondo" width="300" height="260">
+            <div class="step-controls">
+              <button class="btn btn-outline btn-sm" id="flip-prev">Anterior</button>
+              <button class="btn btn-gold btn-sm" id="flip-play">Reproducir secuencia</button>
+              <button class="btn btn-outline btn-sm" id="flip-next">Siguiente</button>
+            </div>
+            <span class="step-counter" id="flip-counter">Fotograma 1 de 5</span>
+          </div>
         </div>
-        <span class="step-counter" id="flip-counter">Fotograma 1 de 5</span>
+        <div>
+          <img class="img-rounded" src="assets/img/tulipanartelatte.png" alt="Tulipán de arte latte terminado, visto desde arriba en una taza real">
+          <p class="lede mt-4">Así se ve un tulipán terminado en la vida real, para comparar con tu resultado.</p>
+        </div>
       </div>
     </div>
   </section>

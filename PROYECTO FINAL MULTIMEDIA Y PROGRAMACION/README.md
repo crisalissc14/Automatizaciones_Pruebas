@@ -49,6 +49,24 @@ Por una restricción de red del entorno de desarrollo usado para este proyecto, 
 | `assets/img/trivia-trofeo.svg` | Ilustración propia | Cristina Colimba | Uso libre (autoría propia) |
 | `assets/img/noticias-tablon.svg` | Ilustración propia | Cristina Colimba | Uso libre (autoría propia) |
 
+**Fotos y videos aportados por la autora** (varias ilustraciones SVG de la tabla anterior fueron reemplazadas por estos archivos reales; los SVG se conservan en `assets/img/` por si se necesitan de respaldo). Los videos se comprimieron para web a partir de los clips originales en 4K (se recortó solo resolución/bitrate, no el contenido):
+
+| Archivo | Usado en | Fuente | Autor | Licencia |
+|---|---|---|---|---|
+| `assets/video/exterior-cafeteria.mp4` | Carrusel de `historia.html` | *(pendiente: banco/autor original)* | — | *(pendiente: confirmar licencia libre de derechos)* |
+| `assets/video/clientes-cafeteria.mp4` | Carrusel de `historia.html` | *(pendiente: banco/autor original)* | — | *(pendiente: confirmar licencia libre de derechos)* |
+| `assets/video/baristas-oliendo-catando-cafe.mp4` | Sección de cata en `recetario.html` | *(pendiente: banco/autor original)* | — | *(pendiente: confirmar licencia libre de derechos)* |
+| `assets/video/preparandocafe-pourover.mp4` | `cursos.html`, curso de métodos de extracción | *(pendiente: banco/autor original)* | — | *(pendiente: confirmar licencia libre de derechos)* |
+| `assets/img/shotdecafebajando.jpg` | Hero de `index.html` | *(pendiente: banco/autor original)* | — | *(pendiente: confirmar licencia libre de derechos)* |
+| `assets/img/baristahaciendoartelatte.png` | Banner de `latte-art.html` | *(pendiente: banco/autor original)* | — | *(pendiente: confirmar licencia libre de derechos)* |
+| `assets/img/tulipanartelatte.png` | `latte-art.html`, junto al flipbook | *(pendiente: banco/autor original)* | — | *(pendiente: confirmar licencia libre de derechos)* |
+| `assets/img/utilesdeestudioenmesa.png` | Banner de `cursos.html` | *(pendiente: banco/autor original)* | — | *(pendiente: confirmar licencia libre de derechos)* |
+| `assets/img/mastrena-maquinadecafe.png` | Banner de `recetario.html` | *(pendiente: banco/autor original)* | — | *(pendiente: confirmar licencia libre de derechos)* |
+| `assets/img/granosdecafe-cafemolido-latte.png` | Banner de `comunidad.html` | *(pendiente: banco/autor original)* | — | *(pendiente: confirmar licencia libre de derechos)* |
+| `assets/img/imagen-noticias-equipo-animada.png` | Banner de `noticias.html` | *(pendiente: banco/autor original)* | — | *(pendiente: confirmar licencia libre de derechos)* |
+
+**Sin usar todavía:** `videohorizontal_artelatte.mp4` (arte latte) muestra visiblemente el logo real de una cafetería de terceros ("Café Kitsuné") en el vaso y el delantal del barista — pendiente de decisión de la autora antes de incorporarlo.
+
 **Tipografías (Google Fonts):**
 
 | Fuente | Uso | Licencia |
@@ -59,7 +77,7 @@ Por una restricción de red del entorno de desarrollo usado para este proyecto, 
 
 El bloque de créditos también está visible en el sitio, al final de `historia.html` (sección `#creditos`), enlazado desde el pie de página de las 8 páginas.
 
-**Nota sobre el video de `latte-art.html`:** por la misma restricción de red no se pudo incorporar un video real libre de derechos. Siguiendo la alternativa que contempla la guía del proyecto, la técnica de vertido se muestra como una secuencia de imágenes ("flipbook") controlada por JavaScript, con reproducción automática y controles de anterior/siguiente.
+**Nota sobre el video de `latte-art.html`:** por la restricción de red del entorno de desarrollo no se pudo descargar un video real libre de derechos directamente. Siguiendo la alternativa que contempla la guía del proyecto, la técnica de vertido se muestra como una secuencia de imágenes ("flipbook") controlada por JavaScript, con reproducción automática y controles de anterior/siguiente. Sí se incorporaron videos reales (aportados por la autora) en el carrusel de `historia.html`.
 
 ## Notas de marca
 
