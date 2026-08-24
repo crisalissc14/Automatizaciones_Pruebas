@@ -4,10 +4,13 @@
    ========================================================= */
 
 /* ---------- Fuentes ----------
-   Sans-serif redondeada tipo SoDoSans (la fuente de marca de Starbucks,
-   propietaria y no disponible en Google Fonts): Poppins para títulos,
-   Inter para cuerpo de texto — en vez de la serif editorial que traía
-   la primera versión del sitio. */
+   "SoDo Sans" encabeza la pila porque es la fuente real de marca de
+   Starbucks — pero es propietaria (no está en Google Fonts ni se puede
+   auto-hospedar sin comprarla/tenerla con licencia), así que el navegador
+   nunca la va a encontrar instalada y siempre caerá a Poppins/Inter, que
+   son sans-serif redondeadas del mismo espíritu. Si en algún momento se
+   consiguen los archivos .woff de SoDo Sans, con @font-face bastaría para
+   que esta misma declaración empiece a usarla de verdad. */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
 
 /* ---------- Variables de marca ----------
@@ -15,12 +18,17 @@
    (colorHouseGreen, colorCoffeeLeaf600, colorStarbucksGreen300, colorGold300,
    colorWarmNeutral*, etc. — a pedido explícito, en vez de una paleta propia
    "inspirada"). GROUNDS sigue siendo una marca ficticia: no se usa su logo
-   ni ningún otro asset de Starbucks, solo estos valores de color. */
+   ni ningún otro asset de Starbucks, solo estos valores de color.
+   --paper es blanco (colorWhite) en vez del beige de la versión anterior:
+   ese beige repetido en --paper y --paper-dim casi sin diferencia entre
+   ambos hacía que todo el sitio se viera con un único tono apagado/turbio.
+   Ahora el blanco y el crema alternan con contraste real entre secciones,
+   como en starbucks.com (mayormente blanco, con crema solo en acentos). */
 :root {
   --ink: #1E3932;        /* colorHouseGreen */
   --ink-soft: #2C3D28;   /* colorCoffeeLeaf600 */
-  --paper: #F7F0E4;      /* colorWarmNeutral25 */
-  --paper-dim: #F3E9D9;  /* colorWarmNeutral50 */
+  --paper: #FFFFFF;      /* colorWhite */
+  --paper-dim: #F7F0E4;  /* colorWarmNeutral25 */
   --gold: #CBA258;       /* colorGold300 */
   --gold-dark: #8F6E32;  /* colorGold600 */
   --pine: #006242;       /* colorStarbucksGreen300 */
@@ -31,8 +39,8 @@
      (cumple contraste AA; --gold-dark se conserva para hovers y acentos grandes). */
   --gold-text: #735725;  /* colorGold700 */
 
-  --font-display: "Poppins", "Segoe UI", sans-serif;
-  --font-body: "Inter", "Segoe UI", sans-serif;
+  --font-display: "SoDo Sans", "Poppins", "Segoe UI", sans-serif;
+  --font-body: "SoDo Sans", "Inter", "Segoe UI", sans-serif;
   --font-mono: "Space Mono", "Courier New", monospace;
 
   --radius-sm: 6px;
@@ -412,6 +420,84 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
 /* ---------- Encabezado de sección centrado (estilo "SHOP NOW / SHOP COFFEE") ---------- */
 .section-header--center { text-align: center; max-width: 640px; margin: 0 auto 2.5rem; }
 .section-header--center .lede { margin-inline: auto; }
+
+/* ---------- Carrusel (galería de fotos/video) ---------- */
+.carousel {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--ink);
+  background: var(--ink);
+}
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+.carousel-slide {
+  flex: 0 0 100%;
+  position: relative;
+}
+.carousel-slide video,
+.carousel-slide img {
+  width: 100%;
+  height: clamp(260px, 55vw, 480px);
+  object-fit: cover;
+  display: block;
+}
+.carousel-caption {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 2.5rem 1.5rem 1.25rem;
+  background: linear-gradient(180deg, transparent, rgba(30, 57, 50, 0.88));
+  color: var(--paper-white);
+  font-weight: 600;
+}
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--ink);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  transition: background var(--transition), transform var(--transition);
+  z-index: 2;
+}
+.carousel-btn:hover { background: var(--paper-white); transform: translateY(-50%) scale(1.06); }
+.carousel-prev { left: 1rem; }
+.carousel-next { right: 1rem; }
+.carousel-dots {
+  position: absolute;
+  bottom: 0.85rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 2;
+}
+.carousel-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 2px solid var(--paper-white);
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.carousel-dot[aria-current="true"] { background: var(--paper-white); }
+@media (max-width: 480px) {
+  .carousel-btn { width: 36px; height: 36px; font-size: 1.1rem; }
+}
 
 /* ---------- Franja de estadísticas (estilo "In numbers" de Nestlé) ---------- */
 .stats-band {

@@ -49,6 +49,13 @@ Por una restricción de red del entorno de desarrollo usado para este proyecto, 
 | `assets/img/trivia-trofeo.svg` | Ilustración propia | Cristina Colimba | Uso libre (autoría propia) |
 | `assets/img/noticias-tablon.svg` | Ilustración propia | Cristina Colimba | Uso libre (autoría propia) |
 
+**Videos** (comprimidos para web a partir de los clips originales en 4K provistos por la autora; se recortó solo la resolución/bitrate, no el contenido):
+
+| Archivo | Fuente | Autor | Licencia |
+|---|---|---|---|
+| `assets/video/exterior-cafeteria.mp4` | *(pendiente: nombre del banco y autor original)* | — | *(pendiente: confirmar licencia libre de derechos)* |
+| `assets/video/clientes-cafeteria.mp4` | *(pendiente: nombre del banco y autor original)* | — | *(pendiente: confirmar licencia libre de derechos)* |
+
 **Tipografías (Google Fonts):**
 
 | Fuente | Uso | Licencia |
@@ -59,7 +66,7 @@ Por una restricción de red del entorno de desarrollo usado para este proyecto, 
 
 El bloque de créditos también está visible en el sitio, al final de `historia.html` (sección `#creditos`), enlazado desde el pie de página de las 8 páginas.
 
-**Nota sobre el video de `latte-art.html`:** por la misma restricción de red no se pudo incorporar un video real libre de derechos. Siguiendo la alternativa que contempla la guía del proyecto, la técnica de vertido se muestra como una secuencia de imágenes ("flipbook") controlada por JavaScript, con reproducción automática y controles de anterior/siguiente.
+**Nota sobre el video de `latte-art.html`:** por la restricción de red del entorno de desarrollo no se pudo descargar un video real libre de derechos directamente. Siguiendo la alternativa que contempla la guía del proyecto, la técnica de vertido se muestra como una secuencia de imágenes ("flipbook") controlada por JavaScript, con reproducción automática y controles de anterior/siguiente. Sí se incorporaron videos reales (aportados por la autora) en el carrusel de `historia.html`.
 
 ## Notas de marca
 
