@@ -1005,6 +1005,24 @@ function Get-InstallerFile {
 
 function Ensure-Directory { param([string]$Path) if (-not (Test-Path $Path)) { New-Item -ItemType Directory -Path $Path -Force | Out-Null } }
 
+# Borra un archivo temporal reintentando si el primer intento falla. Justo
+# después de escanearlo, Defender (u otro proceso) puede retener un candado
+# breve sobre el archivo; con -ErrorAction SilentlyContinue ese fallo antes
+# quedaba en silencio y el archivo se quedaba huérfano en la carpeta
+# temporal. Devuelve $true si terminó borrado, $false si no se pudo.
+function Remove-TempFileSafely {
+  param([Parameter(Mandatory)][string]$FilePath, [int]$MaxAttempts = 3, [int]$DelaySeconds = 3)
+  for ($attempt = 1; $attempt -le $MaxAttempts; $attempt++) {
+    try {
+      Remove-Item -Path $FilePath -Force -ErrorAction Stop
+      return $true
+    } catch {
+      if ($attempt -lt $MaxAttempts) { Start-Sleep -Seconds $DelaySeconds }
+    }
+  }
+  return (-not (Test-Path $FilePath))
+}
+
 function Get-Sha256Hash { param([string]$FilePath) (Get-FileHash -Algorithm SHA256 -Path $FilePath).Hash.ToLower() }
 
 # Compara el hash SHA256 del archivo descargado contra el hash oficial
@@ -1337,6 +1355,14 @@ function Process-Application {
     return $status
   }
 
+  # Limpieza defensiva: si una corrida anterior quedó interrumpida (cierre de
+  # la ventana, Ctrl+C, corte de energía) antes de mover/borrar el archivo de
+  # este aplicativo, puede haber quedado huérfano en la carpeta temporal.
+  # Se borra antes de empezar para no acumular versiones viejas.
+  $safeNamePrefix = ($name -replace "[^a-zA-Z0-9\.\-]", "_")
+  Get-ChildItem -Path $TempDir -Filter "$safeNamePrefix`_*" -File -ErrorAction SilentlyContinue |
+    ForEach-Object { Remove-TempFileSafely -FilePath $_.FullName | Out-Null }
+
   # --- Intento 1: última versión (URL directa o winget, según la app) ---
   try {
     $file = Get-InstallerFile -Name $name -Version $VersionResult.LatestVersion -TempDir $TempDir
@@ -1349,7 +1375,9 @@ function Process-Application {
     $hashCheck = Test-OfficialHashMatch -AppName $name -LocalFilePath $file
     if ($hashCheck -and -not $hashCheck.Match) {
       $status.Detail = "Última versión ($($VersionResult.LatestVersion)) descartada: el SHA256 no coincide con el oficial publicado por el fabricante (posible descarga corrupta o manipulada). Esperado=$($hashCheck.Expected) Obtenido=$($hashCheck.Actual)"
-      Remove-Item -Path $file -Force -ErrorAction SilentlyContinue
+      if (-not (Remove-TempFileSafely -FilePath $file)) {
+        $status.Detail += " || ADVERTENCIA: no se pudo borrar el archivo temporal (posible bloqueo de otro proceso); queda en $file, bórralo manualmente."
+      }
       $file = $null
     }
 
@@ -1373,7 +1401,9 @@ function Process-Application {
         $status.DefenderResult  = $check.DefenderResult
         $status.SignatureResult = $check.SignatureResult
         $status.Detail = "Última versión ($($VersionResult.LatestVersion)) bloqueada: ni VirusTotal ni Defender la validaron como segura. VT: $($check.VTDetail) | Defender: $($check.DefenderDetail)"
-        Remove-Item -Path $file -Force -ErrorAction SilentlyContinue
+        if (-not (Remove-TempFileSafely -FilePath $file)) {
+          $status.Detail += " || ADVERTENCIA: no se pudo borrar el archivo temporal (posible bloqueo de otro proceso, ej. Defender); queda en $file, bórralo manualmente."
+        }
       }
     }
   } catch {
@@ -1407,7 +1437,9 @@ function Process-Application {
           return $status
         } else {
           $status.Detail += " || Penúltima ($previousSafe) también falló: VT: $($check2.VTDetail) | Defender: $($check2.DefenderDetail)"
-          Remove-Item -Path $file2 -Force -ErrorAction SilentlyContinue
+          if (-not (Remove-TempFileSafely -FilePath $file2)) {
+            $status.Detail += " || ADVERTENCIA: no se pudo borrar el archivo temporal de la penúltima versión (posible bloqueo de otro proceso); queda en $file2, bórralo manualmente."
+          }
         }
       }
     } catch {
