@@ -101,6 +101,19 @@ $script:ExpectedPublishers = @{
   ".NET SDK (LTS más reciente, win-x64)"        = @("Microsoft Corporation")
   "Visual Studio Professional 2026 (bootstrapper)" = @("Microsoft Corporation")
   "Visual Studio Enterprise 2026 (bootstrapper)"   = @("Microsoft Corporation")
+  "Visual Studio Professional 2022 (bootstrapper)" = @("Microsoft Corporation")
+  "Visual Studio Enterprise 2022 (bootstrapper)"   = @("Microsoft Corporation")
+  "Azure Connected Machine Agent"                = @("Microsoft Corporation")
+  ".NET Runtime (LTS más reciente, win-x64)"     = @("Microsoft Corporation")
+  "ASP.NET Core Runtime (LTS más reciente, win-x64)" = @("Microsoft Corporation")
+  ".NET Hosting Bundle (LTS más reciente)"       = @("Microsoft Corporation")
+  "IntelliJ IDEA Community Edition"              = @("JetBrains s.r.o.")
+  "JetBrains dotPeek"                            = @("JetBrains s.r.o.")
+  "RStudio Desktop"                              = @("Posit Software, PBC", "RStudio, PBC", "RStudio")
+  "R for Windows"                                = @("The R Foundation for Statistical Computing", "R Core Team")
+  "Figma (desktop)"                              = @("Figma, Inc.", "Figma")
+  "Postman"                                      = @("Postman, Inc.", "Postman")
+  "Araxis Merge"                                 = @("Araxis Ltd", "Araxis Limited")
 }
 
 # Hashes SHA256 "oficiales" publicados directamente por el fabricante (cuando
@@ -558,6 +571,149 @@ function Get-ThinkCellNote {
   New-VersionResult -Name "think-cell" -LatestVersion "N/A" -Source "https://www.think-cell.com" -Notes "Requiere licencia comercial (solo hay prueba gratuita limitada). Descarga y activación deben hacerse manualmente desde el portal de think-cell con la licencia de la organización."
 }
 
+function Get-ACLForWindowsNote {
+  # ACL for Windows (Diligent One / HighBond) es software por suscripción: el
+  # instalador solo se obtiene tras iniciar sesión en el portal del cliente.
+  New-VersionResult -Name "ACL for Windows (Diligent One)" -LatestVersion "N/A" -Source "https://www.diligentoneplatform.com" -Notes "Software por suscripción; el instalador (ACLforWindows*.exe) se descarga desde el portal Diligent One / HighBond tras iniciar sesión con la cuenta de la organización. No hay URL de descarga pública."
+}
+
+function Get-TeamMateNote {
+  # TeamMate+ / TeamMate Analytics (Wolters Kluwer) es software de auditoría
+  # licenciado; la descarga se obtiene desde el portal de soporte del cliente,
+  # no mediante una URL pública estable.
+  New-VersionResult -Name "TeamMate (Wolters Kluwer)" -LatestVersion "N/A" -Source "https://www.wolterskluwer.com/en/solutions/teammate" -Notes "Software de auditoría licenciado (Wolters Kluwer); la descarga se obtiene desde el portal de soporte del cliente. No hay URL de descarga pública. Confirmar si se refiere a TeamMate+ (workpapers) o TeamMate Analytics."
+}
+
+function Get-LatestAESCryptOpenSource {
+  $r = Get-LatestGitHubReleaseAsset -Owner "terrapane" -Repo "aescrypt_win" -AssetPattern '(?i)\.(exe|msi)$'
+  New-VersionResult -Name "AES Crypt (open-source, GitHub)" -LatestVersion $r.Version -Source "https://api.github.com/repos/terrapane/aescrypt_win/releases/latest" -Notes "Build open-source (GPL) mantenido por terrapane, distinto de la versión comercial de aescrypt.com."
+}
+
+function Get-LatestAESCryptCommercial {
+  # aescrypt.com distribuye un .zip con aescrypt.exe (no un instalador con
+  # asistente); no requiere cuenta para la prueba de 30 días, pero el patrón
+  # de URL exacto no está confirmado por el fabricante en una API pública
+  # (se extrae por scraping best-effort; verificar si la página cambia).
+  New-VersionResult -Name "AES Crypt (comercial, aescrypt.com)" -LatestVersion "latest" -Source "https://www.aescrypt.com/download/" -Notes "Distribución comercial (prueba de 30 días, sin cuenta requerida para descargar); paquete .zip con aescrypt.exe portable, no instalador tradicional. URL exacta resuelta por scraping best-effort."
+}
+
+function Get-LatestAngularCli {
+  $json = Get-JsonFromUrl -Url "https://registry.npmjs.org/@angular/cli/latest"
+  New-VersionResult -Name "Angular CLI (paquete npm)" -LatestVersion $json.version -Source "https://registry.npmjs.org/@angular/cli/latest" -Notes "Se instala con 'npm install -g @angular/cli' (requiere Node.js, ya cubierto en este catálogo). Este script descarga y valida el tarball .tgz oficial publicado en el registro de npm, no un instalador tradicional."
+}
+
+function Get-LatestIntelliJIdeaCommunity {
+  # API pública oficial de JetBrains (Data Services) para resolver la última versión.
+  $url = "https://data.services.jetbrains.com/products/releases?code=IIC&latest=true&type=release"
+  $json = Get-JsonFromUrl -Url $url
+  $release = $json.IIC[0]
+  New-VersionResult -Name "IntelliJ IDEA Community Edition" -LatestVersion $release.version -Source $url
+}
+
+function Get-LatestJetBrainsDotPeek {
+  $url = "https://data.services.jetbrains.com/products/releases?code=DPK&latest=true&type=release"
+  $json = Get-JsonFromUrl -Url $url
+  $release = $json.DPK[0]
+  New-VersionResult -Name "JetBrains dotPeek" -LatestVersion $release.version -Source $url
+}
+
+function Get-LatestGradle {
+  $json = Get-JsonFromUrl -Url "https://services.gradle.org/versions/current"
+  New-VersionResult -Name "Gradle (bin.zip)" -LatestVersion $json.version -Source "https://services.gradle.org/versions/current" -Notes "Gradle se distribuye como .zip (no hay .exe/.msi oficial)."
+}
+
+function Get-LatestRForWindows {
+  # Índice oficial de CRAN para el instalador base de R en Windows.
+  $url = "https://cran.r-project.org/bin/windows/base/"
+  $html = Get-TextFromUrl -Url $url
+  $ver = Extract-RegexFirstGroup -Text $html -Pattern 'href="R-([0-9]+\.[0-9]+\.[0-9]+)-win\.exe"'
+  New-VersionResult -Name "R for Windows" -LatestVersion $ver -Source $url
+}
+
+function Get-LatestRStudioDesktop {
+  $url = "https://posit.co/download/rstudio-desktop/"
+  $html = Get-TextFromUrl -Url $url
+  $ver = Extract-RegexFirstGroup -Text $html -Pattern 'RStudio-([0-9]+\.[0-9]+\.[0-9]+-[0-9]+)\.exe'
+  New-VersionResult -Name "RStudio Desktop" -LatestVersion $ver -Source $url -Notes "Edición open-source gratuita (existe una edición Pro/comercial aparte)."
+}
+
+function Get-LatestAzureConnectedMachineAgent {
+  New-VersionResult -Name "Azure Connected Machine Agent" -LatestVersion "latest" -Source "https://aka.ms/AzureConnectedMachineAgent" -Notes "URL fija oficial de Microsoft (Azure Arc) que siempre resuelve al MSI más reciente; no expone un número de versión antes de descargar."
+}
+
+function Get-LatestDotNetAspNetCoreRuntime {
+  $indexUrl = "https://raw.githubusercontent.com/dotnet/core/main/release-notes/releases-index.json"
+  $index = Get-JsonFromUrl -Url $indexUrl
+  $ltsChannel = $index.'releases-index' |
+    Where-Object { $_.'release-type' -eq 'lts' -and $_.'support-phase' -eq 'active' } |
+    Sort-Object { [version]$_.'channel-version' } -Descending | Select-Object -First 1
+  if (-not $ltsChannel) { throw "No se encontró un canal LTS activo en releases-index.json." }
+  $releases = Get-JsonFromUrl -Url $ltsChannel.'releases.json'
+  $latestRelease = $releases.releases | Sort-Object { [datetime]$_.'release-date' } -Descending | Select-Object -First 1
+  $file = $latestRelease.'aspnetcore-runtime'.files | Where-Object { $_.rid -eq 'win-x64' -and $_.name -match '\.exe$' } | Select-Object -First 1
+  if (-not $file) { throw "No se encontró instalador win-x64 .exe de ASP.NET Core Runtime en el canal $($ltsChannel.'channel-version')." }
+  New-VersionResult -Name "ASP.NET Core Runtime (LTS más reciente, win-x64)" -LatestVersion $latestRelease.'aspnetcore-runtime'.'version-display' -Source $ltsChannel.'releases.json' -Notes "Canal LTS: $($ltsChannel.'channel-version')."
+}
+
+function Get-LatestDotNetRuntime {
+  $indexUrl = "https://raw.githubusercontent.com/dotnet/core/main/release-notes/releases-index.json"
+  $index = Get-JsonFromUrl -Url $indexUrl
+  $ltsChannel = $index.'releases-index' |
+    Where-Object { $_.'release-type' -eq 'lts' -and $_.'support-phase' -eq 'active' } |
+    Sort-Object { [version]$_.'channel-version' } -Descending | Select-Object -First 1
+  if (-not $ltsChannel) { throw "No se encontró un canal LTS activo en releases-index.json." }
+  $releases = Get-JsonFromUrl -Url $ltsChannel.'releases.json'
+  $latestRelease = $releases.releases | Sort-Object { [datetime]$_.'release-date' } -Descending | Select-Object -First 1
+  $file = $latestRelease.runtime.files | Where-Object { $_.rid -eq 'win-x64' -and $_.name -match '\.exe$' } | Select-Object -First 1
+  if (-not $file) { throw "No se encontró instalador win-x64 .exe del .NET Runtime en el canal $($ltsChannel.'channel-version')." }
+  New-VersionResult -Name ".NET Runtime (LTS más reciente, win-x64)" -LatestVersion $latestRelease.runtime.version -Source $ltsChannel.'releases.json' -Notes "Canal LTS: $($ltsChannel.'channel-version')."
+}
+
+function Get-LatestDotNetHostingBundle {
+  $indexUrl = "https://raw.githubusercontent.com/dotnet/core/main/release-notes/releases-index.json"
+  $index = Get-JsonFromUrl -Url $indexUrl
+  $ltsChannel = $index.'releases-index' |
+    Where-Object { $_.'release-type' -eq 'lts' -and $_.'support-phase' -eq 'active' } |
+    Sort-Object { [version]$_.'channel-version' } -Descending | Select-Object -First 1
+  if (-not $ltsChannel) { throw "No se encontró un canal LTS activo en releases-index.json." }
+  $releases = Get-JsonFromUrl -Url $ltsChannel.'releases.json'
+  $latestRelease = $releases.releases | Sort-Object { [datetime]$_.'release-date' } -Descending | Select-Object -First 1
+  $file = $latestRelease.'aspnetcore-runtime'.files | Where-Object { $_.name -match '(?i)hosting-bundle.*\.exe$' } | Select-Object -First 1
+  if (-not $file) { throw "No se encontró el .NET Hosting Bundle en el canal $($ltsChannel.'channel-version')." }
+  New-VersionResult -Name ".NET Hosting Bundle (LTS más reciente)" -LatestVersion $latestRelease.'aspnetcore-runtime'.'version-display' -Source $ltsChannel.'releases.json' -Notes "Canal LTS: $($ltsChannel.'channel-version'). Incluye el módulo ASP.NET Core para IIS."
+}
+
+function Get-LatestVSProfessional2022 {
+  New-VersionResult -Name "Visual Studio Professional 2022 (bootstrapper)" -LatestVersion "17.x (canal release)" -Source "https://aka.ms/vs/17/release/vs_professional.exe" -Notes "El bootstrapper descarga los workloads seleccionados durante la instalación; VT/Defender solo validan el bootstrapper, no el payload completo descargado después."
+}
+
+function Get-LatestVSEnterprise2022 {
+  New-VersionResult -Name "Visual Studio Enterprise 2022 (bootstrapper)" -LatestVersion "17.x (canal release)" -Source "https://aka.ms/vs/17/release/vs_enterprise.exe" -Notes "El bootstrapper descarga los workloads seleccionados durante la instalación; VT/Defender solo validan el bootstrapper, no el payload completo descargado después."
+}
+
+function Get-LatestAraxisMerge {
+  # Araxis publica soporte oficial de winget; se resuelve la versión con el propio winget.
+  if (-not (Test-WingetAvailable)) { throw "winget no está disponible para resolver la versión de Araxis Merge." }
+  $out = (& winget show --id Araxis.Merge --source winget 2>&1 | Out-String)
+  $ver = Extract-RegexFirstGroup -Text $out -Pattern "Version:\s*([0-9]+(?:\.[0-9]+)*)"
+  New-VersionResult -Name "Araxis Merge" -LatestVersion $ver -Source "winget show Araxis.Merge"
+}
+
+function Get-LatestNvmWindows {
+  $r = Get-LatestGitHubReleaseAsset -Owner "coreybutler" -Repo "nvm-windows" -AssetPattern '^nvm-setup\.exe$'
+  New-VersionResult -Name "nvm-windows" -LatestVersion $r.Version -Source "https://api.github.com/repos/coreybutler/nvm-windows/releases/latest"
+}
+
+function Get-LatestFigma {
+  # Figma se autoactualiza y no publica un número de versión previo a la
+  # descarga; la URL de "latest" es estable y confirmada por el fabricante.
+  New-VersionResult -Name "Figma (desktop)" -LatestVersion "latest" -Source "https://desktop.figma.com/win/FigmaSetup.exe" -Notes "Instalador autoactualizable; Figma no publica número de versión antes de descargar."
+}
+
+function Get-LatestPostman {
+  New-VersionResult -Name "Postman" -LatestVersion "latest" -Source "https://dl.pstmn.io/download/latest/win64" -Notes "Instalador autoactualizable; Postman no publica número de versión antes de descargar."
+}
+
 # ============================================================
 # RESOLUCIÓN DE URL DE DESCARGA DIRECTA POR APP
 # Cada resolver recibe la versión resuelta y devuelve la URL del instalador
@@ -670,6 +826,83 @@ $script:DownloadResolvers = @{
 
   "SentinelOne (agente)" = { param($v) $null }   # sin URL pública: requiere consola del tenant + Site Token
   "TRSuite (FATCA/CRS)" = { param($v) $null }    # software licenciado, descarga vía portal del fabricante
+  "ACL for Windows (Diligent One)" = { param($v) $null }   # software por suscripción, sin URL pública
+  "TeamMate (Wolters Kluwer)" = { param($v) $null }        # software de auditoría licenciado, portal de cliente
+
+  "AES Crypt (open-source, GitHub)" = { param($v)
+    (Get-LatestGitHubReleaseAsset -Owner "terrapane" -Repo "aescrypt_win" -AssetPattern '(?i)\.(exe|msi)$').DownloadUrl }
+
+  "AES Crypt (comercial, aescrypt.com)" = { param($v)
+    $html = Get-TextFromUrl -Url "https://www.aescrypt.com/download/"
+    $m = [regex]::Match($html, 'href="([^"]*[Ww]indows[^"]*\.zip)"')
+    if (-not $m.Success) { throw "No se pudo extraer el link de descarga de Windows desde aescrypt.com/download/ (verificar manualmente)." }
+    $m.Groups[1].Value }
+
+  "Angular CLI (paquete npm)" = { param($v)
+    (Get-JsonFromUrl -Url "https://registry.npmjs.org/@angular/cli/latest").dist.tarball }
+
+  "IntelliJ IDEA Community Edition" = { param($v)
+    $json = Get-JsonFromUrl -Url "https://data.services.jetbrains.com/products/releases?code=IIC&latest=true&type=release"
+    $json.IIC[0].downloads.windows.link }
+
+  "JetBrains dotPeek" = { param($v)
+    $json = Get-JsonFromUrl -Url "https://data.services.jetbrains.com/products/releases?code=DPK&latest=true&type=release"
+    $json.DPK[0].downloads.windows.link }
+
+  "Gradle (bin.zip)" = { param($v)
+    $json = Get-JsonFromUrl -Url "https://services.gradle.org/versions/current"
+    $json.downloadUrl }
+
+  "R for Windows" = { param($v)
+    "https://cran.r-project.org/bin/windows/base/R-$v-win.exe" }
+
+  "RStudio Desktop" = { param($v)
+    "https://download1.rstudio.org/electron/windows/RStudio-$v.exe" }
+
+  "Azure Connected Machine Agent" = { param($v)
+    "https://aka.ms/AzureConnectedMachineAgent" }
+
+  ".NET Runtime (LTS más reciente, win-x64)" = { param($v)
+    $index = Get-JsonFromUrl -Url "https://raw.githubusercontent.com/dotnet/core/main/release-notes/releases-index.json"
+    $ltsChannel = $index.'releases-index' |
+      Where-Object { $_.'release-type' -eq 'lts' -and $_.'support-phase' -eq 'active' } |
+      Sort-Object { [version]$_.'channel-version' } -Descending | Select-Object -First 1
+    $releases = Get-JsonFromUrl -Url $ltsChannel.'releases.json'
+    $latestRelease = $releases.releases | Sort-Object { [datetime]$_.'release-date' } -Descending | Select-Object -First 1
+    ($latestRelease.runtime.files | Where-Object { $_.rid -eq 'win-x64' -and $_.name -match '\.exe$' } | Select-Object -First 1).url }
+
+  "ASP.NET Core Runtime (LTS más reciente, win-x64)" = { param($v)
+    $index = Get-JsonFromUrl -Url "https://raw.githubusercontent.com/dotnet/core/main/release-notes/releases-index.json"
+    $ltsChannel = $index.'releases-index' |
+      Where-Object { $_.'release-type' -eq 'lts' -and $_.'support-phase' -eq 'active' } |
+      Sort-Object { [version]$_.'channel-version' } -Descending | Select-Object -First 1
+    $releases = Get-JsonFromUrl -Url $ltsChannel.'releases.json'
+    $latestRelease = $releases.releases | Sort-Object { [datetime]$_.'release-date' } -Descending | Select-Object -First 1
+    ($latestRelease.'aspnetcore-runtime'.files | Where-Object { $_.rid -eq 'win-x64' -and $_.name -match '\.exe$' } | Select-Object -First 1).url }
+
+  ".NET Hosting Bundle (LTS más reciente)" = { param($v)
+    $index = Get-JsonFromUrl -Url "https://raw.githubusercontent.com/dotnet/core/main/release-notes/releases-index.json"
+    $ltsChannel = $index.'releases-index' |
+      Where-Object { $_.'release-type' -eq 'lts' -and $_.'support-phase' -eq 'active' } |
+      Sort-Object { [version]$_.'channel-version' } -Descending | Select-Object -First 1
+    $releases = Get-JsonFromUrl -Url $ltsChannel.'releases.json'
+    $latestRelease = $releases.releases | Sort-Object { [datetime]$_.'release-date' } -Descending | Select-Object -First 1
+    ($latestRelease.'aspnetcore-runtime'.files | Where-Object { $_.name -match '(?i)hosting-bundle.*\.exe$' } | Select-Object -First 1).url }
+
+  "Visual Studio Professional 2022 (bootstrapper)" = { param($v)
+    "https://aka.ms/vs/17/release/vs_professional.exe" }
+
+  "Visual Studio Enterprise 2022 (bootstrapper)" = { param($v)
+    "https://aka.ms/vs/17/release/vs_enterprise.exe" }
+
+  "nvm-windows" = { param($v)
+    (Get-LatestGitHubReleaseAsset -Owner "coreybutler" -Repo "nvm-windows" -AssetPattern '^nvm-setup\.exe$').DownloadUrl }
+
+  "Figma (desktop)" = { param($v)
+    "https://desktop.figma.com/win/FigmaSetup.exe" }
+
+  "Postman" = { param($v)
+    "https://dl.pstmn.io/download/latest/win64" }
 
   "think-cell" = { param($v) $null }   # requiere licencia comercial, no publica instalador de descarga pública sin cuenta
 }
@@ -692,6 +925,7 @@ $script:WingetIds = @{
   "Android Studio (latest shown on official site)"       = "Google.AndroidStudio"
   "Microsoft Power BI Desktop (latest from change log)"  = "Microsoft.PowerBI"
   "Power Automate for Desktop"                            = "Microsoft.PowerAutomateDesktop"
+  "Araxis Merge"                                          = "Araxis.Merge"
 }
 
 # Idioma preferido (código winget/BCP-47) para apps sin MSI/URL directa que se
@@ -1074,7 +1308,9 @@ function Process-Application {
     "DCNet Document Control Backoffice",
     "think-cell",
     "SentinelOne (agente)",
-    "TRSuite (FATCA/CRS)"
+    "TRSuite (FATCA/CRS)",
+    "ACL for Windows (Diligent One)",
+    "TeamMate (Wolters Kluwer)"
   )
 
   $name = $VersionResult.Name
@@ -1316,6 +1552,26 @@ $results += Safe-Run -Name "Visual Studio Professional 2026"              -Sourc
 $results += Safe-Run -Name "Visual Studio Enterprise 2026"                -Source "https://aka.ms/vs/18/Stable/vs_enterprise.exe" -Block { Get-LatestVSEnterprise2026 }
 $results += Get-SentinelOneNote
 $results += Get-TRSuiteNote
+$results += Get-ACLForWindowsNote
+$results += Get-TeamMateNote
+$results += Safe-Run -Name "AES Crypt (open-source)"                      -Source "https://api.github.com/repos/terrapane/aescrypt_win/releases/latest" -Block { Get-LatestAESCryptOpenSource }
+$results += Safe-Run -Name "AES Crypt (comercial)"                        -Source "https://www.aescrypt.com/download/" -Block { Get-LatestAESCryptCommercial }
+$results += Safe-Run -Name "Angular CLI"                                  -Source "https://registry.npmjs.org/@angular/cli/latest" -Block { Get-LatestAngularCli }
+$results += Safe-Run -Name "IntelliJ IDEA Community Edition"              -Source "https://data.services.jetbrains.com/products/releases?code=IIC" -Block { Get-LatestIntelliJIdeaCommunity }
+$results += Safe-Run -Name "JetBrains dotPeek"                            -Source "https://data.services.jetbrains.com/products/releases?code=DPK" -Block { Get-LatestJetBrainsDotPeek }
+$results += Safe-Run -Name "Gradle"                                       -Source "https://services.gradle.org/versions/current" -Block { Get-LatestGradle }
+$results += Safe-Run -Name "R for Windows"                                -Source "https://cran.r-project.org/bin/windows/base/" -Block { Get-LatestRForWindows }
+$results += Safe-Run -Name "RStudio Desktop"                              -Source "https://posit.co/download/rstudio-desktop/" -Block { Get-LatestRStudioDesktop }
+$results += Get-LatestAzureConnectedMachineAgent
+$results += Safe-Run -Name ".NET Runtime"                                 -Source "https://raw.githubusercontent.com/dotnet/core/main/release-notes/releases-index.json" -Block { Get-LatestDotNetRuntime }
+$results += Safe-Run -Name "ASP.NET Core Runtime"                         -Source "https://raw.githubusercontent.com/dotnet/core/main/release-notes/releases-index.json" -Block { Get-LatestDotNetAspNetCoreRuntime }
+$results += Safe-Run -Name ".NET Hosting Bundle"                          -Source "https://raw.githubusercontent.com/dotnet/core/main/release-notes/releases-index.json" -Block { Get-LatestDotNetHostingBundle }
+$results += Safe-Run -Name "Visual Studio Professional 2022"              -Source "https://aka.ms/vs/17/release/vs_professional.exe" -Block { Get-LatestVSProfessional2022 }
+$results += Safe-Run -Name "Visual Studio Enterprise 2022"                -Source "https://aka.ms/vs/17/release/vs_enterprise.exe" -Block { Get-LatestVSEnterprise2022 }
+$results += Safe-Run -Name "Araxis Merge"                                 -Source "winget show Araxis.Merge" -Block { Get-LatestAraxisMerge }
+$results += Safe-Run -Name "nvm-windows"                                  -Source "https://api.github.com/repos/coreybutler/nvm-windows/releases/latest" -Block { Get-LatestNvmWindows }
+$results += Get-LatestFigma
+$results += Get-LatestPostman
 $results += Get-ThinkCellNote
 
 $results | Sort-Object Name | Format-Table -AutoSize
