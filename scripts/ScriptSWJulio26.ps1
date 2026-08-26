@@ -417,7 +417,7 @@ function Get-LatestPowerBIDesktop {
   $url = "https://learn.microsoft.com/en-us/power-bi/fundamentals/desktop-change-log"
   $html = Get-TextFromUrl -Url $url
   $ver = Extract-RegexFirstGroup -Text $html -Pattern "Version\s+(2\.[0-9]+\.[0-9]+\.[0-9]+)"
-  New-VersionResult -Name "Microsoft Power BI Desktop (latest from change log)" -LatestVersion $ver -Source $url
+  New-VersionResult -Name "Microsoft Power BI Desktop (latest from change log)" -LatestVersion $ver -Source $url -Notes "Microsoft distribuye un único instalador multi-idioma (no hay versión 'en español' separada); el idioma con el que abre depende de la configuración regional/idioma de Windows del equipo donde se instale, no del archivo descargado."
 }
 
 function Get-LatestOpenJDK {
@@ -444,7 +444,7 @@ function Get-LatestPowerAutomateDesktop {
   if (-not (Test-WingetAvailable)) { throw "winget no está disponible para resolver la versión de Power Automate for Desktop." }
   $out = (& winget show --id Microsoft.PowerAutomateDesktop --source winget 2>&1 | Out-String)
   $ver = Extract-RegexFirstGroup -Text $out -Pattern "Version:\s*([0-9]+(?:\.[0-9]+)*)"
-  New-VersionResult -Name "Power Automate for Desktop" -LatestVersion $ver -Source "winget show Microsoft.PowerAutomateDesktop" -Notes "Se instala/descarga vía winget; Microsoft no publica una URL de descarga directa pública."
+  New-VersionResult -Name "Power Automate for Desktop" -LatestVersion $ver -Source "winget show Microsoft.PowerAutomateDesktop" -Notes "Se instala/descarga vía winget; Microsoft no publica una URL de descarga directa pública. Es un único instalador multi-idioma: el idioma con el que abre depende de la configuración regional/idioma de Windows del equipo, no del archivo descargado."
 }
 
 function Get-LatestNotepadPlusPlus {
@@ -929,12 +929,16 @@ $script:WingetIds = @{
 }
 
 # Idioma preferido (código winget/BCP-47) para apps sin MSI/URL directa que se
-# resuelven vía winget. Si el manifest del paquete no publica ese idioma,
+# resuelven vía winget, SOLO para paquetes cuyo manifest realmente publica
+# instaladores distintos por idioma. Si el manifest no publica ese idioma,
 # Download-InstallerViaWinget reintenta automáticamente sin --locale.
-$script:WingetLocale = @{
-  "Microsoft Power BI Desktop (latest from change log)" = "es-MX"
-  "Power Automate for Desktop"                            = "es-MX"
-}
+# NOTA: Power BI Desktop y Power Automate for Desktop se sacaron de este mapa
+# porque Microsoft los distribuye como un único instalador multi-idioma (no
+# hay una versión "en español" distinta que descargar); el idioma con el que
+# arrancan depende de la configuración regional/idioma de Windows en el
+# equipo donde se instalan, no del archivo descargado. Pasarles --locale no
+# tenía ningún efecto real (siempre bajaba el mismo archivo).
+$script:WingetLocale = @{}
 
 function Download-InstallerViaWinget {
   param(
