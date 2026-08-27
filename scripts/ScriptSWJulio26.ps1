@@ -443,7 +443,9 @@ function Get-LatestPowerAutomateDesktop {
   # la versión con el propio winget como fuente de verdad.
   if (-not (Test-WingetAvailable)) { throw "winget no está disponible para resolver la versión de Power Automate for Desktop." }
   $out = (& winget show --id Microsoft.PowerAutomateDesktop --source winget 2>&1 | Out-String)
-  $ver = Extract-RegexFirstGroup -Text $out -Pattern "Version:\s*([0-9]+(?:\.[0-9]+)*)"
+  # "Version" o "Versión": winget muestra la etiqueta traducida si Windows
+  # está configurado en español, y el regex original solo cubría inglés.
+  $ver = Extract-RegexFirstGroup -Text $out -Pattern "Versi[oó]n:\s*([0-9]+(?:\.[0-9]+)*)"
   New-VersionResult -Name "Power Automate for Desktop" -LatestVersion $ver -Source "winget show Microsoft.PowerAutomateDesktop" -Notes "Se instala/descarga vía winget; Microsoft no publica una URL de descarga directa pública. Es un único instalador multi-idioma: el idioma con el que abre depende de la configuración regional/idioma de Windows del equipo, no del archivo descargado."
 }
 
@@ -678,7 +680,7 @@ function Get-LatestDotNetHostingBundle {
   if (-not $ltsChannel) { throw "No se encontró un canal LTS activo en releases-index.json." }
   $releases = Get-JsonFromUrl -Url $ltsChannel.'releases.json'
   $latestRelease = $releases.releases | Sort-Object { [datetime]$_.'release-date' } -Descending | Select-Object -First 1
-  $file = $latestRelease.'aspnetcore-runtime'.files | Where-Object { $_.name -match '(?i)hosting-bundle.*\.exe$' } | Select-Object -First 1
+  $file = $latestRelease.'aspnetcore-runtime'.files | Where-Object { $_.name -match '(?i)hosting.*\.exe$' } | Select-Object -First 1
   if (-not $file) { throw "No se encontró el .NET Hosting Bundle en el canal $($ltsChannel.'channel-version')." }
   New-VersionResult -Name ".NET Hosting Bundle (LTS más reciente)" -LatestVersion $latestRelease.'aspnetcore-runtime'.'version-display' -Source $ltsChannel.'releases.json' -Notes "Canal LTS: $($ltsChannel.'channel-version'). Incluye el módulo ASP.NET Core para IIS."
 }
@@ -695,7 +697,9 @@ function Get-LatestAraxisMerge {
   # Araxis publica soporte oficial de winget; se resuelve la versión con el propio winget.
   if (-not (Test-WingetAvailable)) { throw "winget no está disponible para resolver la versión de Araxis Merge." }
   $out = (& winget show --id Araxis.Merge --source winget 2>&1 | Out-String)
-  $ver = Extract-RegexFirstGroup -Text $out -Pattern "Version:\s*([0-9]+(?:\.[0-9]+)*)"
+  # "Version" o "Versión": winget muestra la etiqueta traducida si Windows
+  # está configurado en español, y el regex original solo cubría inglés.
+  $ver = Extract-RegexFirstGroup -Text $out -Pattern "Versi[oó]n:\s*([0-9]+(?:\.[0-9]+)*)"
   New-VersionResult -Name "Araxis Merge" -LatestVersion $ver -Source "winget show Araxis.Merge"
 }
 
@@ -836,7 +840,11 @@ $script:DownloadResolvers = @{
     $html = Get-TextFromUrl -Url "https://www.aescrypt.com/download/"
     $m = [regex]::Match($html, 'href="([^"]*[Ww]indows[^"]*\.zip)"')
     if (-not $m.Success) { throw "No se pudo extraer el link de descarga de Windows desde aescrypt.com/download/ (verificar manualmente)." }
-    $m.Groups[1].Value }
+    $href = $m.Groups[1].Value
+    # La página puede usar un link relativo (ej. "/files/x.zip"); si no trae
+    # el dominio completo, se completa con la base del sitio.
+    if ($href -notmatch '^https?://') { $href = "https://www.aescrypt.com" + (if ($href.StartsWith('/')) { $href } else { "/$href" }) }
+    $href }
 
   "Angular CLI (paquete npm)" = { param($v)
     (Get-JsonFromUrl -Url "https://registry.npmjs.org/@angular/cli/latest").dist.tarball }
@@ -887,7 +895,7 @@ $script:DownloadResolvers = @{
       Sort-Object { [version]$_.'channel-version' } -Descending | Select-Object -First 1
     $releases = Get-JsonFromUrl -Url $ltsChannel.'releases.json'
     $latestRelease = $releases.releases | Sort-Object { [datetime]$_.'release-date' } -Descending | Select-Object -First 1
-    ($latestRelease.'aspnetcore-runtime'.files | Where-Object { $_.name -match '(?i)hosting-bundle.*\.exe$' } | Select-Object -First 1).url }
+    ($latestRelease.'aspnetcore-runtime'.files | Where-Object { $_.name -match '(?i)hosting.*\.exe$' } | Select-Object -First 1).url }
 
   "Visual Studio Professional 2022 (bootstrapper)" = { param($v)
     "https://aka.ms/vs/17/release/vs_professional.exe" }
@@ -1076,7 +1084,15 @@ function Download-Installer {
 function Invoke-VirusTotalCheck {
   param(
     [Parameter(Mandatory)][string]$FilePath,
-    [Parameter(Mandatory)][string]$ApiKey
+    # OJO: NO marcar como Mandatory. En PowerShell, un parámetro [string]
+    # Mandatory rechaza una cadena vacía ("") con el error "Cannot bind
+    # argument... because it is an empty string" ANTES de que se ejecute el
+    # cuerpo de la función — así que el chequeo de abajo (IsNullOrWhiteSpace)
+    # nunca llegaba a correr cuando VT_API_KEY no estaba configurada. Esto
+    # rompía TODO el pipeline: la excepción no se atrapaba aquí ni en
+    # Test-InstallerSafety, y abortaba antes de que Defender llegara a
+    # escanear nada, bloqueando el 100% de las apps sin importar Defender.
+    [string]$ApiKey
   )
 
   if ([string]::IsNullOrWhiteSpace($ApiKey)) {
