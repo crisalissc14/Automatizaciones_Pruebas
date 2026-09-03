@@ -656,7 +656,7 @@ function Get-LatestDotNetAspNetCoreRuntime {
   if (-not $ltsChannel) { throw "No se encontró un canal LTS activo en releases-index.json." }
   $releases = Get-JsonFromUrl -Url $ltsChannel.'releases.json'
   $latestRelease = $releases.releases | Sort-Object { [datetime]$_.'release-date' } -Descending | Select-Object -First 1
-  $file = $latestRelease.'aspnetcore-runtime'.files | Where-Object { $_.rid -eq 'win-x64' -and $_.name -match '\.exe$' } | Select-Object -First 1
+  $file = $latestRelease.'aspnetcore-runtime'.files | Where-Object { $_.rid -eq 'win-x64' -and $_.name -match '\.exe$' -and $_.name -notmatch '(?i)hosting' } | Select-Object -First 1
   if (-not $file) { throw "No se encontró instalador win-x64 .exe de ASP.NET Core Runtime en el canal $($ltsChannel.'channel-version')." }
   New-VersionResult -Name "ASP.NET Core Runtime (LTS más reciente, win-x64)" -LatestVersion $latestRelease.'aspnetcore-runtime'.'version-display' -Source $ltsChannel.'releases.json' -Notes "Canal LTS: $($ltsChannel.'channel-version')."
 }
@@ -890,7 +890,7 @@ $script:DownloadResolvers = @{
       Sort-Object { [version]$_.'channel-version' } -Descending | Select-Object -First 1
     $releases = Get-JsonFromUrl -Url $ltsChannel.'releases.json'
     $latestRelease = $releases.releases | Sort-Object { [datetime]$_.'release-date' } -Descending | Select-Object -First 1
-    ($latestRelease.'aspnetcore-runtime'.files | Where-Object { $_.rid -eq 'win-x64' -and $_.name -match '\.exe$' } | Select-Object -First 1).url }
+    ($latestRelease.'aspnetcore-runtime'.files | Where-Object { $_.rid -eq 'win-x64' -and $_.name -match '\.exe$' -and $_.name -notmatch '(?i)hosting' } | Select-Object -First 1).url }
 
   ".NET Hosting Bundle (LTS más reciente)" = { param($v)
     $index = Get-JsonFromUrl -Url "https://raw.githubusercontent.com/dotnet/core/main/release-notes/releases-index.json"
