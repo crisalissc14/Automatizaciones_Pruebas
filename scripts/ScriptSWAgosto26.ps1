@@ -111,9 +111,9 @@ $script:ExpectedPublishers = @{
   "JetBrains dotPeek"                            = @("JetBrains s.r.o.")
   "RStudio Desktop"                              = @("Posit Software, PBC", "RStudio, PBC", "RStudio")
   "R for Windows"                                = @("The R Foundation for Statistical Computing", "R Core Team")
-  "Figma (desktop)"                              = @("Figma, Inc.", "Figma")
   "Postman"                                      = @("Postman, Inc.", "Postman")
   "Araxis Merge"                                 = @("Araxis Ltd", "Araxis Limited")
+  "SafeNet Authentication Client (Thales, via DigiCert)" = @("Thales", "Thales DIS", "Gemalto", "SafeNet")
 }
 
 # Hashes SHA256 "oficiales" publicados directamente por el fabricante (cuando
@@ -586,12 +586,18 @@ function Get-TeamMateNote {
   New-VersionResult -Name "TeamMate (Wolters Kluwer)" -LatestVersion "N/A" -Source "https://www.wolterskluwer.com/en/solutions/teammate" -Notes "Software de auditoría licenciado (Wolters Kluwer); la descarga se obtiene desde el portal de soporte del cliente. No hay URL de descarga pública. Confirmar si se refiere a TeamMate+ (workpapers) o TeamMate Analytics."
 }
 
-function Get-SafeNetAuthenticationClientNote {
-  # SafeNet Authentication Client (Thales) es software propietario para
-  # autenticación con tokens/tarjetas inteligentes PKI; NO es open-source y
-  # NO tiene repositorio en GitHub. La descarga solo se obtiene desde el
-  # portal de soporte de Thales (registro con cuenta corporativa).
-  New-VersionResult -Name "SafeNet Authentication Client (Thales)" -LatestVersion "N/A" -Source "https://support.thales.com" -Notes "Software propietario de Thales (no open-source, sin repositorio en GitHub); la descarga se obtiene desde el portal de soporte de Thales (support.thales.com) tras registrar una cuenta corporativa. No hay URL de descarga pública ni API de versión."
+function Get-LatestSafeNetAuthenticationClient {
+  # SafeNet Authentication Client (Thales) no publica un portal público propio
+  # (el sitio oficial de Thales requiere cuenta corporativa), pero DigiCert
+  # redistribuye públicamente el instalador para sus clientes de firma de
+  # código/documentos. Confirmado por el usuario con un link real:
+  # https://www.digicert.com/StaticFiles/Windows_SAC_10.9_R1_GA.zip
+  $url = "https://knowledge.digicert.com/general-information/how-to-download-safenet-authentication-client"
+  $html = Get-TextFromUrl -Url $url
+  $m = [regex]::Match($html, "Windows_SAC_([0-9]+\.[0-9]+)_R([0-9]+)_GA\.zip", "IgnoreCase")
+  if (-not $m.Success) { throw "No se encontró el archivo de SafeNet Authentication Client para Windows en la página de DigiCert." }
+  $ver = "$($m.Groups[1].Value) R$($m.Groups[2].Value)"
+  New-VersionResult -Name "SafeNet Authentication Client (Thales, via DigiCert)" -LatestVersion $ver -Source $url -Notes "Mirror público de DigiCert (no es el portal oficial de Thales, que requiere cuenta corporativa); DigiCert lo redistribuye para sus clientes de firma de código/documentos. No se pudo verificar esta página en vivo desde este entorno de desarrollo (bloqueada por política de red aquí); el patrón de archivo fue confirmado por el usuario con un link real."
 }
 
 function Get-LatestAESCryptOpenSource {
@@ -617,11 +623,18 @@ function Get-LatestAngularCli {
 }
 
 function Get-LatestIntelliJIdeaCommunity {
-  # API pública oficial de JetBrains (Data Services) para resolver la última versión.
-  $url = "https://data.services.jetbrains.com/products/releases?code=IIC&latest=true&type=release"
+  # API pública de JetBrains ("Data Services"). Corregido: el endpoint real es
+  # /products (NO /products/releases, que se usaba antes y no existe como tal);
+  # además ese endpoint no garantiza que el primer elemento del array sea el
+  # más reciente, así que se ordena explícito por versión. Este bug hacía que
+  # el script devolviera una versión vieja (2025.3) estando ya disponible la
+  # 2026.2.x en septiembre 2026.
+  $url = "https://data.services.jetbrains.com/products?code=IIC&type=release"
   $json = Get-JsonFromUrl -Url $url
-  $release = $json.IIC[0]
-  New-VersionResult -Name "IntelliJ IDEA Community Edition" -LatestVersion $release.version -Source $url
+  $allReleases = @($json | ForEach-Object { $_.releases } | Where-Object { $_ })
+  if ($allReleases.Count -eq 0) { throw "La API de JetBrains (products?code=IIC) no devolvió releases." }
+  $latest = $allReleases | Sort-Object { [version]$_.version } -Descending | Select-Object -First 1
+  New-VersionResult -Name "IntelliJ IDEA Community Edition" -LatestVersion $latest.version -Source $url -Notes "Endpoint corregido (antes /products/releases). No se pudo verificar en vivo desde este entorno de desarrollo (sin acceso a internet aquí); confirmar en la primera corrida real que la versión resuelta coincida con la vigente en jetbrains.com/idea/download/."
 }
 
 function Get-LatestJetBrainsDotPeek {
@@ -718,12 +731,6 @@ function Get-LatestAraxisMerge {
 function Get-LatestNvmWindows {
   $r = Get-LatestGitHubReleaseAsset -Owner "coreybutler" -Repo "nvm-windows" -AssetPattern '^nvm-setup\.exe$'
   New-VersionResult -Name "nvm-windows" -LatestVersion $r.Version -Source "https://api.github.com/repos/coreybutler/nvm-windows/releases/latest"
-}
-
-function Get-LatestFigma {
-  # Figma se autoactualiza y no publica un número de versión previo a la
-  # descarga; la URL de "latest" es estable y confirmada por el fabricante.
-  New-VersionResult -Name "Figma (desktop)" -LatestVersion "latest" -Source "https://desktop.figma.com/win/FigmaSetup.exe" -Notes "Instalador autoactualizable; Figma no publica número de versión antes de descargar."
 }
 
 function Get-LatestPostman {
@@ -844,7 +851,15 @@ $script:DownloadResolvers = @{
   "TRSuite (FATCA/CRS)" = { param($v) $null }    # software licenciado, descarga vía portal del fabricante
   "ACL for Windows (Diligent One)" = { param($v) $null }   # software por suscripción, sin URL pública
   "TeamMate (Wolters Kluwer)" = { param($v) $null }        # software de auditoría licenciado, portal de cliente
-  "SafeNet Authentication Client (Thales)" = { param($v) $null }   # propietario, sin GitHub, portal Thales
+  "SafeNet Authentication Client (Thales, via DigiCert)" = { param($v)
+    $html = Get-TextFromUrl -Url "https://knowledge.digicert.com/general-information/how-to-download-safenet-authentication-client"
+    $m = [regex]::Match($html, "(https?://[^""'\s]*Windows_SAC_[0-9.]+_R[0-9]+_GA\.zip)", "IgnoreCase")
+    if ($m.Success) { return $m.Groups[1].Value }
+    # Fallback: si el link en la página viene sin el dominio completo, se
+    # arma con la ruta estática confirmada por el usuario (digicert.com/StaticFiles/).
+    $m2 = [regex]::Match($html, "(Windows_SAC_[0-9.]+_R[0-9]+_GA\.zip)", "IgnoreCase")
+    if (-not $m2.Success) { throw "No se encontró el link de SafeNet Authentication Client en la página de DigiCert." }
+    "https://www.digicert.com/StaticFiles/$($m2.Groups[1].Value)" }
 
   "AES Crypt (open-source, GitHub)" = { param($v)
     (Get-LatestGitHubReleaseAsset -Owner "terrapane" -Repo "aescrypt_win" -AssetPattern '(?i)\.(exe|msi)$').DownloadUrl }
@@ -863,8 +878,10 @@ $script:DownloadResolvers = @{
     "https://github.com/angular/angular-cli/archive/refs/tags/v$v.zip" }
 
   "IntelliJ IDEA Community Edition" = { param($v)
-    $json = Get-JsonFromUrl -Url "https://data.services.jetbrains.com/products/releases?code=IIC&latest=true&type=release"
-    $json.IIC[0].downloads.windows.link }
+    $json = Get-JsonFromUrl -Url "https://data.services.jetbrains.com/products?code=IIC&type=release"
+    $allReleases = @($json | ForEach-Object { $_.releases } | Where-Object { $_ })
+    $latest = $allReleases | Sort-Object { [version]$_.version } -Descending | Select-Object -First 1
+    $latest.downloads.windows.link }
 
   "JetBrains dotPeek" = { param($v)
     $json = Get-JsonFromUrl -Url "https://data.services.jetbrains.com/products/releases?code=DPK&latest=true&type=release"
@@ -918,9 +935,6 @@ $script:DownloadResolvers = @{
 
   "nvm-windows" = { param($v)
     (Get-LatestGitHubReleaseAsset -Owner "coreybutler" -Repo "nvm-windows" -AssetPattern '^nvm-setup\.exe$').DownloadUrl }
-
-  "Figma (desktop)" = { param($v)
-    "https://desktop.figma.com/win/FigmaSetup.exe" }
 
   "Postman" = { param($v)
     "https://dl.pstmn.io/download/latest/win64" }
@@ -1361,8 +1375,7 @@ function Process-Application {
     "SentinelOne (agente)",
     "TRSuite (FATCA/CRS)",
     "ACL for Windows (Diligent One)",
-    "TeamMate (Wolters Kluwer)",
-    "SafeNet Authentication Client (Thales)"
+    "TeamMate (Wolters Kluwer)"
   )
 
   $name = $VersionResult.Name
@@ -1620,11 +1633,11 @@ $results += Get-SentinelOneNote
 $results += Get-TRSuiteNote
 $results += Get-ACLForWindowsNote
 $results += Get-TeamMateNote
-$results += Get-SafeNetAuthenticationClientNote
+$results += Safe-Run -Name "SafeNet Authentication Client"                -Source "https://knowledge.digicert.com/general-information/how-to-download-safenet-authentication-client" -Block { Get-LatestSafeNetAuthenticationClient }
 $results += Safe-Run -Name "AES Crypt (open-source)"                      -Source "https://api.github.com/repos/terrapane/aescrypt_win/releases/latest" -Block { Get-LatestAESCryptOpenSource }
 $results += Safe-Run -Name "AES Crypt (comercial)"                        -Source "https://www.aescrypt.com/download/" -Block { Get-LatestAESCryptCommercial }
 $results += Safe-Run -Name "Angular CLI"                                  -Source "https://registry.npmjs.org/@angular/cli/latest" -Block { Get-LatestAngularCli }
-$results += Safe-Run -Name "IntelliJ IDEA Community Edition"              -Source "https://data.services.jetbrains.com/products/releases?code=IIC" -Block { Get-LatestIntelliJIdeaCommunity }
+$results += Safe-Run -Name "IntelliJ IDEA Community Edition"              -Source "https://data.services.jetbrains.com/products?code=IIC" -Block { Get-LatestIntelliJIdeaCommunity }
 $results += Safe-Run -Name "JetBrains dotPeek"                            -Source "https://data.services.jetbrains.com/products/releases?code=DPK" -Block { Get-LatestJetBrainsDotPeek }
 $results += Safe-Run -Name "Gradle"                                       -Source "https://services.gradle.org/versions/current" -Block { Get-LatestGradle }
 $results += Safe-Run -Name "R for Windows"                                -Source "https://cran.r-project.org/bin/windows/base/" -Block { Get-LatestRForWindows }
@@ -1637,7 +1650,6 @@ $results += Safe-Run -Name "Visual Studio Professional 2022"              -Sourc
 $results += Safe-Run -Name "Visual Studio Enterprise 2022"                -Source "https://aka.ms/vs/17/release/vs_enterprise.exe" -Block { Get-LatestVSEnterprise2022 }
 $results += Safe-Run -Name "Araxis Merge"                                 -Source "winget show Araxis.Merge" -Block { Get-LatestAraxisMerge }
 $results += Safe-Run -Name "nvm-windows"                                  -Source "https://api.github.com/repos/coreybutler/nvm-windows/releases/latest" -Block { Get-LatestNvmWindows }
-$results += Get-LatestFigma
 $results += Get-LatestPostman
 $results += Get-ThinkCellNote
 
