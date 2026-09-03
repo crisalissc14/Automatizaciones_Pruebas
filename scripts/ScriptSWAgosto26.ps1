@@ -529,13 +529,23 @@ function Get-LatestDrawIO {
 }
 
 function Get-LatestZuluJDK {
-  # Azul Metadata API oficial (sin autenticación), JDK 21 LTS, Windows x64, MSI, build CA (Community)
-  $url = "https://api.azul.com/metadata/v1/zulu/packages/?java_version=21&os=windows&arch=x64&archive_type=msi&java_package_type=jdk&javafx_bundled=false&release_status=ga&availability_types=CA&latest=true&page=1&page_size=1"
-  $json = Get-JsonFromUrl -Url $url
-  if (-not $json -or $json.Count -eq 0) { throw "La API de Azul no devolvió resultados para JDK 21 Windows x64 MSI." }
-  $pkg = $json[0]
-  $ver = ($pkg.java_version -join ".")
-  New-VersionResult -Name "Zulu JDK 21 (Windows x64 MSI)" -LatestVersion $ver -Source $url -Notes "distro_version (build Zulu): $($pkg.distro_version -join '.')"
+  # Antes quedaba fijo en Java 21 (heredado del script original): quedó
+  # obsoleto, ya que para septiembre 2026 existe Java 25 LTS, y volvería a
+  # quedar desactualizado con la siguiente LTS. Se prueban las versiones LTS
+  # conocidas de mayor a menor (Azul no expone un endpoint público de "LTS
+  # más reciente" como sí tiene Adoptium) hasta encontrar la más nueva con
+  # paquete GA disponible para Windows x64 MSI.
+  $candidateLtsVersions = @(29, 25, 21, 17, 11, 8)
+  foreach ($jv in $candidateLtsVersions) {
+    $url = "https://api.azul.com/metadata/v1/zulu/packages/?java_version=$jv&os=windows&arch=x64&archive_type=msi&java_package_type=jdk&javafx_bundled=false&release_status=ga&availability_types=CA&latest=true&page=1&page_size=1"
+    try { $json = Get-JsonFromUrl -Url $url } catch { $json = $null }
+    if ($json -and $json.Count -gt 0) {
+      $pkg = $json[0]
+      $ver = ($pkg.java_version -join ".")
+      return New-VersionResult -Name "Zulu JDK LTS más reciente (Windows x64 MSI)" -LatestVersion $ver -Source $url -Notes "LTS detectada: Java $jv. distro_version (build Zulu): $($pkg.distro_version -join '.')"
+    }
+  }
+  throw "No se encontró ninguna versión LTS de Zulu JDK disponible en GA para Windows x64 MSI (probadas: $($candidateLtsVersions -join ', '))."
 }
 
 function Get-LatestWireshark {
@@ -808,10 +818,16 @@ $script:DownloadResolvers = @{
   "draw.io Desktop" = { param($v)
     (Get-LatestGitHubReleaseAsset -Owner "jgraph" -Repo "drawio-desktop" -AssetPattern '^draw\.io-[\d\.]+-windows-installer\.exe$').DownloadUrl }
 
-  "Zulu JDK 21 (Windows x64 MSI)" = { param($v)
-    $url = "https://api.azul.com/metadata/v1/zulu/packages/?java_version=21&os=windows&arch=x64&archive_type=msi&java_package_type=jdk&javafx_bundled=false&release_status=ga&availability_types=CA&latest=true&page=1&page_size=1"
-    $json = Get-JsonFromUrl -Url $url
-    $json[0].download_url }
+  "Zulu JDK LTS más reciente (Windows x64 MSI)" = { param($v)
+    $candidateLtsVersions = @(29, 25, 21, 17, 11, 8)
+    $downloadUrl = $null
+    foreach ($jv in $candidateLtsVersions) {
+      $url = "https://api.azul.com/metadata/v1/zulu/packages/?java_version=$jv&os=windows&arch=x64&archive_type=msi&java_package_type=jdk&javafx_bundled=false&release_status=ga&availability_types=CA&latest=true&page=1&page_size=1"
+      try { $json = Get-JsonFromUrl -Url $url } catch { $json = $null }
+      if ($json -and $json.Count -gt 0) { $downloadUrl = $json[0].download_url; break }
+    }
+    if (-not $downloadUrl) { throw "No se encontró ninguna versión LTS de Zulu JDK disponible." }
+    $downloadUrl }
 
   "Wireshark" = { param($v)
     "https://2.na.dl.wireshark.org/win64/Wireshark-$v-x64.exe" }
@@ -1620,7 +1636,7 @@ $results += Safe-Run -Name "Microsoft Power BI Desktop"                   -Sourc
 $results += Safe-Run -Name "Visual Studio Code"                           -Source "https://update.code.visualstudio.com/api/update/win32-x64/stable/latest" -Block { Get-LatestVSCode }
 $results += Get-LatestLucenTime
 $results += Safe-Run -Name "draw.io Desktop"                              -Source "https://api.github.com/repos/jgraph/drawio-desktop/releases/latest" -Block { Get-LatestDrawIO }
-$results += Safe-Run -Name "Zulu JDK 21 (Windows x64 MSI)"                 -Source "https://api.azul.com/metadata/v1/zulu/packages/" -Block { Get-LatestZuluJDK }
+$results += Safe-Run -Name "Zulu JDK LTS más reciente"                    -Source "https://api.azul.com/metadata/v1/zulu/packages/" -Block { Get-LatestZuluJDK }
 $results += Safe-Run -Name "Wireshark"                                    -Source "https://www.wireshark.org/download.html" -Block { Get-LatestWireshark }
 $results += Safe-Run -Name "ILSpy"                                        -Source "https://api.github.com/repos/icsharpcode/ILSpy/releases/latest" -Block { Get-LatestILSpy }
 $results += Safe-Run -Name "PuTTY (64-bit)"                               -Source "https://the.earth.li/~sgtatham/putty/latest/w64/" -Block { Get-LatestPuTTY }
