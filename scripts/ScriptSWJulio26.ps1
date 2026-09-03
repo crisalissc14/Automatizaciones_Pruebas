@@ -600,8 +600,12 @@ function Get-LatestAESCryptCommercial {
 }
 
 function Get-LatestAngularCli {
+  # npm solo publica tarballs .tgz (no hay .zip oficial desde el registro).
+  # Se resuelve la versión con npm (fuente canónica de "última versión"), pero
+  # se descarga el .zip de código fuente que GitHub genera automáticamente
+  # para cada tag del repo oficial angular/angular-cli.
   $json = Get-JsonFromUrl -Url "https://registry.npmjs.org/@angular/cli/latest"
-  New-VersionResult -Name "Angular CLI (paquete npm)" -LatestVersion $json.version -Source "https://registry.npmjs.org/@angular/cli/latest" -Notes "Se instala con 'npm install -g @angular/cli' (requiere Node.js, ya cubierto en este catálogo). Este script descarga y valida el tarball .tgz oficial publicado en el registro de npm, no un instalador tradicional."
+  New-VersionResult -Name "Angular CLI (código fuente, GitHub, .zip)" -LatestVersion $json.version -Source "https://registry.npmjs.org/@angular/cli/latest" -Notes "Se instala normalmente con 'npm install -g @angular/cli' (requiere Node.js, ya cubierto en este catálogo), lo cual baja el paquete .tgz de npm. Como se pidió .zip en vez de .tgz, este script descarga el código fuente en .zip que GitHub genera para el tag de esa versión en angular/angular-cli — es el repositorio fuente, NO el paquete ya compilado que usa npm; hay que compilarlo para obtener el CLI ejecutable."
 }
 
 function Get-LatestIntelliJIdeaCommunity {
@@ -846,8 +850,8 @@ $script:DownloadResolvers = @{
     if ($href -notmatch '^https?://') { $href = "https://www.aescrypt.com" + (if ($href.StartsWith('/')) { $href } else { "/$href" }) }
     $href }
 
-  "Angular CLI (paquete npm)" = { param($v)
-    (Get-JsonFromUrl -Url "https://registry.npmjs.org/@angular/cli/latest").dist.tarball }
+  "Angular CLI (código fuente, GitHub, .zip)" = { param($v)
+    "https://github.com/angular/angular-cli/archive/refs/tags/v$v.zip" }
 
   "IntelliJ IDEA Community Edition" = { param($v)
     $json = Get-JsonFromUrl -Url "https://data.services.jetbrains.com/products/releases?code=IIC&latest=true&type=release"
