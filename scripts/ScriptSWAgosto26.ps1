@@ -623,25 +623,30 @@ function Get-LatestAngularCli {
 }
 
 function Get-LatestIntelliJIdeaCommunity {
-  # API pública de JetBrains ("Data Services"). Corregido: el endpoint real es
-  # /products (NO /products/releases, que se usaba antes y no existe como tal);
-  # además ese endpoint no garantiza que el primer elemento del array sea el
-  # más reciente, así que se ordena explícito por versión. Este bug hacía que
-  # el script devolviera una versión vieja (2025.3) estando ya disponible la
-  # 2026.2.x en septiembre 2026.
-  $url = "https://data.services.jetbrains.com/products?code=IIC&type=release"
-  $json = Get-JsonFromUrl -Url $url
-  $allReleases = @($json | ForEach-Object { $_.releases } | Where-Object { $_ })
-  if ($allReleases.Count -eq 0) { throw "La API de JetBrains (products?code=IIC) no devolvió releases." }
-  $latest = $allReleases | Sort-Object { [version]$_.version } -Descending | Select-Object -First 1
-  New-VersionResult -Name "IntelliJ IDEA Community Edition" -LatestVersion $latest.version -Source $url -Notes "Endpoint corregido (antes /products/releases). No se pudo verificar en vivo desde este entorno de desarrollo (sin acceso a internet aquí); confirmar en la primera corrida real que la versión resuelta coincida con la vigente en jetbrains.com/idea/download/."
+  # Se descarta la API de JetBrains (Data Services) y la página de descarga
+  # (download-thanks.html, una landing page dinámica tipo "gracias por
+  # descargar" que redirige por JS, igual que el problema ya visto con
+  # Adobe/Visual Studio): IntelliJ IDEA Community está disponible vía winget,
+  # mecanismo mucho más confiable y ya usado en este script para Android
+  # Studio, Power BI, Power Automate y Araxis Merge.
+  if (-not (Test-WingetAvailable)) { throw "winget no está disponible para resolver la versión de IntelliJ IDEA Community." }
+  $out = (& winget show --id JetBrains.IntelliJIDEA.Community --source winget 2>&1 | Out-String)
+  $ver = Extract-RegexFirstGroup -Text $out -Pattern "Versi[oó]n:\s*([0-9]+(?:\.[0-9]+)*)"
+  New-VersionResult -Name "IntelliJ IDEA Community Edition" -LatestVersion $ver -Source "winget show JetBrains.IntelliJIDEA.Community"
 }
 
 function Get-LatestJetBrainsDotPeek {
-  $url = "https://data.services.jetbrains.com/products/releases?code=DPK&latest=true&type=release"
+  # Mismo bug corregido que en IntelliJ IDEA: el endpoint real es /products
+  # (no /products/releases), y no hay garantía de que el primer elemento del
+  # array sea el más reciente, así que se ordena explícito. dotPeek no está
+  # empaquetado en winget (a diferencia de IntelliJ IDEA), así que se sigue
+  # usando esta API como fuente.
+  $url = "https://data.services.jetbrains.com/products?code=DPK&type=release"
   $json = Get-JsonFromUrl -Url $url
-  $release = $json.DPK[0]
-  New-VersionResult -Name "JetBrains dotPeek" -LatestVersion $release.version -Source $url
+  $allReleases = @($json | ForEach-Object { $_.releases } | Where-Object { $_ })
+  if ($allReleases.Count -eq 0) { throw "La API de JetBrains (products?code=DPK) no devolvió releases." }
+  $latest = $allReleases | Sort-Object { [version]$_.version } -Descending | Select-Object -First 1
+  New-VersionResult -Name "JetBrains dotPeek" -LatestVersion $latest.version -Source $url -Notes "No se pudo verificar en vivo desde este entorno de desarrollo (sin acceso a internet aquí); confirmar en la primera corrida real que la versión resuelta sea la vigente."
 }
 
 function Get-LatestGradle {
@@ -877,15 +882,11 @@ $script:DownloadResolvers = @{
   "Angular CLI (código fuente, GitHub, .zip)" = { param($v)
     "https://github.com/angular/angular-cli/archive/refs/tags/v$v.zip" }
 
-  "IntelliJ IDEA Community Edition" = { param($v)
-    $json = Get-JsonFromUrl -Url "https://data.services.jetbrains.com/products?code=IIC&type=release"
+  "JetBrains dotPeek" = { param($v)
+    $json = Get-JsonFromUrl -Url "https://data.services.jetbrains.com/products?code=DPK&type=release"
     $allReleases = @($json | ForEach-Object { $_.releases } | Where-Object { $_ })
     $latest = $allReleases | Sort-Object { [version]$_.version } -Descending | Select-Object -First 1
     $latest.downloads.windows.link }
-
-  "JetBrains dotPeek" = { param($v)
-    $json = Get-JsonFromUrl -Url "https://data.services.jetbrains.com/products/releases?code=DPK&latest=true&type=release"
-    $json.DPK[0].downloads.windows.link }
 
   "Gradle (bin.zip)" = { param($v)
     $json = Get-JsonFromUrl -Url "https://services.gradle.org/versions/current"
@@ -961,6 +962,7 @@ $script:WingetIds = @{
   "Microsoft Power BI Desktop (latest from change log)"  = "Microsoft.PowerBI"
   "Power Automate for Desktop"                            = "Microsoft.PowerAutomateDesktop"
   "Araxis Merge"                                          = "Araxis.Merge"
+  "IntelliJ IDEA Community Edition"                       = "JetBrains.IntelliJIDEA.Community"
 }
 
 # Idioma preferido (código winget/BCP-47) para apps sin MSI/URL directa que se
@@ -1637,8 +1639,8 @@ $results += Safe-Run -Name "SafeNet Authentication Client"                -Sourc
 $results += Safe-Run -Name "AES Crypt (open-source)"                      -Source "https://api.github.com/repos/terrapane/aescrypt_win/releases/latest" -Block { Get-LatestAESCryptOpenSource }
 $results += Safe-Run -Name "AES Crypt (comercial)"                        -Source "https://www.aescrypt.com/download/" -Block { Get-LatestAESCryptCommercial }
 $results += Safe-Run -Name "Angular CLI"                                  -Source "https://registry.npmjs.org/@angular/cli/latest" -Block { Get-LatestAngularCli }
-$results += Safe-Run -Name "IntelliJ IDEA Community Edition"              -Source "https://data.services.jetbrains.com/products?code=IIC" -Block { Get-LatestIntelliJIdeaCommunity }
-$results += Safe-Run -Name "JetBrains dotPeek"                            -Source "https://data.services.jetbrains.com/products/releases?code=DPK" -Block { Get-LatestJetBrainsDotPeek }
+$results += Safe-Run -Name "IntelliJ IDEA Community Edition"              -Source "winget show JetBrains.IntelliJIDEA.Community" -Block { Get-LatestIntelliJIdeaCommunity }
+$results += Safe-Run -Name "JetBrains dotPeek"                            -Source "https://data.services.jetbrains.com/products?code=DPK" -Block { Get-LatestJetBrainsDotPeek }
 $results += Safe-Run -Name "Gradle"                                       -Source "https://services.gradle.org/versions/current" -Block { Get-LatestGradle }
 $results += Safe-Run -Name "R for Windows"                                -Source "https://cran.r-project.org/bin/windows/base/" -Block { Get-LatestRForWindows }
 $results += Safe-Run -Name "RStudio Desktop"                              -Source "https://posit.co/download/rstudio-desktop/" -Block { Get-LatestRStudioDesktop }
