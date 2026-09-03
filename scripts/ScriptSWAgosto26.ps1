@@ -586,6 +586,14 @@ function Get-TeamMateNote {
   New-VersionResult -Name "TeamMate (Wolters Kluwer)" -LatestVersion "N/A" -Source "https://www.wolterskluwer.com/en/solutions/teammate" -Notes "Software de auditoría licenciado (Wolters Kluwer); la descarga se obtiene desde el portal de soporte del cliente. No hay URL de descarga pública. Confirmar si se refiere a TeamMate+ (workpapers) o TeamMate Analytics."
 }
 
+function Get-SafeNetAuthenticationClientNote {
+  # SafeNet Authentication Client (Thales) es software propietario para
+  # autenticación con tokens/tarjetas inteligentes PKI; NO es open-source y
+  # NO tiene repositorio en GitHub. La descarga solo se obtiene desde el
+  # portal de soporte de Thales (registro con cuenta corporativa).
+  New-VersionResult -Name "SafeNet Authentication Client (Thales)" -LatestVersion "N/A" -Source "https://support.thales.com" -Notes "Software propietario de Thales (no open-source, sin repositorio en GitHub); la descarga se obtiene desde el portal de soporte de Thales (support.thales.com) tras registrar una cuenta corporativa. No hay URL de descarga pública ni API de versión."
+}
+
 function Get-LatestAESCryptOpenSource {
   $r = Get-LatestGitHubReleaseAsset -Owner "terrapane" -Repo "aescrypt_win" -AssetPattern '(?i)\.(exe|msi)$'
   New-VersionResult -Name "AES Crypt (open-source, GitHub)" -LatestVersion $r.Version -Source "https://api.github.com/repos/terrapane/aescrypt_win/releases/latest" -Notes "Build open-source (GPL) mantenido por terrapane, distinto de la versión comercial de aescrypt.com."
@@ -836,6 +844,7 @@ $script:DownloadResolvers = @{
   "TRSuite (FATCA/CRS)" = { param($v) $null }    # software licenciado, descarga vía portal del fabricante
   "ACL for Windows (Diligent One)" = { param($v) $null }   # software por suscripción, sin URL pública
   "TeamMate (Wolters Kluwer)" = { param($v) $null }        # software de auditoría licenciado, portal de cliente
+  "SafeNet Authentication Client (Thales)" = { param($v) $null }   # propietario, sin GitHub, portal Thales
 
   "AES Crypt (open-source, GitHub)" = { param($v)
     (Get-LatestGitHubReleaseAsset -Owner "terrapane" -Repo "aescrypt_win" -AssetPattern '(?i)\.(exe|msi)$').DownloadUrl }
@@ -1352,7 +1361,8 @@ function Process-Application {
     "SentinelOne (agente)",
     "TRSuite (FATCA/CRS)",
     "ACL for Windows (Diligent One)",
-    "TeamMate (Wolters Kluwer)"
+    "TeamMate (Wolters Kluwer)",
+    "SafeNet Authentication Client (Thales)"
   )
 
   $name = $VersionResult.Name
@@ -1610,6 +1620,7 @@ $results += Get-SentinelOneNote
 $results += Get-TRSuiteNote
 $results += Get-ACLForWindowsNote
 $results += Get-TeamMateNote
+$results += Get-SafeNetAuthenticationClientNote
 $results += Safe-Run -Name "AES Crypt (open-source)"                      -Source "https://api.github.com/repos/terrapane/aescrypt_win/releases/latest" -Block { Get-LatestAESCryptOpenSource }
 $results += Safe-Run -Name "AES Crypt (comercial)"                        -Source "https://www.aescrypt.com/download/" -Block { Get-LatestAESCryptCommercial }
 $results += Safe-Run -Name "Angular CLI"                                  -Source "https://registry.npmjs.org/@angular/cli/latest" -Block { Get-LatestAngularCli }
