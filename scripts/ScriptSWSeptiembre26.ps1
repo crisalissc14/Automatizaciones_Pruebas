@@ -95,22 +95,22 @@ $script:ExpectedPublishers = @{
   "7-Zip"                                       = @("Igor Pavlov")
   "Wireshark"                                   = @("Wireshark Foundation", "Wireshark")
   "PuTTY (64-bit)"                              = @("Simon Tatham")
-  "Nmap"                                        = @("Insecure.Com LLC", "Nmap Project", "Nmap.Org")
+  "Nmap"                                        = @("Insecure.Com LLC", "Nmap Project", "Nmap.Org", "Nmap Software LLC")
   "OpenJDK (Eclipse Temurin, LTS más reciente, Windows x64 MSI)" = @("Eclipse Foundation, Inc.", "Eclipse Adoptium")
   "Power Automate for Desktop"                  = @("Microsoft Corporation")
-  ".NET SDK (LTS más reciente, win-x64)"        = @("Microsoft Corporation")
+  ".NET SDK (LTS más reciente, win-x64)"        = @("Microsoft Corporation", ".NET")
   "Visual Studio Professional 2026 (bootstrapper)" = @("Microsoft Corporation")
   "Visual Studio Enterprise 2026 (bootstrapper)"   = @("Microsoft Corporation")
   "Visual Studio Professional 2022 (bootstrapper)" = @("Microsoft Corporation")
   "Visual Studio Enterprise 2022 (bootstrapper)"   = @("Microsoft Corporation")
   "Azure Connected Machine Agent"                = @("Microsoft Corporation")
-  ".NET Runtime (LTS más reciente, win-x64)"     = @("Microsoft Corporation")
-  "ASP.NET Core Runtime (LTS más reciente, win-x64)" = @("Microsoft Corporation")
-  ".NET Hosting Bundle (LTS más reciente)"       = @("Microsoft Corporation")
+  ".NET Runtime (LTS más reciente, win-x64)"     = @("Microsoft Corporation", ".NET")
+  "ASP.NET Core Runtime (LTS más reciente, win-x64)" = @("Microsoft Corporation", ".NET")
+  ".NET Hosting Bundle (LTS más reciente)"       = @("Microsoft Corporation", ".NET")
   "IntelliJ IDEA Community Edition"              = @("JetBrains s.r.o.")
   "JetBrains dotPeek"                            = @("JetBrains s.r.o.")
   "RStudio Desktop"                              = @("Posit Software, PBC", "RStudio, PBC", "RStudio")
-  "R for Windows"                                = @("The R Foundation for Statistical Computing", "R Core Team")
+  "R for Windows"                                = @("The R Foundation for Statistical Computing", "R Core Team", "Martyn Plummer")
   "Postman"                                      = @("Postman, Inc.", "Postman")
   "Araxis Merge"                                 = @("Araxis Ltd", "Araxis Limited")
   "SafeNet Authentication Client (Thales, via DigiCert)" = @("Thales", "Thales DIS", "Gemalto", "SafeNet")
@@ -130,7 +130,7 @@ $script:OfficialHashes = @{}
 function Get-TextFromUrl {
   param([Parameter(Mandatory)][string]$Url, [hashtable]$Headers = @{})
   if (-not $Headers.ContainsKey("User-Agent")) {
-    $Headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) PowerShell-OfficialVersionCheck/1.0"
+    $Headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
   }
   $lastError = $null
   for ($attempt = 1; $attempt -le 2; $attempt++) {
@@ -147,7 +147,7 @@ function Get-TextFromUrl {
 function Get-JsonFromUrl {
   param([Parameter(Mandatory)][string]$Url, [hashtable]$Headers = @{})
   if (-not $Headers.ContainsKey("User-Agent")) {
-    $Headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) PowerShell-OfficialVersionCheck/1.0"
+    $Headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
   }
   Invoke-RestMethod -Uri $Url -Headers $Headers -MaximumRedirection 10 -TimeoutSec 60
 }
@@ -358,11 +358,15 @@ function Get-LatestPythonWindows {
   $url = "https://www.python.org/downloads/windows/"
   $html = Get-TextFromUrl -Url $url
   $py  = Extract-RegexFirstGroup -Text $html -Pattern "Latest\s+Python\s+3\s+Release\s*-\s*Python\s+([0-9]+\.[0-9]+\.[0-9]+)"
-  $mgr = Extract-RegexFirstGroup -Text $html -Pattern "Latest\s+Python\s+install\s+manager\s*-\s*Python\s+install\s+manager\s*([0-9]+\.[0-9]+)"
-  @(
-    New-VersionResult -Name "Python (Latest 3.x for Windows)" -LatestVersion $py -Source $url
-    New-VersionResult -Name "Python install manager (Windows)" -LatestVersion $mgr -Source $url -Notes "Formato .msix (no .msi): se instala con Add-AppxPackage o doble clic, no con msiexec. Fuente del paquete: github.com/python/pymanager."
-  )
+  $results = @(New-VersionResult -Name "Python (Latest 3.x for Windows)" -LatestVersion $py -Source $url)
+  if (Test-WingetAvailable) {
+    $out = (& winget show --id Python.PythonInstallManager --source winget 2>&1 | Out-String)
+    $mgr = Extract-WingetVersion -WingetShowOutput $out
+    $results += New-VersionResult -Name "Python install manager (Windows)" -LatestVersion $mgr -Source "winget show Python.PythonInstallManager" -Notes "Formato .msix (no .msi): se instala con Add-AppxPackage o doble clic, no con msiexec. El repo github.com/python/pymanager no publica Releases con binarios adjuntos, por eso se usa winget en vez de GitHub Releases."
+  } else {
+    $results += New-VersionResult -Name "Python install manager (Windows)" -LatestVersion "N/A" -Source $url -Notes "No se pudo resolver: winget no está disponible y el repo github.com/python/pymanager no publica Releases con binarios adjuntos."
+  }
+  $results
 }
 
 function Get-PythonLauncherLocal {
@@ -445,7 +449,7 @@ function Get-LatestPowerAutomateDesktop {
   $out = (& winget show --id Microsoft.PowerAutomateDesktop --source winget 2>&1 | Out-String)
   # "Version" o "Versión": winget muestra la etiqueta traducida si Windows
   # está configurado en español, y el regex original solo cubría inglés.
-  $ver = Extract-RegexFirstGroup -Text $out -Pattern "Versi[oó]n:\s*([0-9]+(?:\.[0-9]+)*)"
+  $ver = Extract-WingetVersion -WingetShowOutput $out
   New-VersionResult -Name "Power Automate for Desktop" -LatestVersion $ver -Source "winget show Microsoft.PowerAutomateDesktop" -Notes "Se instala/descarga vía winget; Microsoft no publica una URL de descarga directa pública. Es un único instalador multi-idioma: el idioma con el que abre depende de la configuración regional/idioma de Windows del equipo, no del archivo descargado."
 }
 
@@ -611,8 +615,14 @@ function Get-LatestSafeNetAuthenticationClient {
 }
 
 function Get-LatestAESCryptOpenSource {
-  $r = Get-LatestGitHubReleaseAsset -Owner "terrapane" -Repo "aescrypt_win" -AssetPattern '(?i)\.(exe|msi)$'
-  New-VersionResult -Name "AES Crypt (open-source, GitHub)" -LatestVersion $r.Version -Source "https://api.github.com/repos/terrapane/aescrypt_win/releases/latest" -Notes "Build open-source (GPL) mantenido por terrapane, distinto de la versión comercial de aescrypt.com."
+  # El repo terrapane/aescrypt_win existe pero no publica "Releases" de GitHub
+  # con binarios adjuntos (solo tags) -> /releases/latest da 404. Confirmado
+  # que SÍ está empaquetado en winget como "Terrapane.AESCrypt" (PR real de
+  # microsoft/winget-pkgs), mecanismo más confiable para este caso.
+  if (-not (Test-WingetAvailable)) { throw "winget no está disponible para resolver la versión de AES Crypt (open-source)." }
+  $out = (& winget show --id Terrapane.AESCrypt --source winget 2>&1 | Out-String)
+  $ver = Extract-WingetVersion -WingetShowOutput $out
+  New-VersionResult -Name "AES Crypt (open-source, GitHub)" -LatestVersion $ver -Source "winget show Terrapane.AESCrypt" -Notes "Build open-source (GPL) mantenido por terrapane, distinto de la versión comercial de aescrypt.com. El repo de GitHub no publica Releases con binarios, por eso se usa winget en vez de GitHub Releases."
 }
 
 function Get-LatestAESCryptCommercial {
@@ -641,7 +651,7 @@ function Get-LatestIntelliJIdeaCommunity {
   # Studio, Power BI, Power Automate y Araxis Merge.
   if (-not (Test-WingetAvailable)) { throw "winget no está disponible para resolver la versión de IntelliJ IDEA Community." }
   $out = (& winget show --id JetBrains.IntelliJIDEA.Community --source winget 2>&1 | Out-String)
-  $ver = Extract-RegexFirstGroup -Text $out -Pattern "Versi[oó]n:\s*([0-9]+(?:\.[0-9]+)*)"
+  $ver = Extract-WingetVersion -WingetShowOutput $out
   New-VersionResult -Name "IntelliJ IDEA Community Edition" -LatestVersion $ver -Source "winget show JetBrains.IntelliJIDEA.Community"
 }
 
@@ -739,12 +749,12 @@ function Get-LatestAraxisMerge {
   $out = (& winget show --id Araxis.Merge --source winget 2>&1 | Out-String)
   # "Version" o "Versión": winget muestra la etiqueta traducida si Windows
   # está configurado en español, y el regex original solo cubría inglés.
-  $ver = Extract-RegexFirstGroup -Text $out -Pattern "Versi[oó]n:\s*([0-9]+(?:\.[0-9]+)*)"
+  $ver = Extract-WingetVersion -WingetShowOutput $out
   New-VersionResult -Name "Araxis Merge" -LatestVersion $ver -Source "winget show Araxis.Merge"
 }
 
 function Get-LatestNvmWindows {
-  $r = Get-LatestGitHubReleaseAsset -Owner "coreybutler" -Repo "nvm-windows" -AssetPattern '^nvm-setup\.exe$'
+  $r = Get-LatestGitHubReleaseAsset -Owner "coreybutler" -Repo "nvm-windows" -AssetPattern '^nvm-[\d.]+-x64-setup\.exe$'
   New-VersionResult -Name "nvm-windows" -LatestVersion $r.Version -Source "https://api.github.com/repos/coreybutler/nvm-windows/releases/latest"
 }
 
@@ -865,9 +875,6 @@ $script:DownloadResolvers = @{
   "Visual Studio Enterprise 2026 (bootstrapper)" = { param($v)
     "https://aka.ms/vs/18/Stable/vs_enterprise.exe" }
 
-  "Python install manager (Windows)" = { param($v)
-    (Get-LatestGitHubReleaseAsset -Owner "python" -Repo "pymanager" -AssetPattern '(?i)\.msix$').DownloadUrl }
-
   "SentinelOne (agente)" = { param($v) $null }   # sin URL pública: requiere consola del tenant + Site Token
   "TRSuite (FATCA/CRS)" = { param($v) $null }    # software licenciado, descarga vía portal del fabricante
   "ACL for Windows (Diligent One)" = { param($v) $null }   # software por suscripción, sin URL pública
@@ -882,9 +889,6 @@ $script:DownloadResolvers = @{
     if (-not $m2.Success) { throw "No se encontró el link de SafeNet Authentication Client en la página de DigiCert." }
     "https://www.digicert.com/StaticFiles/$($m2.Groups[1].Value)" }
 
-  "AES Crypt (open-source, GitHub)" = { param($v)
-    (Get-LatestGitHubReleaseAsset -Owner "terrapane" -Repo "aescrypt_win" -AssetPattern '(?i)\.(exe|msi)$').DownloadUrl }
-
   "AES Crypt (comercial, aescrypt.com)" = { param($v)
     $html = Get-TextFromUrl -Url "https://www.aescrypt.com/download/"
     $m = [regex]::Match($html, 'href="([^"]*[Ww]indows[^"]*\.zip)"')
@@ -892,7 +896,12 @@ $script:DownloadResolvers = @{
     $href = $m.Groups[1].Value
     # La página puede usar un link relativo (ej. "/files/x.zip"); si no trae
     # el dominio completo, se completa con la base del sitio.
-    if ($href -notmatch '^https?://') { $href = "https://www.aescrypt.com" + (if ($href.StartsWith('/')) { $href } else { "/$href" }) }
+    # (Antes esto usaba "if" anidado como expresión dentro de una concatenación,
+    # lo cual no es válido en PowerShell: "El término 'if' no se reconoce...".)
+    if ($href -notmatch '^https?://') {
+      $path = if ($href.StartsWith('/')) { $href } else { "/$href" }
+      $href = "https://www.aescrypt.com" + $path
+    }
     $href }
 
   "Angular CLI (código fuente, GitHub, .zip)" = { param($v)
@@ -902,7 +911,21 @@ $script:DownloadResolvers = @{
     $json = Get-JsonFromUrl -Url "https://data.services.jetbrains.com/products?code=DPK&type=release"
     $allReleases = @($json | ForEach-Object { $_.releases } | Where-Object { $_ })
     $latest = $allReleases | Sort-Object { [version]$_.version } -Descending | Select-Object -First 1
-    $latest.downloads.windows.link }
+    # dotPeek es Windows-only: a diferencia de IntelliJ IDEA, su JSON no
+    # necesariamente anida el link bajo ".downloads.windows" (falló con "No
+    # se encuentra la propiedad 'windows'"). Se prueban varias claves
+    # conocidas y, si ninguna aplica, se toma cualquier link bajo "downloads"
+    # que termine en .exe o .web.exe.
+    $link = $null
+    foreach ($key in @('windows', 'windowsZip', 'exe', 'web')) {
+      if ($latest.downloads.$key -and $latest.downloads.$key.link) { $link = $latest.downloads.$key.link; break }
+    }
+    if (-not $link) {
+      $link = $latest.downloads.PSObject.Properties |
+        ForEach-Object { $_.Value.link } | Where-Object { $_ -match '\.exe$' } | Select-Object -First 1
+    }
+    if (-not $link) { throw "No se encontró un link de descarga .exe para dotPeek en la respuesta de la API de JetBrains." }
+    $link }
 
   "Gradle (bin.zip)" = { param($v)
     $json = Get-JsonFromUrl -Url "https://services.gradle.org/versions/current"
@@ -951,7 +974,7 @@ $script:DownloadResolvers = @{
     "https://aka.ms/vs/17/release/vs_enterprise.exe" }
 
   "nvm-windows" = { param($v)
-    (Get-LatestGitHubReleaseAsset -Owner "coreybutler" -Repo "nvm-windows" -AssetPattern '^nvm-setup\.exe$').DownloadUrl }
+    (Get-LatestGitHubReleaseAsset -Owner "coreybutler" -Repo "nvm-windows" -AssetPattern '^nvm-[\d.]+-x64-setup\.exe$').DownloadUrl }
 
   "Postman" = { param($v)
     "https://dl.pstmn.io/download/latest/win64" }
@@ -971,6 +994,24 @@ function Test-WingetAvailable {
   try { $null = & winget --version 2>&1; return ($LASTEXITCODE -eq 0) } catch { return $false }
 }
 
+# Extrae el número de versión de la salida de "winget show --id X". Falló en
+# 3 apps distintas (IntelliJ IDEA, Araxis Merge, Power Automate) buscando
+# solo la etiqueta "Version:"/"Versión:" -> es un problema sistémico de cómo
+# winget imprime la salida, no de una app en particular. Se limpia cualquier
+# código de escape ANSI que pueda venir mezclado en la captura de consola
+# (winget colorea su salida y a veces esos códigos sobreviven al pipe), y si
+# la etiqueta por nombre no aparece, se intenta con el patrón del encabezado
+# "Found <nombre> [<id>] Version <version>" que winget también usa.
+function Extract-WingetVersion {
+  param([Parameter(Mandatory)][string]$WingetShowOutput)
+  $clean = $WingetShowOutput -replace "`e\[[0-9;]*[a-zA-Z]", ""
+  $m = [regex]::Match($clean, "Versi[oó]n\s*:?\s*([0-9]+(?:\.[0-9]+)+)", "IgnoreCase")
+  if ($m.Success) { return $m.Groups[1].Value }
+  $m2 = [regex]::Match($clean, "\[[^\]]+\][^\r\n]*?([0-9]+(?:\.[0-9]+){1,3})")
+  if ($m2.Success) { return $m2.Groups[1].Value }
+  throw "No se pudo extraer la versión de la salida de winget show. Salida cruda: $($clean.Substring(0, [Math]::Min(300, $clean.Length)))"
+}
+
 # Apps que se resuelven vía winget (Windows Package Manager) en lugar de una URL directa,
 # porque el fabricante no publica un patrón de descarga predecible.
 $script:WingetIds = @{
@@ -979,6 +1020,8 @@ $script:WingetIds = @{
   "Power Automate for Desktop"                            = "Microsoft.PowerAutomateDesktop"
   "Araxis Merge"                                          = "Araxis.Merge"
   "IntelliJ IDEA Community Edition"                       = "JetBrains.IntelliJIDEA.Community"
+  "AES Crypt (open-source, GitHub)"                       = "Terrapane.AESCrypt"
+  "Python install manager (Windows)"                      = "Python.PythonInstallManager"
 }
 
 # Idioma preferido (código winget/BCP-47) para apps sin MSI/URL directa que se
@@ -1114,7 +1157,7 @@ function Download-Installer {
   $destPath = Join-Path $DestDir "$safeName`_$Version$ext"
 
   Invoke-WebRequest -Uri $Url -OutFile $destPath -UseBasicParsing -MaximumRedirection 10 -TimeoutSec 300 `
-    -Headers @{ "User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) PowerShell-OfficialVersionCheck/1.0" }
+    -Headers @{ "User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36" }
 
   if (-not (Test-Path $destPath) -or (Get-Item $destPath).Length -eq 0) {
     throw "Descarga vacía o falló para $Name."
@@ -1270,7 +1313,7 @@ function Get-AuthenticodeInfo {
     $validStatus  = ($sig.Status -eq [System.Management.Automation.SignatureStatus]::Valid)
     $publisherOk  = $true
     if ($ExpectedPublishers.Count -gt 0) {
-      $publisherOk = [bool]($publisher -and (@($ExpectedPublishers | Where-Object { $publisher -like "*$_*" })).Count -gt 0)
+      $publisherOk = [bool]($publisher -and (@($ExpectedPublishers | Where-Object { ($publisher -like "*$_*") -or ($_ -like "*$publisher*") })).Count -gt 0)
     }
     [pscustomobject]@{
       Checked        = $true
