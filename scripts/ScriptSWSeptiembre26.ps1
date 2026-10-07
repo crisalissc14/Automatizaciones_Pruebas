@@ -39,6 +39,7 @@ param(
   [string] $VirusTotalApiKey = $env:VT_API_KEY,
   [string] $TempDownloadDir  = "C:\Temp\SoftUpdates",
   [string] $DeliveryDir      = "C:\EntregaMSI",
+  [string] $VerificationDir  = "C:\SoftwaresMsi",   # copia adicional (no se mueve, se mantiene también en EntregaMSI) para comparar manualmente contra la versión publicada en la web del fabricante
   [string] $HistoryFile      = ".\versions_history.json",
   [string] $ReportFile       = ".\Informe.txt",
   [string] $InventoryJson    = ".\latest_versions_official.json",
@@ -1421,6 +1422,7 @@ function Process-Application {
     [Parameter(Mandatory)]$History,
     [Parameter(Mandatory)][string]$TempDir,
     [Parameter(Mandatory)][string]$DeliveryDir,
+    [string]$VerificationDir,
     [string]$ApiKey,
     [switch]$SkipVT
   )
@@ -1493,6 +1495,10 @@ function Process-Application {
       $check = Test-InstallerSafety -FilePath $file -Name $name -ApiKey $ApiKey -SkipVT:$SkipVT
       if ($check.Passed) {
         $fileHash = Get-Sha256Hash -FilePath $file
+        if ($VerificationDir) {
+          Ensure-Directory -Path $VerificationDir
+          Copy-Item -Path $file -Destination (Join-Path $VerificationDir (Split-Path $file -Leaf)) -Force
+        }
         Ensure-Directory -Path $DeliveryDir
         Move-Item -Path $file -Destination (Join-Path $DeliveryDir (Split-Path $file -Leaf)) -Force
         $History = Update-HistoryEntry -History $History -Name $name -SafeVersion $VersionResult.LatestVersion -SafeHash $fileHash
@@ -1533,6 +1539,10 @@ function Process-Application {
         $check2 = Test-InstallerSafety -FilePath $file2 -Name $name -ApiKey $ApiKey -SkipVT:$SkipVT
         if ($check2.Passed) {
           $fileHash2 = Get-Sha256Hash -FilePath $file2
+          if ($VerificationDir) {
+            Ensure-Directory -Path $VerificationDir
+            Copy-Item -Path $file2 -Destination (Join-Path $VerificationDir (Split-Path $file2 -Leaf)) -Force
+          }
           Ensure-Directory -Path $DeliveryDir
           Move-Item -Path $file2 -Destination (Join-Path $DeliveryDir (Split-Path $file2 -Leaf)) -Force
           $status.State           = "⚠️ Penúltima versión entregada (última bloqueada)"
@@ -1729,13 +1739,14 @@ if ($SkipDownload) {
 
 Ensure-Directory -Path $TempDownloadDir
 Ensure-Directory -Path $DeliveryDir
+if ($VerificationDir) { Ensure-Directory -Path $VerificationDir }
 
 $history = Get-VersionsHistory -Path $HistoryFile
 
 $statuses = @()
 foreach ($r in $results) {
   Write-Host "Procesando: $($r.Name) ..."
-  $st = Process-Application -VersionResult $r -History $history -TempDir $TempDownloadDir -DeliveryDir $DeliveryDir -ApiKey $VirusTotalApiKey -SkipVT:$SkipVirusTotal
+  $st = Process-Application -VersionResult $r -History $history -TempDir $TempDownloadDir -DeliveryDir $DeliveryDir -VerificationDir $VerificationDir -ApiKey $VirusTotalApiKey -SkipVT:$SkipVirusTotal
   $statuses += $st
 }
 
